@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProjectReporting — Database Schema</title>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1e40af;
+    --green: #16a34a; --green-light: #dcfce7;
+    --amber: #d97706; --amber-light: #fef3c7;
+    --red: #dc2626; --red-light: #fee2e2;
+    --purple: #7c3aed; --purple-light: #ede9fe;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-500: #6b7280; --gray-700: #374151; --gray-900: #111827;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+  .header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 48px 0; text-align: center; }
+  .header h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 18px; opacity: 0.9; max-width: 650px; margin: 0 auto; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section { margin: 48px 0; }
+  .section-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .section-sub { color: var(--gray-500); font-size: 15px; margin-bottom: 28px; }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 32px 0; }
+  .stat { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+  .stat .v { font-size: 32px; font-weight: 700; color: var(--primary); }
+  .stat .l { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+  /* Table card */
+  .tcard { background: white; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 28px; overflow: hidden; }
+  .tcard-head { padding: 20px 24px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
+  .tcard-head h3 { font-size: 20px; font-weight: 700; }
+  .tcard-head .tname { font-size: 13px; color: var(--gray-500); font-family: 'Courier New', monospace; background: var(--gray-100); padding: 3px 10px; border-radius: 4px; }
+  .tcard-head .tbadge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+  .tb-core { background: var(--primary-light); color: var(--primary); }
+  .tb-fin { background: var(--green-light); color: var(--green); }
+  .tb-health { background: var(--amber-light); color: var(--amber); }
+  .tb-audit { background: var(--purple-light); color: var(--purple); }
+  .tb-mgmt { background: var(--red-light); color: var(--red); }
+
+  table.schema { width: 100%; border-collapse: collapse; }
+  table.schema th { background: var(--gray-50); padding: 10px 24px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); border-bottom: 2px solid var(--gray-200); }
+  table.schema td { padding: 10px 24px; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+  table.schema tr:last-child td { border-bottom: none; }
+  table.schema tr:hover td { background: var(--gray-50); }
+  .col-name { font-weight: 600; font-family: 'Courier New', monospace; font-size: 13px; }
+  .col-type { font-family: 'Courier New', monospace; font-size: 13px; color: var(--primary); }
+  .col-pk { color: var(--amber); font-weight: 700; font-size: 11px; }
+  .col-fk { color: var(--purple); font-weight: 600; font-size: 11px; }
+  .col-uq { color: var(--green); font-weight: 600; font-size: 11px; }
+  .col-nn { color: var(--red); font-size: 11px; }
+  .idx { font-size: 13px; color: var(--gray-500); padding: 12px 24px; border-top: 1px solid var(--gray-200); background: var(--gray-50); }
+  .idx code { background: var(--primary-light); padding: 2px 6px; border-radius: 3px; font-size: 12px; color: var(--primary-dark); }
+
+  /* Enum card */
+  .enum-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
+  .enum-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .enum-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; font-family: 'Courier New', monospace; color: var(--primary); }
+  .enum-card ul { list-style: none; }
+  .enum-card li { font-size: 13px; padding: 3px 0; font-family: 'Courier New', monospace; color: var(--gray-700); }
+  .enum-card li::before { content: '• '; color: var(--primary); }
+
+  /* ER diagram (text-based) */
+  .er { background: white; border-radius: 14px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+  .er pre { font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.5; color: var(--gray-700); white-space: pre; }
+  .er .hl { color: var(--primary); font-weight: 700; }
+  .er .fk { color: var(--purple); }
+  .er .rel { color: var(--amber); }
+
+  /* Rules */
+  .rule { background: white; border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
+  .rule .icon { font-size: 20px; flex-shrink: 0; }
+  .rule .text { font-size: 14px; }
+  .rule .text strong { color: var(--primary); }
+
+  .prisma-block { background: #1e1e2e; color: #cdd6f4; border-radius: 12px; padding: 24px; overflow-x: auto; margin: 16px 0; }
+  .prisma-block pre { font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; white-space: pre; }
+  .pk { color: #fab387; } .kw { color: #cba6f7; } .tp { color: #89b4fa; } .fn { color: #a6e3a1; } .cm { color: #6c7086; } .st { color: #f9e2af; }
+
+  @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .enum-grid { grid-template-columns: 1fr; } }
+  @media print { .header { padding: 24px 0; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1>ProjectReporting — Database Schema</h1>
+    <p>PostgreSQL + Prisma ORM | All financials in INR (₹) | DECIMAL(15,2) precision</p>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<section class="section">
+  <div class="section-title">📊 Schema Overview</div>
+  <div class="section-sub">PostgreSQL v16.x with Prisma ORM v6.x — all tables use snake_case naming</div>
+  <div class="stats-row">
+    <div class="stat"><div class="v">13</div><div class="l">Tables</div></div>
+    <div class="stat"><div class="v">7</div><div class="l">Enums</div></div>
+    <div class="stat"><div class="v">12</div><div class="l">Foreign Keys</div></div>
+    <div class="stat"><div class="v">6</div><div class="l">Unique Constraints</div></div>
+    <div class="stat"><div class="v">DECIMAL</div><div class="l">All Money Fields (15,2)</div></div>
+  </div>
+</section>
+
+<!-- ER RELATIONSHIPS -->
+<section class="section">
+  <div class="section-title">🔗 Entity Relationships</div>
+  <div class="section-sub">High-level relationship map between all 13 tables</div>
+  <div class="er"><pre>
+  ┌──────────────┐          ┌───────────────────┐          ┌──────────────────┐
+  │   <span class="hl">users</span>       │──1:N────▶│    <span class="hl">projects</span>        │◀──N:1───│  <span class="hl">review_notes</span>    │
+  │              │          │                   │          │                  │
+  │ id           │          │ id                │          │ id               │
+  │ username     │          │ code (unique)     │          │ project_id (FK)  │
+  │ role (enum)  │          │ contract_value ₹  │          │ reviewer_id (FK) │
+  │ business_unit│          │ status (enum)     │          │ period, decision │
+  └──────┬───────┘          │ manager_id (FK)──▶│          └──────────────────┘
+         │                  └────────┬──────────┘
+         │                           │
+         │              ┌────────────┼────────────────┬──────────────┬──────────────┐
+         │              │            │                │              │              │
+         │              ▼            ▼                ▼              ▼              ▼
+         │   ┌─────────────┐ ┌──────────────┐ ┌────────────┐ ┌──────────┐ ┌──────────────┐
+         │   │<span class="hl">payment_</span>     │ │<span class="hl">project_</span>     │ │<span class="hl">cost_</span>      │ │<span class="hl">health_</span>  │ │<span class="hl">scope_creep_</span>  │
+         │   │<span class="hl">milestones</span>   │ │<span class="hl">allocations</span>  │ │<span class="hl">categories</span> │ │<span class="hl">updates</span>  │ │<span class="hl">entries</span>       │
+         │   │             │ │              │ │            │ │          │ │              │
+         │   │ amount ₹    │ │ allocation_% │ │ cat_type   │ │ rag      │ │ effort_hrs   │
+         │   │ due_date    │ │ start/end    │ │ (8 types)  │ │ achieve  │ │ cost_impact ₹│
+         │   │ is_paid     │ │ onboard/off  │ │            │ │ challenge│ │ decision     │
+         │   └─────────────┘ └──────┬───────┘ └─────┬──────┘ └──────────┘ └──────────────┘
+         │                          │                │
+         │                          │                ├──────────────┐
+         │                          ▼                ▼              ▼
+         │               ┌──────────────┐  ┌──────────────┐ ┌──────────────┐
+         │               │<span class="hl">team_members</span>  │  │<span class="hl">planned_</span>     │ │<span class="hl">cost_entries</span>  │
+         │               │              │  │<span class="hl">amounts</span>      │ │              │
+         │               │ name         │  │              │ │ actual_amt ₹ │
+         │               │ cost_rate ₹  │  │ period       │ │ period       │
+         │               │ skills[]     │  │ amount ₹     │ │ entered_by──▶│──(FK to users)
+         │               │ department   │  └──────────────┘ └──────┬───────┘
+         │               └──────────────┘                          │
+         │                                                         ▼
+         │                                               ┌──────────────────┐
+         │                                               │<span class="hl">cost_entry_audit</span>  │
+         │                                               │                  │
+         └──────────────(entered_by / changed_by)───────▶│ previous_amt ₹   │
+                                                         │ new_amt ₹        │
+                                                         │ changed_by (FK)  │
+                                                         │ reason           │
+                                                         └──────────────────┘
+
+  <span class="rel">Relationships:</span>
+  users        ──1:N──▶ projects (manager_id)
+  users        ──1:N──▶ cost_entries (entered_by_id)
+  users        ──1:N──▶ health_updates (entered_by_id)
+  users        ──1:N──▶ review_notes (reviewer_id)
+  projects     ──1:N──▶ payment_milestones, project_allocations, cost_categories,
+                        cost_entries, health_updates, risks, scope_creep_entries, review_notes
+  team_members ──1:N──▶ project_allocations
+  cost_categories──1:N──▶ planned_amounts, cost_entries
+  cost_entries ──1:N──▶ cost_entry_audit
+  </pre></div>
+</section>
+
+<!-- ENUMS -->
+<section class="section">
+  <div class="section-title">🏷️ Enumerations (7)</div>
+  <div class="section-sub">All enum values stored as PostgreSQL enum types</div>
+  <div class="enum-grid">
+    <div class="enum-card"><h4>Role</h4><ul><li>PM</li><li>BU_HEAD</li><li>CFO</li></ul></div>
+    <div class="enum-card"><h4>ProjectStatus</h4><ul><li>PROPOSAL</li><li>ACTIVE</li><li>ON_HOLD</li><li>COMPLETED</li><li>CLOSED</li></ul></div>
+    <div class="enum-card"><h4>CostCategoryType</h4><ul><li>EMPLOYEE_SALARY</li><li>SUBSCRIPTIONS</li><li>TRAVEL</li><li>ACCOMMODATION</li><li>FOOD_ALLOWANCE</li><li>GIFTS</li><li>INFRASTRUCTURE</li><li>CONTRACTOR</li></ul></div>
+    <div class="enum-card"><h4>RagStatus</h4><ul><li>RED</li><li>AMBER</li><li>GREEN</li></ul></div>
+    <div class="enum-card"><h4>RiskLevel</h4><ul><li>LOW</li><li>MEDIUM</li><li>HIGH</li></ul></div>
+    <div class="enum-card"><h4>RiskStatus</h4><ul><li>OPEN</li><li>MITIGATED</li><li>CLOSED</li><li>MATERIALIZED</li></ul></div>
+    <div class="enum-card"><h4>ScopeCreepDecision</h4><ul><li>ABSORBED</li><li>CHANGE_REQUEST</li><li>DECLINED</li></ul></div>
+  </div>
+</section>
+
+<!-- TABLE DEFINITIONS -->
+<section class="section">
+  <div class="section-title">📋 Table Definitions (13 Tables)</div>
+  <div class="section-sub">Complete column specifications with types, constraints, and foreign keys</div>
+
+  <!-- users -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>users</h3><div><span class="tname">@@map("users")</span> <span class="tbadge tb-core">Core</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span> <span class="col-nn">NOT NULL</span></td><td>Auto-increment primary key</td></tr>
+      <tr><td class="col-name">username</td><td class="col-type">VARCHAR</td><td><span class="col-uq">UNIQUE</span> <span class="col-nn">NOT NULL</span></td><td>Login username</td></tr>
+      <tr><td class="col-name">password_hash</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>bcrypt hash (12 salt rounds)</td></tr>
+      <tr><td class="col-name">display_name</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Full name for display</td></tr>
+      <tr><td class="col-name">email</td><td class="col-type">VARCHAR</td><td><span class="col-uq">UNIQUE</span> <span class="col-nn">NOT NULL</span></td><td>Email address</td></tr>
+      <tr><td class="col-name">role</td><td class="col-type">Role (ENUM)</td><td><span class="col-nn">NOT NULL</span></td><td>PM / BU_HEAD / CFO</td></tr>
+      <tr><td class="col-name">business_unit</td><td class="col-type">VARCHAR</td><td>NULLABLE</td><td>Business unit (for BU_HEAD filtering)</td></tr>
+      <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td>Soft delete flag</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Record creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification time</td></tr>
+    </table>
+  </div>
+
+  <!-- projects -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>projects</h3><div><span class="tname">@@map("projects")</span> <span class="tbadge tb-core">Core</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Auto-increment primary key</td></tr>
+      <tr><td class="col-name">code</td><td class="col-type">VARCHAR</td><td><span class="col-uq">UNIQUE</span> <span class="col-nn">NOT NULL</span></td><td>Project code (e.g., PRJ-2024-001)</td></tr>
+      <tr><td class="col-name">name</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Project name</td></tr>
+      <tr><td class="col-name">client</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Client name</td></tr>
+      <tr><td class="col-name">contract_value</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>FPP contract value in ₹ INR</td></tr>
+      <tr><td class="col-name">start_date</td><td class="col-type">DATE</td><td><span class="col-nn">NOT NULL</span></td><td>Project start date</td></tr>
+      <tr><td class="col-name">end_date</td><td class="col-type">DATE</td><td><span class="col-nn">NOT NULL</span></td><td>Project end date</td></tr>
+      <tr><td class="col-name">status</td><td class="col-type">ProjectStatus (ENUM)</td><td>DEFAULT PROPOSAL</td><td>Lifecycle state</td></tr>
+      <tr><td class="col-name">business_unit</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Business unit for BU Head filtering</td></tr>
+      <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td>NULLABLE</td><td>Project description</td></tr>
+      <tr><td class="col-name">manager_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → users.id</span> <span class="col-nn">NOT NULL</span></td><td>Project manager</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+    <div class="idx">Index: <code>idx_projects_manager_id</code> on (manager_id) | <code>idx_projects_business_unit</code> on (business_unit)</div>
+  </div>
+
+  <!-- payment_milestones -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>payment_milestones</h3><div><span class="tname">@@map("payment_milestones")</span> <span class="tbadge tb-fin">Financial</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Parent project</td></tr>
+      <tr><td class="col-name">name</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Milestone name</td></tr>
+      <tr><td class="col-name">amount</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Payment amount in ₹</td></tr>
+      <tr><td class="col-name">due_date</td><td class="col-type">DATE</td><td><span class="col-nn">NOT NULL</span></td><td>Due date</td></tr>
+      <tr><td class="col-name">is_paid</td><td class="col-type">BOOLEAN</td><td>DEFAULT false</td><td>Payment received flag</td></tr>
+      <tr><td class="col-name">paid_date</td><td class="col-type">DATE</td><td>NULLABLE</td><td>Actual payment date</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+    </table>
+  </div>
+
+  <!-- team_members -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>team_members</h3><div><span class="tname">@@map("team_members")</span> <span class="tbadge tb-core">Core</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">name</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Full name</td></tr>
+      <tr><td class="col-name">role</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Job role (e.g., Lead Dev, QA)</td></tr>
+      <tr><td class="col-name">department</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Department</td></tr>
+      <tr><td class="col-name">loaded_cost_rate</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Monthly loaded cost rate in ₹</td></tr>
+      <tr><td class="col-name">skills</td><td class="col-type">TEXT[]</td><td>DEFAULT '{}'</td><td>PostgreSQL text array of skills</td></tr>
+      <tr><td class="col-name">is_active</td><td class="col-type">BOOLEAN</td><td>DEFAULT true</td><td>Active status</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+  </div>
+
+  <!-- project_allocations -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>project_allocations</h3><div><span class="tname">@@map("project_allocations")</span> <span class="tbadge tb-core">Core</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">team_member_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → team_members.id</span></td><td>Team member</td></tr>
+      <tr><td class="col-name">allocation_pct</td><td class="col-type">DECIMAL(5,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Allocation percentage (0-100)</td></tr>
+      <tr><td class="col-name">start_date</td><td class="col-type">DATE</td><td><span class="col-nn">NOT NULL</span></td><td>Allocation start</td></tr>
+      <tr><td class="col-name">end_date</td><td class="col-type">DATE</td><td>NULLABLE</td><td>Allocation end</td></tr>
+      <tr><td class="col-name">onboarding_date</td><td class="col-type">DATE</td><td>NULLABLE</td><td>Onboarding date</td></tr>
+      <tr><td class="col-name">offboarding_date</td><td class="col-type">DATE</td><td>NULLABLE</td><td>Offboarding date</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+    <div class="idx">Unique: <code>(project_id, team_member_id, start_date)</code></div>
+  </div>
+
+  <!-- cost_categories -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>cost_categories</h3><div><span class="tname">@@map("cost_categories")</span> <span class="tbadge tb-fin">Financial</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">category_type</td><td class="col-type">CostCategoryType (ENUM)</td><td><span class="col-nn">NOT NULL</span></td><td>One of 8 fixed categories</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+    </table>
+    <div class="idx">Unique: <code>(project_id, category_type)</code> — Auto-created: all 8 categories per project</div>
+  </div>
+
+  <!-- planned_amounts -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>planned_amounts</h3><div><span class="tname">@@map("planned_amounts")</span> <span class="tbadge tb-fin">Financial</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">cost_category_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → cost_categories.id</span> ON DELETE CASCADE</td><td>Cost category</td></tr>
+      <tr><td class="col-name">period</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Format: "YYYY-MM"</td></tr>
+      <tr><td class="col-name">amount</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Planned budget amount in ₹</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+    <div class="idx">Unique: <code>(cost_category_id, period)</code></div>
+  </div>
+
+  <!-- cost_entries -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>cost_entries</h3><div><span class="tname">@@map("cost_entries")</span> <span class="tbadge tb-fin">Financial</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">cost_category_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → cost_categories.id</span></td><td>Cost category</td></tr>
+      <tr><td class="col-name">period</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Format: "YYYY-MM"</td></tr>
+      <tr><td class="col-name">actual_amount</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Actual cost in ₹</td></tr>
+      <tr><td class="col-name">notes</td><td class="col-type">TEXT</td><td>NULLABLE</td><td>Entry notes</td></tr>
+      <tr><td class="col-name">entered_by_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → users.id</span> <span class="col-nn">NOT NULL</span></td><td>User who entered</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+    <div class="idx">Unique: <code>(cost_category_id, period)</code> | Index: <code>idx_cost_entries_project_id_period</code></div>
+  </div>
+
+  <!-- cost_entry_audit -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>cost_entry_audit</h3><div><span class="tname">@@map("cost_entry_audit")</span> <span class="tbadge tb-audit">Audit</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">cost_entry_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → cost_entries.id</span> ON DELETE CASCADE</td><td>Parent cost entry</td></tr>
+      <tr><td class="col-name">previous_amount</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Amount before change in ₹</td></tr>
+      <tr><td class="col-name">new_amount</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Amount after change in ₹</td></tr>
+      <tr><td class="col-name">changed_by_id</td><td class="col-type">INTEGER</td><td><span class="col-nn">NOT NULL</span></td><td>User who made the change</td></tr>
+      <tr><td class="col-name">changed_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>When the change occurred</td></tr>
+      <tr><td class="col-name">reason</td><td class="col-type">TEXT</td><td>NULLABLE</td><td>Reason for change</td></tr>
+    </table>
+  </div>
+
+  <!-- health_updates -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>health_updates</h3><div><span class="tname">@@map("health_updates")</span> <span class="tbadge tb-health">Health</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">period</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Format: "YYYY-MM"</td></tr>
+      <tr><td class="col-name">achievements</td><td class="col-type">TEXT[]</td><td>DEFAULT '{}'</td><td>Array of achievements</td></tr>
+      <tr><td class="col-name">challenges</td><td class="col-type">TEXT[]</td><td>DEFAULT '{}'</td><td>Array of challenges</td></tr>
+      <tr><td class="col-name">client_satisfaction_rag</td><td class="col-type">RagStatus (ENUM)</td><td><span class="col-nn">NOT NULL</span></td><td>RED / AMBER / GREEN</td></tr>
+      <tr><td class="col-name">client_satisfaction_note</td><td class="col-type">TEXT</td><td>NULLABLE</td><td>Context notes</td></tr>
+      <tr><td class="col-name">escalation_count</td><td class="col-type">INTEGER</td><td>NULLABLE</td><td>Proxy signal: escalations</td></tr>
+      <tr><td class="col-name">change_request_volume</td><td class="col-type">INTEGER</td><td>NULLABLE</td><td>Proxy signal: change requests</td></tr>
+      <tr><td class="col-name">avg_response_time_days</td><td class="col-type">DECIMAL(5,2)</td><td>NULLABLE</td><td>Proxy signal: avg response days</td></tr>
+      <tr><td class="col-name">entered_by_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → users.id</span> <span class="col-nn">NOT NULL</span></td><td>Entered by user</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+    <div class="idx">Unique: <code>(project_id, period)</code></div>
+  </div>
+
+  <!-- risks -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>risks</h3><div><span class="tname">@@map("risks")</span> <span class="tbadge tb-health">Health</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td><span class="col-nn">NOT NULL</span></td><td>Risk description</td></tr>
+      <tr><td class="col-name">probability</td><td class="col-type">RiskLevel (ENUM)</td><td><span class="col-nn">NOT NULL</span></td><td>LOW / MEDIUM / HIGH</td></tr>
+      <tr><td class="col-name">cost_impact</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Financial impact in ₹</td></tr>
+      <tr><td class="col-name">status</td><td class="col-type">RiskStatus (ENUM)</td><td>DEFAULT OPEN</td><td>OPEN / MITIGATED / CLOSED / MATERIALIZED</td></tr>
+      <tr><td class="col-name">mitigation_plan</td><td class="col-type">TEXT</td><td>NULLABLE</td><td>Mitigation strategy</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+  </div>
+
+  <!-- scope_creep_entries -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>scope_creep_entries</h3><div><span class="tname">@@map("scope_creep_entries")</span> <span class="tbadge tb-mgmt">Management</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td><span class="col-nn">NOT NULL</span></td><td>Scope change description</td></tr>
+      <tr><td class="col-name">effort_hours</td><td class="col-type">DECIMAL(8,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Effort in hours</td></tr>
+      <tr><td class="col-name">cost_impact</td><td class="col-type">DECIMAL(15,2)</td><td><span class="col-nn">NOT NULL</span></td><td>Cost impact in ₹</td></tr>
+      <tr><td class="col-name">decision</td><td class="col-type">ScopeCreepDecision (ENUM)</td><td><span class="col-nn">NOT NULL</span></td><td>ABSORBED / CHANGE_REQUEST / DECLINED</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+      <tr><td class="col-name">updated_at</td><td class="col-type">TIMESTAMP</td><td>Auto-update</td><td>Last modification</td></tr>
+    </table>
+  </div>
+
+  <!-- review_notes -->
+  <div class="tcard">
+    <div class="tcard-head"><h3>review_notes</h3><div><span class="tname">@@map("review_notes")</span> <span class="tbadge tb-mgmt">Management</span></div></div>
+    <table class="schema">
+      <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+      <tr><td class="col-name">id</td><td class="col-type">SERIAL</td><td><span class="col-pk">PK</span></td><td>Primary key</td></tr>
+      <tr><td class="col-name">project_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → projects.id</span> ON DELETE CASCADE</td><td>Project</td></tr>
+      <tr><td class="col-name">period</td><td class="col-type">VARCHAR</td><td><span class="col-nn">NOT NULL</span></td><td>Format: "YYYY-MM"</td></tr>
+      <tr><td class="col-name">note</td><td class="col-type">TEXT</td><td><span class="col-nn">NOT NULL</span></td><td>Review note content</td></tr>
+      <tr><td class="col-name">decision</td><td class="col-type">VARCHAR</td><td>NULLABLE</td><td>"Approved" / "Needs Revision" / "Acknowledged"</td></tr>
+      <tr><td class="col-name">reviewer_id</td><td class="col-type">INTEGER</td><td><span class="col-fk">FK → users.id</span> <span class="col-nn">NOT NULL</span></td><td>BU Head or CFO reviewer</td></tr>
+      <tr><td class="col-name">created_at</td><td class="col-type">TIMESTAMP</td><td>DEFAULT now()</td><td>Creation time</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- DESIGN RULES -->
+<section class="section">
+  <div class="section-title">⚙️ Database Design Rules</div>
+  <div class="section-sub">Critical constraints enforced across the schema</div>
+
+  <div class="rule"><div class="icon">💰</div><div class="text"><strong>Financial Precision:</strong> All monetary columns use DECIMAL(15,2) — supports up to ₹9,99,99,99,99,999.99. Never use FLOAT or DOUBLE for money.</div></div>
+  <div class="rule"><div class="icon">🔗</div><div class="text"><strong>Referential Integrity:</strong> All foreign keys enforced at DB level. Child records CASCADE DELETE when parent project is deleted (NFR20).</div></div>
+  <div class="rule"><div class="icon">📝</div><div class="text"><strong>Audit Trail:</strong> All cost entry changes logged in cost_entry_audit with previous_amount, new_amount, changed_by, timestamp, and reason (NFR19).</div></div>
+  <div class="rule"><div class="icon">📅</div><div class="text"><strong>Period Format:</strong> All period columns use "YYYY-MM" string format (e.g., "2023-10"). Not a date type — represents a month, not a specific day.</div></div>
+  <div class="rule"><div class="icon">🔢</div><div class="text"><strong>Auto-creation:</strong> When a project is created, all 8 cost_categories rows are automatically inserted for that project.</div></div>
+  <div class="rule"><div class="icon">🗂️</div><div class="text"><strong>Naming:</strong> All tables use snake_case plural names. All columns use snake_case. Prisma @@map() bridges to camelCase in TypeScript.</div></div>
+  <div class="rule"><div class="icon">⏰</div><div class="text"><strong>Timestamps:</strong> Every table has created_at (DEFAULT now()). Mutable tables also have updated_at (auto-updated by Prisma).</div></div>
+  <div class="rule"><div class="icon">🔒</div><div class="text"><strong>Sessions:</strong> express-session + connect-pg-simple stores sessions in a PostgreSQL session table (auto-managed, not in Prisma schema).</div></div>
+</section>
+
+<!-- PRISMA SCHEMA -->
+<section class="section">
+  <div class="section-title">🔧 Prisma Schema Reference</div>
+  <div class="section-sub">Complete Prisma schema for copy-paste into server/prisma/schema.prisma</div>
+  <div class="prisma-block"><pre><span class="cm">// generator and datasource</span>
+<span class="kw">generator</span> client {
+  provider = <span class="st">"prisma-client-js"</span>
+}
+
+<span class="kw">datasource</span> db {
+  provider = <span class="st">"postgresql"</span>
+  url      = <span class="fn">env</span>(<span class="st">"DATABASE_URL"</span>)
+}
+
+<span class="cm">// ═══════════════════════════════════════</span>
+<span class="cm">// ENUMS</span>
+<span class="cm">// ═══════════════════════════════════════</span>
+
+<span class="kw">enum</span> <span class="tp">Role</span> { PM  BU_HEAD  CFO }
+<span class="kw">enum</span> <span class="tp">ProjectStatus</span> { PROPOSAL  ACTIVE  ON_HOLD  COMPLETED  CLOSED }
+<span class="kw">enum</span> <span class="tp">CostCategoryType</span> { EMPLOYEE_SALARY  SUBSCRIPTIONS  TRAVEL  ACCOMMODATION  FOOD_ALLOWANCE  GIFTS  INFRASTRUCTURE  CONTRACTOR }
+<span class="kw">enum</span> <span class="tp">RagStatus</span> { RED  AMBER  GREEN }
+<span class="kw">enum</span> <span class="tp">RiskLevel</span> { LOW  MEDIUM  HIGH }
+<span class="kw">enum</span> <span class="tp">RiskStatus</span> { OPEN  MITIGATED  CLOSED  MATERIALIZED }
+<span class="kw">enum</span> <span class="tp">ScopeCreepDecision</span> { ABSORBED  CHANGE_REQUEST  DECLINED }
+
+<span class="cm">// ═══════════════════════════════════════</span>
+<span class="cm">// MODELS (13 tables)</span>
+<span class="cm">// ═══════════════════════════════════════</span>
+
+<span class="kw">model</span> <span class="tp">User</span> {
+  id            <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  username      <span class="tp">String</span>    @unique
+  passwordHash  <span class="tp">String</span>    @map(<span class="st">"password_hash"</span>)
+  displayName   <span class="tp">String</span>    @map(<span class="st">"display_name"</span>)
+  email         <span class="tp">String</span>    @unique
+  role          <span class="tp">Role</span>
+  businessUnit  <span class="tp">String?</span>   @map(<span class="st">"business_unit"</span>)
+  isActive      <span class="tp">Boolean</span>   @default(true) @map(<span class="st">"is_active"</span>)
+  createdAt     <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt     <span class="tp">DateTime</span>  @updatedAt @map(<span class="st">"updated_at"</span>)
+  managedProjects  Project[]       @relation(<span class="st">"ProjectManager"</span>)
+  costEntries      CostEntry[]
+  healthUpdates    HealthUpdate[]
+  reviewNotes      ReviewNote[]
+  @@map(<span class="st">"users"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">Project</span> {
+  id              <span class="tp">Int</span>            <span class="pk">@id</span> @default(autoincrement())
+  code            <span class="tp">String</span>         @unique
+  name            <span class="tp">String</span>
+  client          <span class="tp">String</span>
+  contractValue   <span class="tp">Decimal</span>        @db.Decimal(15, 2) @map(<span class="st">"contract_value"</span>)
+  startDate       <span class="tp">DateTime</span>       @map(<span class="st">"start_date"</span>) @db.Date
+  endDate         <span class="tp">DateTime</span>       @map(<span class="st">"end_date"</span>) @db.Date
+  status          <span class="tp">ProjectStatus</span>  @default(PROPOSAL)
+  businessUnit    <span class="tp">String</span>         @map(<span class="st">"business_unit"</span>)
+  description     <span class="tp">String?</span>
+  managerId       <span class="tp">Int</span>            @map(<span class="st">"manager_id"</span>)
+  createdAt       <span class="tp">DateTime</span>       @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt       <span class="tp">DateTime</span>       @updatedAt @map(<span class="st">"updated_at"</span>)
+  manager           User                @relation(<span class="st">"ProjectManager"</span>, fields: [managerId], references: [id])
+  paymentMilestones PaymentMilestone[]
+  allocations       ProjectAllocation[]
+  costCategories    CostCategory[]
+  costEntries       CostEntry[]
+  healthUpdates     HealthUpdate[]
+  risks             Risk[]
+  scopeCreepEntries ScopeCreepEntry[]
+  reviewNotes       ReviewNote[]
+  @@map(<span class="st">"projects"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">PaymentMilestone</span> {
+  id        <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  projectId <span class="tp">Int</span>       @map(<span class="st">"project_id"</span>)
+  name      <span class="tp">String</span>
+  amount    <span class="tp">Decimal</span>   @db.Decimal(15, 2)
+  dueDate   <span class="tp">DateTime</span>  @map(<span class="st">"due_date"</span>) @db.Date
+  isPaid    <span class="tp">Boolean</span>   @default(false) @map(<span class="st">"is_paid"</span>)
+  paidDate  <span class="tp">DateTime?</span> @map(<span class="st">"paid_date"</span>) @db.Date
+  createdAt <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"created_at"</span>)
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map(<span class="st">"payment_milestones"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">TeamMember</span> {
+  id             <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  name           <span class="tp">String</span>
+  role           <span class="tp">String</span>
+  department     <span class="tp">String</span>
+  loadedCostRate <span class="tp">Decimal</span>   @db.Decimal(15, 2) @map(<span class="st">"loaded_cost_rate"</span>)
+  skills         <span class="tp">String[]</span>  @default([])
+  isActive       <span class="tp">Boolean</span>   @default(true) @map(<span class="st">"is_active"</span>)
+  createdAt      <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt      <span class="tp">DateTime</span>  @updatedAt @map(<span class="st">"updated_at"</span>)
+  allocations    ProjectAllocation[]
+  @@map(<span class="st">"team_members"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">ProjectAllocation</span> {
+  id              <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  projectId       <span class="tp">Int</span>       @map(<span class="st">"project_id"</span>)
+  teamMemberId    <span class="tp">Int</span>       @map(<span class="st">"team_member_id"</span>)
+  allocationPct   <span class="tp">Decimal</span>   @db.Decimal(5, 2) @map(<span class="st">"allocation_pct"</span>)
+  startDate       <span class="tp">DateTime</span>  @map(<span class="st">"start_date"</span>) @db.Date
+  endDate         <span class="tp">DateTime?</span> @map(<span class="st">"end_date"</span>) @db.Date
+  onboardingDate  <span class="tp">DateTime?</span> @map(<span class="st">"onboarding_date"</span>) @db.Date
+  offboardingDate <span class="tp">DateTime?</span> @map(<span class="st">"offboarding_date"</span>) @db.Date
+  createdAt       <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt       <span class="tp">DateTime</span>  @updatedAt @map(<span class="st">"updated_at"</span>)
+  project         Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  teamMember      TeamMember @relation(fields: [teamMemberId], references: [id])
+  @@unique([projectId, teamMemberId, startDate])
+  @@map(<span class="st">"project_allocations"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">CostCategory</span> {
+  id           <span class="tp">Int</span>              <span class="pk">@id</span> @default(autoincrement())
+  projectId    <span class="tp">Int</span>              @map(<span class="st">"project_id"</span>)
+  categoryType <span class="tp">CostCategoryType</span> @map(<span class="st">"category_type"</span>)
+  createdAt    <span class="tp">DateTime</span>         @default(now()) @map(<span class="st">"created_at"</span>)
+  project      Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  plannedAmounts PlannedAmount[]
+  costEntries    CostEntry[]
+  @@unique([projectId, categoryType])
+  @@map(<span class="st">"cost_categories"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">PlannedAmount</span> {
+  id             <span class="tp">Int</span>          <span class="pk">@id</span> @default(autoincrement())
+  costCategoryId <span class="tp">Int</span>          @map(<span class="st">"cost_category_id"</span>)
+  period         <span class="tp">String</span>       <span class="cm">// "YYYY-MM"</span>
+  amount         <span class="tp">Decimal</span>      @db.Decimal(15, 2)
+  createdAt      <span class="tp">DateTime</span>     @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt      <span class="tp">DateTime</span>     @updatedAt @map(<span class="st">"updated_at"</span>)
+  costCategory   CostCategory @relation(fields: [costCategoryId], references: [id], onDelete: Cascade)
+  @@unique([costCategoryId, period])
+  @@map(<span class="st">"planned_amounts"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">CostEntry</span> {
+  id             <span class="tp">Int</span>          <span class="pk">@id</span> @default(autoincrement())
+  projectId      <span class="tp">Int</span>          @map(<span class="st">"project_id"</span>)
+  costCategoryId <span class="tp">Int</span>          @map(<span class="st">"cost_category_id"</span>)
+  period         <span class="tp">String</span>       <span class="cm">// "YYYY-MM"</span>
+  actualAmount   <span class="tp">Decimal</span>      @db.Decimal(15, 2) @map(<span class="st">"actual_amount"</span>)
+  notes          <span class="tp">String?</span>
+  enteredById    <span class="tp">Int</span>          @map(<span class="st">"entered_by_id"</span>)
+  createdAt      <span class="tp">DateTime</span>     @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt      <span class="tp">DateTime</span>     @updatedAt @map(<span class="st">"updated_at"</span>)
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  costCategory   CostCategory @relation(fields: [costCategoryId], references: [id])
+  enteredBy      User         @relation(fields: [enteredById], references: [id])
+  auditLog       CostEntryAudit[]
+  @@unique([costCategoryId, period])
+  @@map(<span class="st">"cost_entries"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">CostEntryAudit</span> {
+  id             <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  costEntryId    <span class="tp">Int</span>       @map(<span class="st">"cost_entry_id"</span>)
+  previousAmount <span class="tp">Decimal</span>   @db.Decimal(15, 2) @map(<span class="st">"previous_amount"</span>)
+  newAmount      <span class="tp">Decimal</span>   @db.Decimal(15, 2) @map(<span class="st">"new_amount"</span>)
+  changedById    <span class="tp">Int</span>       @map(<span class="st">"changed_by_id"</span>)
+  changedAt      <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"changed_at"</span>)
+  reason         <span class="tp">String?</span>
+  costEntry      CostEntry @relation(fields: [costEntryId], references: [id], onDelete: Cascade)
+  @@map(<span class="st">"cost_entry_audit"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">HealthUpdate</span> {
+  id                     <span class="tp">Int</span>       <span class="pk">@id</span> @default(autoincrement())
+  projectId              <span class="tp">Int</span>       @map(<span class="st">"project_id"</span>)
+  period                 <span class="tp">String</span>    <span class="cm">// "YYYY-MM"</span>
+  achievements           <span class="tp">String[]</span>  @default([])
+  challenges             <span class="tp">String[]</span>  @default([])
+  clientSatisfactionRag  <span class="tp">RagStatus</span> @map(<span class="st">"client_satisfaction_rag"</span>)
+  clientSatisfactionNote <span class="tp">String?</span>   @map(<span class="st">"client_satisfaction_note"</span>)
+  escalationCount        <span class="tp">Int?</span>      @map(<span class="st">"escalation_count"</span>)
+  changeRequestVolume    <span class="tp">Int?</span>      @map(<span class="st">"change_request_volume"</span>)
+  avgResponseTimeDays    <span class="tp">Decimal?</span>  @db.Decimal(5, 2) @map(<span class="st">"avg_response_time_days"</span>)
+  enteredById            <span class="tp">Int</span>       @map(<span class="st">"entered_by_id"</span>)
+  createdAt              <span class="tp">DateTime</span>  @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt              <span class="tp">DateTime</span>  @updatedAt @map(<span class="st">"updated_at"</span>)
+  project                Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  enteredBy              User      @relation(fields: [enteredById], references: [id])
+  @@unique([projectId, period])
+  @@map(<span class="st">"health_updates"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">Risk</span> {
+  id             <span class="tp">Int</span>        <span class="pk">@id</span> @default(autoincrement())
+  projectId      <span class="tp">Int</span>        @map(<span class="st">"project_id"</span>)
+  description    <span class="tp">String</span>
+  probability    <span class="tp">RiskLevel</span>
+  costImpact     <span class="tp">Decimal</span>    @db.Decimal(15, 2) @map(<span class="st">"cost_impact"</span>)
+  status         <span class="tp">RiskStatus</span> @default(OPEN)
+  mitigationPlan <span class="tp">String?</span>    @map(<span class="st">"mitigation_plan"</span>)
+  createdAt      <span class="tp">DateTime</span>   @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt      <span class="tp">DateTime</span>   @updatedAt @map(<span class="st">"updated_at"</span>)
+  project        Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map(<span class="st">"risks"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">ScopeCreepEntry</span> {
+  id          <span class="tp">Int</span>                <span class="pk">@id</span> @default(autoincrement())
+  projectId   <span class="tp">Int</span>                @map(<span class="st">"project_id"</span>)
+  description <span class="tp">String</span>
+  effortHours <span class="tp">Decimal</span>            @db.Decimal(8, 2) @map(<span class="st">"effort_hours"</span>)
+  costImpact  <span class="tp">Decimal</span>            @db.Decimal(15, 2) @map(<span class="st">"cost_impact"</span>)
+  decision    <span class="tp">ScopeCreepDecision</span>
+  createdAt   <span class="tp">DateTime</span>           @default(now()) @map(<span class="st">"created_at"</span>)
+  updatedAt   <span class="tp">DateTime</span>           @updatedAt @map(<span class="st">"updated_at"</span>)
+  project     Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map(<span class="st">"scope_creep_entries"</span>)
+}
+
+<span class="kw">model</span> <span class="tp">ReviewNote</span> {
+  id         <span class="tp">Int</span>      <span class="pk">@id</span> @default(autoincrement())
+  projectId  <span class="tp">Int</span>      @map(<span class="st">"project_id"</span>)
+  period     <span class="tp">String</span>   <span class="cm">// "YYYY-MM"</span>
+  note       <span class="tp">String</span>
+  decision   <span class="tp">String?</span>  <span class="cm">// "Approved", "Needs Revision", "Acknowledged"</span>
+  reviewerId <span class="tp">Int</span>      @map(<span class="st">"reviewer_id"</span>)
+  createdAt  <span class="tp">DateTime</span> @default(now()) @map(<span class="st">"created_at"</span>)
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reviewer   User     @relation(fields: [reviewerId], references: [id])
+  @@map(<span class="st">"review_notes"</span>)
+}</pre></div>
+</section>
+
+</div>
+
+<div style="background:var(--gray-900);color:var(--gray-300);padding:32px 0;margin-top:64px;text-align:center;font-size:14px">
+  <div class="container">
+    <p>ProjectReporting — Database Schema Document</p>
+    <p style="margin-top:4px;opacity:0.6">PostgreSQL v16.x • Prisma v6.x • All financials in INR (₹) • DECIMAL(15,2)</p>
+  </div>
+</div>
+
+</body>
+</html>

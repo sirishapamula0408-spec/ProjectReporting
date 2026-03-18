@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProjectReporting — Visual Analysis & User Journeys</title>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1e40af;
+    --green: #16a34a; --green-light: #dcfce7;
+    --amber: #d97706; --amber-light: #fef3c7;
+    --red: #dc2626; --red-light: #fee2e2;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-300: #d1d5db; --gray-500: #6b7280; --gray-700: #374151; --gray-900: #111827;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+  .header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 48px 0; text-align: center; }
+  .header h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 18px; opacity: 0.9; max-width: 650px; margin: 0 auto; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section { margin: 48px 0; }
+  .section-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+  .section-subtitle { color: var(--gray-500); font-size: 16px; margin-bottom: 32px; }
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 32px 0; }
+  .stat-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+  .stat-value { font-size: 36px; font-weight: 700; color: var(--primary); }
+  .stat-label { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+  table.ct { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  table.ct th { background: var(--primary); color: white; padding: 14px 16px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+  table.ct td { padding: 12px 16px; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+  table.ct tr:last-child td { border-bottom: none; }
+  table.ct tr:hover td { background: var(--gray-50); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-amber { background: var(--amber-light); color: var(--amber); }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-blue { background: var(--primary-light); color: var(--primary); }
+  .jc { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 32px; border-left: 5px solid var(--primary); }
+  .jc h3 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .jc .persona { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 16px; }
+  .jc .goal { background: var(--primary-light); padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 24px; color: var(--primary-dark); }
+  .flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin: 16px 0; }
+  .fs { flex: 1; min-width: 150px; position: relative; text-align: center; padding: 8px 6px; }
+  .fs::after { content: ''; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 10px solid var(--primary-light); border-top: 18px solid transparent; border-bottom: 18px solid transparent; z-index: 1; }
+  .fs:last-child::after { display: none; }
+  .fb { background: var(--primary-light); border: 2px solid var(--primary); border-radius: 10px; padding: 10px 6px; min-height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .fb .sn { background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+  .fb .sl { font-size: 12px; font-weight: 600; color: var(--gray-700); line-height: 1.3; }
+  .fb .ss { font-size: 10px; color: var(--primary); margin-top: 3px; font-weight: 600; }
+  .fb .si { width: 100%; height: 50px; object-fit: cover; object-position: top; border-radius: 4px; margin-top: 5px; border: 1px solid var(--gray-200); }
+  .sg { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+  .sc { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; }
+  .sc:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+  .sc img { width: 100%; height: 200px; object-fit: cover; object-position: top; border-bottom: 1px solid var(--gray-200); background: var(--gray-100); }
+  .sc .si { padding: 16px; }
+  .sc .sn2 { display: inline-block; background: var(--primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; }
+  .sc .sname { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .sc .sdesc { font-size: 13px; color: var(--gray-500); margin-bottom: 8px; line-height: 1.4; }
+  .sc .sfr { font-size: 12px; color: var(--gray-500); }
+  .sc .sfr span { color: var(--primary); font-weight: 600; }
+  .pg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .pc { background: white; border-radius: 16px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+  .pa { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .pc h4 { font-size: 18px; font-weight: 700; }
+  .pc .role { color: var(--primary); font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .pc ul { list-style: none; text-align: left; }
+  .pc li { font-size: 13px; padding: 4px 0; color: var(--gray-700); }
+  .pc li::before { content: '→ '; color: var(--primary); font-weight: 700; }
+  .pr { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .pl { width: 160px; font-weight: 700; font-size: 14px; text-align: right; flex-shrink: 0; }
+  .pbc { flex: 1; height: 48px; }
+  .pb { height: 100%; border-radius: 8px; display: flex; align-items: center; padding: 0 16px; color: white; font-weight: 600; font-size: 14px; }
+  .pb1 { background: linear-gradient(90deg, var(--primary), #60a5fa); width: 78%; }
+  .pb2 { background: linear-gradient(90deg, var(--amber), #fbbf24); width: 14%; }
+  .pb3 { background: linear-gradient(90deg, var(--green), #4ade80); width: 8%; }
+  .ps { font-size: 12px; opacity: 0.9; margin-left: 8px; }
+  .gc { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; border-left: 4px solid var(--amber); display: flex; gap: 16px; }
+  .gc.ok { border-left-color: var(--green); opacity: 0.7; }
+  .gi { font-size: 24px; flex-shrink: 0; }
+  .gc h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .gc p { font-size: 13px; color: var(--gray-500); }
+  @media (max-width: 768px) { .stats-row,.pg { grid-template-columns: 1fr; } .flow { flex-direction: column; } .fs::after { display: none; } .pr { flex-direction: column; align-items: flex-start; } .pl { text-align: left; } .sg { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1>ProjectReporting</h1>
+    <p>Visual Analysis & User Journey Map — FPP Financial Intelligence Platform</p>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<section class="section">
+  <div class="section-title"><span>📊</span> Project Overview</div>
+  <div class="section-subtitle">Internal FPP financial tracking with 3 roles, 19 screens, and 97% PRD coverage</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value">38</div><div class="stat-label">Functional Requirements</div></div>
+    <div class="stat-card"><div class="stat-value">20</div><div class="stat-label">Non-Functional Requirements</div></div>
+    <div class="stat-card"><div class="stat-value">19</div><div class="stat-label">UI Screenshots</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--green)">97%</div><div class="stat-label">PRD Coverage</div></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Epics</div></div>
+    <div class="stat-card"><div class="stat-value">37</div><div class="stat-label">User Stories</div></div>
+    <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">User Roles</div></div>
+    <div class="stat-card"><div class="stat-value">3</div><div class="stat-label">Development Phases</div></div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section class="section">
+  <div class="section-title"><span>👥</span> User Personas</div>
+  <div class="section-subtitle">Three distinct roles with different workflows and information needs</div>
+  <div class="pg">
+    <div class="pc">
+      <div class="pa" style="background:var(--primary-light)">👩‍💼</div>
+      <h4>Priya Sharma</h4><div class="role">Project Manager (PM)</div>
+      <ul>
+        <li>Primary user — daily to weekly</li>
+        <li>Cost entry, health updates, team mgmt</li>
+        <li>Target: &lt;15 min per project update</li>
+        <li>Screens: Login, PM Dashboard, Project Detail, Cost Entry, Health Update, Project Setup, Team Allocation, Scope Creep, Risk Register</li>
+      </ul>
+    </div>
+    <div class="pc">
+      <div class="pa" style="background:var(--amber-light)">👨‍💼</div>
+      <h4>Rajesh Kumar</h4><div class="role">BU Head</div>
+      <ul>
+        <li>Weekly reviewer — mostly read-only</li>
+        <li>Portfolio scanning, approvals</li>
+        <li>Target: 20 min full portfolio review</li>
+        <li>Screens: Login, BU Portfolio Overview, Project Portfolio List, Review Notes & Approval</li>
+      </ul>
+    </div>
+    <div class="pc">
+      <div class="pa" style="background:var(--green-light)">👩‍💼</div>
+      <h4>Meera Patel</h4><div class="role">CFO</div>
+      <ul>
+        <li>Monthly strategic user — read-only</li>
+        <li>Board prep, portfolio assessment</li>
+        <li>Target: 30 min instead of 2 days</li>
+        <li>Screens: Login, CFO Command Center, Burn vs Revenue, Forecast, Trend Analysis</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN INVENTORY -->
+<section class="section">
+  <div class="section-title"><span>🖥️</span> Screen Inventory — 19 Screenshots</div>
+  <div class="section-subtitle">Each screenshot with its actual filename, description, and PRD requirement mapping</div>
+  <div class="sg">
+
+    <div class="sc">
+      <img src="../screenshot/Login.png" alt="Login">
+      <div class="si">
+        <div class="sn2">Login.png</div>
+        <div class="sname">Login Page</div>
+        <div class="sdesc">Centered login card with ProjectReporting branding, username/email + password fields, "Sign In" button, internal portal subtitle</div>
+        <div class="sfr">FRs: <span>FR34</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/PM Dashboard.png" alt="PM Dashboard">
+      <div class="si">
+        <div class="sn2">PM Dashboard.png</div>
+        <div class="sname">PM Project Dashboard & Cost Entry</div>
+        <div class="sdesc">KPI cards (₹45,200 burn, ₹320k cumulative, Healthy RAG), 8-category cost grid with planned/actual/variance, burn rate trend chart, health summary, team list, next milestone</div>
+        <div class="sfr">FRs: <span>FR13, FR14, FR15, FR16, FR26</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Project Portfolio.png" alt="Project Portfolio">
+      <div class="si">
+        <div class="sn2">Project Portfolio.png</div>
+        <div class="sname">PM Dashboard Landing (My Projects)</div>
+        <div class="sdesc">KPI cards (12 managed, 3 at risk, ₹142.5k burn, 92% utilization), active projects list with health RAG/burn/timeline, urgent actions, upcoming milestones</div>
+        <div class="sfr">FRs: <span>FR4</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Project Portfolio listview.png" alt="Project Portfolio listview">
+      <div class="si">
+        <div class="sn2">Project Portfolio listview.png</div>
+        <div class="sname">Project Portfolio List View</div>
+        <div class="sdesc">Project list with name, code, client, status badges (Active/On Hold/Completed/At Risk), manager, filter tabs (All/Active/On Hold/Archived), search, pagination, "+ New Project"</div>
+        <div class="sfr">FRs: <span>FR2, FR4, FR5</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Project Setup & Team managment.png" alt="Project Setup">
+      <div class="si">
+        <div class="sn2">Project Setup & Team managment.png</div>
+        <div class="sname">Project Setup & Team Management</div>
+        <div class="sdesc">Project details form (name, code, client, contract value ₹, dates), resource assignment with allocation %, budget planning grid (8 categories × 6 months), payment milestones with setup status</div>
+        <div class="sfr">FRs: <span>FR1, FR7, FR12, FR38</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Edit Project Details.png" alt="Edit Project Details">
+      <div class="si">
+        <div class="sn2">Edit Project Details.png</div>
+        <div class="sname">Edit Project Details</div>
+        <div class="sdesc">Edit mode with pre-filled data, ACTIVE status badge, "Change Status" dropdown, unsaved changes warning banner, "Save Changes"/"Discard" buttons, editable resources/budgets/milestones (some marked PAID)</div>
+        <div class="sfr">FRs: <span>FR2, FR3</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Project Team& Resource allocation.png" alt="Team Allocation">
+      <div class="si">
+        <div class="sn2">Project Team& Resource allocation.png</div>
+        <div class="sname">Project Team & Resource Allocation</div>
+        <div class="sdesc">KPI cards (8 members, 625% allocation, ₹1,35,000 avg rate), team grid with allocation % bars, start/end/onboarding dates, inline edit mode, Gantt-style allocation timeline with markers</div>
+        <div class="sfr">FRs: <span>FR7, FR8, FR9, FR10</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Team member Registry.png" alt="Team Registry">
+      <div class="si">
+        <div class="sn2">Team member Registry.png</div>
+        <div class="sname">Team Member Registry</div>
+        <div class="sdesc">Registry grid with name/avatar, role, department, loaded cost rate (₹ INR), skills tags, status, project count. Expandable rows showing cross-project allocation details</div>
+        <div class="sfr">FRs: <span>FR6, FR11</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Monthly health report.png" alt="Health Update">
+      <div class="si">
+        <div class="sn2">Monthly health report.png</div>
+        <div class="sname">Monthly Health Update Form</div>
+        <div class="sdesc">RAG selector (Green/Amber/Red cards), Key Achievements textarea, Challenges & Obstacles textarea, Risks & Mitigations inline grid with probability/impact, "Submit Monthly Update" button</div>
+        <div class="sfr">FRs: <span>FR19, FR21, FR22</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Risk Register.png" alt="Risk Register">
+      <div class="si">
+        <div class="sn2">Risk Register.png</div>
+        <div class="sname">Risk Register</div>
+        <div class="sdesc">KPIs (12 open, ₹8,45,000 exposure, 8 mitigated), filter tabs (All/Open/Mitigated/Closed), risk grid with description/probability/cost impact/status/mitigation, aggregate exposure footer</div>
+        <div class="sfr">FRs: <span>FR20</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/scope creep log.png" alt="Scope Creep">
+      <div class="si">
+        <div class="sn2">scope creep log.png</div>
+        <div class="sname">Scope Creep Log</div>
+        <div class="sdesc">KPIs (12 entries, 142 hrs, ₹5,40,000 impact, decision breakdown chart), inline add form, grid (date/description/hours/cost/decision badge), "Total Absorbed: ₹3,25,000 | 85 hrs" footer</div>
+        <div class="sfr">FRs: <span>FR24, FR25</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Cost Variena analysis.png" alt="Cost Variance">
+      <div class="si">
+        <div class="sn2">Cost Variena analysis.png</div>
+        <div class="sname">Cost Variance Analysis (Multi-Month)</div>
+        <div class="sdesc">KPIs (₹-3,25,000 overall, 3/8 over budget, best category), 8 categories × 6 months grid with variance % and RAG coloring (green/amber/red), trend arrows column, date range selector</div>
+        <div class="sfr">FRs: <span>FR14, FR30</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Trend Analysis.png" alt="Trend Analysis">
+      <div class="si">
+        <div class="sn2">Trend Analysis.png</div>
+        <div class="sname">Trend Analysis</div>
+        <div class="sdesc">KPIs (₹6,20,000 current, ₹5,52,000 previous, +12.3% MoM), monthly burn rate trend chart with budget baseline, top variance categories multi-line chart, benchmark comparison table with direction arrows</div>
+        <div class="sfr">FRs: <span>FR30</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/BU Head Portfolio Overview.png" alt="BU Portfolio">
+      <div class="si">
+        <div class="sn2">BU Head Portfolio Overview.png</div>
+        <div class="sname">BU Head Portfolio Overview</div>
+        <div class="sdesc">Portfolio grid with RAG health, margin/cost/forecast columns, review notes panel with reviewer comments, "Export Report" button, KPIs (42 projects, 8 at risk, ₹1.2M margin)</div>
+        <div class="sfr">FRs: <span>FR27, FR28, FR31, FR32, FR33, FR36</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Review Notes & Approval.png" alt="Review Notes">
+      <div class="si">
+        <div class="sn2">Review Notes & Approval.png</div>
+        <div class="sname">Review Notes & Approvals</div>
+        <div class="sdesc">Current review status (Pending), "Add Review" form with decision dropdown (Approved/Needs Revision) + notes textarea, review history timeline with reviewer avatars, decision badges, and dated notes</div>
+        <div class="sfr">FRs: <span>FR33</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/CFO Command Center.png" alt="CFO Command Center">
+      <div class="si">
+        <div class="sn2">CFO Command Center.png</div>
+        <div class="sname">CFO Command Center</div>
+        <div class="sdesc">4-panel dashboard: KPIs (₹42.8M, ₹1.24M/mo, 24.5% margin), forecast bar chart, margin risk heatmap, revenue vs cost comparison chart, critical portfolios grid with trend/action</div>
+        <div class="sfr">FRs: <span>FR29, FR37</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Burn vs Revenue Timeline.png" alt="Burn vs Revenue">
+      <div class="si">
+        <div class="sn2">Burn vs Revenue Timeline.png</div>
+        <div class="sname">Burn vs Revenue Timeline</div>
+        <div class="sdesc">Dual-axis chart (cumulative spend vs revenue), current gap KPI (₹-12,45,000), next milestone card, milestone markers on chart, payment milestones table with paid/pending status</div>
+        <div class="sfr">FRs: <span>FR18</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Forecast to Completion.png" alt="Forecast">
+      <div class="si">
+        <div class="sn2">Forecast to Completion.png</div>
+        <div class="sname">Forecast to Completion</div>
+        <div class="sdesc">KPIs (₹85M contract, ₹57M spent/45%, ₹88M projected OVER BUDGET, +₹3.2M variance), trend chart (actual vs projected vs ceiling), projection summary (confidence/completion/months), monthly breakdown table</div>
+        <div class="sfr">FRs: <span>FR17</span></div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <img src="../screenshot/Project Status Report.png" alt="Status Report">
+      <div class="si">
+        <div class="sn2">Project Status Report.png</div>
+        <div class="sname">Project Status Report (PDF Preview)</div>
+        <div class="sdesc">Print-formatted report: project summary, financial overview table (8 categories planned/actual/variance in ₹), burn rate chart, health summary (achievements/challenges/RAG), risks table, team roster. "Print Report" button</div>
+        <div class="sfr">FRs: <span>FR31</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- USER JOURNEYS -->
+<section class="section">
+  <div class="section-title"><span>🗺️</span> User Journeys</div>
+  <div class="section-subtitle">End-to-end workflows mapped to actual screenshot filenames</div>
+
+  <!-- Journey 1: PM Monthly Update -->
+  <div class="jc">
+    <h3>🟦 Journey 1: PM Monthly Update</h3>
+    <div class="persona">Priya Sharma — Project Manager</div>
+    <div class="goal">Goal: Complete monthly project updates (cost entry, health, team) in under 15 minutes per project</div>
+    <div class="flow">
+      <div class="fs"><div class="fb">
+        <div class="sn">1</div><div class="sl">Login</div><div class="ss">Login.png</div>
+        <img class="si" src="../screenshot/Login.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">2</div><div class="sl">My Projects</div><div class="ss">Project Portfolio.png</div>
+        <img class="si" src="../screenshot/Project Portfolio.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">3</div><div class="sl">Project Dashboard & Costs</div><div class="ss">PM Dashboard.png</div>
+        <img class="si" src="../screenshot/PM Dashboard.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">4</div><div class="sl">Health Update</div><div class="ss">Monthly health report.png</div>
+        <img class="si" src="../screenshot/Monthly health report.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">5</div><div class="sl">Export Report</div><div class="ss">Project Status Report.png</div>
+        <img class="si" src="../screenshot/Project Status Report.png" alt="">
+      </div></div>
+    </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--gray-500)"><strong>Requirements:</strong> FR4, FR12, FR13, FR14, FR15, FR16, FR19, FR21, FR22, FR26, FR31</p>
+  </div>
+
+  <!-- Journey 2: BU Head -->
+  <div class="jc" style="border-left-color:var(--amber)">
+    <h3>🟨 Journey 2: BU Head Weekly Portfolio Review</h3>
+    <div class="persona">Rajesh Kumar — BU Head</div>
+    <div class="goal">Goal: Review entire portfolio, identify at-risk projects, and take action in 20 minutes</div>
+    <div class="flow">
+      <div class="fs"><div class="fb">
+        <div class="sn">1</div><div class="sl">Login</div><div class="ss">Login.png</div>
+        <img class="si" src="../screenshot/Login.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">2</div><div class="sl">Portfolio Overview</div><div class="ss">BU Head Portfolio Overview.png</div>
+        <img class="si" src="../screenshot/BU Head Portfolio Overview.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">3</div><div class="sl">Drill Into Project</div><div class="ss">PM Dashboard.png</div>
+        <img class="si" src="../screenshot/PM Dashboard.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">4</div><div class="sl">Review Notes</div><div class="ss">Review Notes & Approval.png</div>
+        <img class="si" src="../screenshot/Review Notes & Approval.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">5</div><div class="sl">Export Report</div><div class="ss">Project Status Report.png</div>
+        <img class="si" src="../screenshot/Project Status Report.png" alt="">
+      </div></div>
+    </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--gray-500)"><strong>Requirements:</strong> FR27, FR28, FR31, FR32, FR33, FR36</p>
+  </div>
+
+  <!-- Journey 3: CFO -->
+  <div class="jc" style="border-left-color:var(--green)">
+    <h3>🟩 Journey 3: CFO Quarterly Board Preparation</h3>
+    <div class="persona">Meera Patel — CFO</div>
+    <div class="goal">Goal: Assess portfolio health and prepare board materials in 30 minutes</div>
+    <div class="flow">
+      <div class="fs"><div class="fb">
+        <div class="sn">1</div><div class="sl">Login</div><div class="ss">Login.png</div>
+        <img class="si" src="../screenshot/Login.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">2</div><div class="sl">Command Center</div><div class="ss">CFO Command Center.png</div>
+        <img class="si" src="../screenshot/CFO Command Center.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">3</div><div class="sl">Forecast Detail</div><div class="ss">Forecast to Completion.png</div>
+        <img class="si" src="../screenshot/Forecast to Completion.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">4</div><div class="sl">Burn vs Revenue</div><div class="ss">Burn vs Revenue Timeline.png</div>
+        <img class="si" src="../screenshot/Burn vs Revenue Timeline.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">5</div><div class="sl">Trend Analysis</div><div class="ss">Trend Analysis.png</div>
+        <img class="si" src="../screenshot/Trend Analysis.png" alt="">
+      </div></div>
+    </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--gray-500)"><strong>Requirements:</strong> FR17, FR18, FR29, FR30, FR31, FR37</p>
+  </div>
+
+  <!-- Journey 4: Project Setup -->
+  <div class="jc" style="border-left-color:#8b5cf6">
+    <h3>🟪 Journey 4: New Project Setup</h3>
+    <div class="persona">Priya Sharma — PM (as configurator)</div>
+    <div class="goal">Goal: Set up a new FPP project with team, budgets, and milestones in 10 minutes</div>
+    <div class="flow">
+      <div class="fs"><div class="fb">
+        <div class="sn">1</div><div class="sl">Project List</div><div class="ss">Project Portfolio listview.png</div>
+        <img class="si" src="../screenshot/Project Portfolio listview.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">2</div><div class="sl">Create Project</div><div class="ss">Project Setup & Team managment.png</div>
+        <img class="si" src="../screenshot/Project Setup & Team managment.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">3</div><div class="sl">Assign Team</div><div class="ss">Project Team& Resource allocation.png</div>
+        <img class="si" src="../screenshot/Project Team& Resource allocation.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">4</div><div class="sl">Team Registry</div><div class="ss">Team member Registry.png</div>
+        <img class="si" src="../screenshot/Team member Registry.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">5</div><div class="sl">Edit & Activate</div><div class="ss">Edit Project Details.png</div>
+        <img class="si" src="../screenshot/Edit Project Details.png" alt="">
+      </div></div>
+    </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--gray-500)"><strong>Requirements:</strong> FR1, FR2, FR3, FR6, FR7, FR12, FR38</p>
+  </div>
+
+  <!-- Journey 5: Risk & Financial Deep Dive -->
+  <div class="jc" style="border-left-color:var(--red)">
+    <h3>🟥 Journey 5: Risk & Financial Deep Dive</h3>
+    <div class="persona">Any Role — Investigating financial concerns</div>
+    <div class="goal">Goal: Identify root causes of budget overruns and assess risk exposure</div>
+    <div class="flow">
+      <div class="fs"><div class="fb">
+        <div class="sn">1</div><div class="sl">Variance Analysis</div><div class="ss">Cost Variena analysis.png</div>
+        <img class="si" src="../screenshot/Cost Variena analysis.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">2</div><div class="sl">Risk Register</div><div class="ss">Risk Register.png</div>
+        <img class="si" src="../screenshot/Risk Register.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">3</div><div class="sl">Scope Creep</div><div class="ss">scope creep log.png</div>
+        <img class="si" src="../screenshot/scope creep log.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">4</div><div class="sl">Forecast Impact</div><div class="ss">Forecast to Completion.png</div>
+        <img class="si" src="../screenshot/Forecast to Completion.png" alt="">
+      </div></div>
+      <div class="fs"><div class="fb">
+        <div class="sn">5</div><div class="sl">Burn vs Revenue</div><div class="ss">Burn vs Revenue Timeline.png</div>
+        <img class="si" src="../screenshot/Burn vs Revenue Timeline.png" alt="">
+      </div></div>
+    </div>
+    <p style="margin-top:16px;font-size:14px;color:var(--gray-500)"><strong>Requirements:</strong> FR14, FR17, FR18, FR20, FR24, FR25, FR30</p>
+  </div>
+</section>
+
+<!-- PRD COVERAGE -->
+<section class="section">
+  <div class="section-title"><span>✅</span> PRD Coverage — All 38 Functional Requirements</div>
+  <div class="section-subtitle">Each FR mapped to the exact screenshot filename</div>
+  <table class="ct">
+    <thead><tr><th>FR</th><th>Requirement</th><th>Screenshot File</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>FR1</td><td>Create project with all details + milestones</td><td>Project Setup & Team managment.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR2</td><td>Update project lifecycle state</td><td>Edit Project Details.png, Project Portfolio listview.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR3</td><td>Edit project details</td><td>Edit Project Details.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR4</td><td>View all managed projects with health</td><td>Project Portfolio.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR5</td><td>Archive completed projects</td><td>Project Portfolio listview.png (Archived tab)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR6</td><td>Add team members to registry</td><td>Team member Registry.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR7</td><td>Assign team members with allocation %</td><td>Project Setup & Team managment.png, Project Team& Resource allocation.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR8</td><td>Update allocation percentages</td><td>Project Team& Resource allocation.png (inline edit)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR9</td><td>Record onboarding/offboarding dates</td><td>Project Team& Resource allocation.png (timeline markers)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR10</td><td>View team members on a project</td><td>Project Team& Resource allocation.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR11</td><td>Cross-project allocation view</td><td>Team member Registry.png (expandable row)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR12</td><td>Enter planned budget per category/month</td><td>Project Setup & Team managment.png (budget grid)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR13</td><td>Enter actual costs per category/month</td><td>PM Dashboard.png (cost entry grid)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR14</td><td>Variance per category per month</td><td>PM Dashboard.png, Cost Variena analysis.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR15</td><td>Monthly burn rate calculation</td><td>PM Dashboard.png (burn rate chart)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR16</td><td>Cumulative spend vs contract value</td><td>PM Dashboard.png (KPI ₹320k/₹500k)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR17</td><td>Forecast-to-completion</td><td>Forecast to Completion.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR18</td><td>Burn vs revenue timeline</td><td>Burn vs Revenue Timeline.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR19</td><td>Log achievements per month</td><td>Monthly health report.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR20</td><td>Log risks with probability + financial impact</td><td>Risk Register.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR21</td><td>Log challenges per month</td><td>Monthly health report.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR22</td><td>Set client satisfaction RAG</td><td>Monthly health report.png (RAG selector)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr style="background:var(--red-light)"><td>FR23</td><td>Record proxy satisfaction signals</td><td>— No screenshot</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td>FR24</td><td>Log scope creep entries</td><td>scope creep log.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR25</td><td>Scope creep aggregation</td><td>scope creep log.png (KPI cards + summary)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR26</td><td>PM project dashboard</td><td>PM Dashboard.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR27</td><td>BU Head portfolio dashboard</td><td>BU Head Portfolio Overview.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR28</td><td>BU Head drill-down to project</td><td>BU Head Portfolio Overview.png (clickable rows)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR29</td><td>CFO command center</td><td>CFO Command Center.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR30</td><td>Month-over-month trend comparisons</td><td>Trend Analysis.png, Cost Variena analysis.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR31</td><td>PDF export</td><td>Project Status Report.png, BU Head Portfolio Overview.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR32</td><td>Excel export</td><td>BU Head Portfolio Overview.png (Export button)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR33</td><td>BU Head review notes</td><td>Review Notes & Approval.png, BU Head Portfolio Overview.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR34</td><td>Authentication with three roles</td><td>Login.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR35</td><td>PMs see only their projects</td><td>Project Portfolio.png (PM filtered)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR36</td><td>BU Heads see business unit projects</td><td>BU Head Portfolio Overview.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR37</td><td>CFO sees all projects</td><td>CFO Command Center.png (all segments)</td><td><span class="badge badge-green">Covered</span></td></tr>
+      <tr><td>FR38</td><td>PM configuration privileges</td><td>Project Setup & Team managment.png</td><td><span class="badge badge-green">Covered</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PHASES -->
+<section class="section">
+  <div class="section-title"><span>📅</span> Phased Implementation</div>
+  <div class="section-subtitle">3-phase rollout with Jira epic and story mapping</div>
+  <div style="margin:32px 0">
+    <div class="pr"><div class="pl">Phase 1 — MVP</div><div class="pbc"><div class="pb pb1">Epics 1-6<span class="ps">• 29 stories • PRT-9 to PRT-37</span></div></div></div>
+    <div class="pr"><div class="pl">Phase 2 — Growth</div><div class="pbc"><div class="pb pb2">Epic 7<span class="ps">• 5 stories • PRT-38 to PRT-42</span></div></div></div>
+    <div class="pr"><div class="pl">Phase 3 — Expansion</div><div class="pbc"><div class="pb pb3">Epic 8<span class="ps">• 3 stories • PRT-43 to PRT-45</span></div></div></div>
+  </div>
+  <table class="ct">
+    <thead><tr><th>Phase</th><th>Epic</th><th>Scope</th><th>Jira Keys</th><th>Stories</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="6"><span class="badge badge-blue">MVP</span></td><td>Epic 1</td><td>Authentication & Access Control</td><td>PRT-1, PRT-9–14</td><td>6</td></tr>
+      <tr><td>Epic 2</td><td>Project Lifecycle Management</td><td>PRT-2, PRT-15–19</td><td>5</td></tr>
+      <tr><td>Epic 3</td><td>Team & Resource Management</td><td>PRT-3, PRT-20–22</td><td>3</td></tr>
+      <tr><td>Epic 4</td><td>Cost Tracking & Budget Management</td><td>PRT-4, PRT-23–26</td><td>4</td></tr>
+      <tr><td>Epic 5</td><td>Project Health & PM Dashboard</td><td>PRT-5, PRT-27–31</td><td>5</td></tr>
+      <tr><td>Epic 6</td><td>Portfolio, Exports & BU Head</td><td>PRT-6, PRT-32–37</td><td>6</td></tr>
+      <tr><td><span class="badge badge-amber">Growth</span></td><td>Epic 7</td><td>Advanced Analytics & Growth</td><td>PRT-7, PRT-38–42</td><td>5</td></tr>
+      <tr><td><span class="badge badge-green">Expansion</span></td><td>Epic 8</td><td>CFO Command Center & Executive</td><td>PRT-8, PRT-43–45</td><td>3</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- GAP ANALYSIS -->
+<section class="section">
+  <div class="section-title"><span>🔍</span> Gap Analysis</div>
+  <div class="section-subtitle">1 of 38 functional requirements has no screenshot coverage</div>
+  <div class="gc">
+    <div class="gi">⚠️</div>
+    <div>
+      <h4>FR23: Client Satisfaction Proxy Signals — MISSING</h4>
+      <p><strong>What's needed:</strong> Escalation Count, Change Request Volume, and Avg Response Time fields alongside RAG rating in Monthly health report.png</p>
+      <p style="margin-top:8px"><span class="badge badge-amber">Phase 2 Feature</span> — Extend the existing Health Update form</p>
+    </div>
+  </div>
+  <div class="gc ok">
+    <div class="gi">✅</div>
+    <div>
+      <h4>All Other 37 FRs — Fully Covered</h4>
+      <p>All requirements across Project Management, Team, Cost Tracking, Health, Dashboards, and Access Control have screenshot coverage.</p>
+    </div>
+  </div>
+  <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1);margin-top:24px">
+    <h4 style="margin-bottom:12px">Summary</h4>
+    <table style="width:100%;font-size:14px">
+      <tr><td style="padding:6px 0">Total Functional Requirements</td><td style="text-align:right;font-weight:700">38</td></tr>
+      <tr><td style="padding:6px 0">Covered by Screenshots</td><td style="text-align:right;font-weight:700;color:var(--green)">37 (97.4%)</td></tr>
+      <tr><td style="padding:6px 0">Missing</td><td style="text-align:right;font-weight:700;color:var(--red)">1 (FR23)</td></tr>
+      <tr><td style="padding:6px 0">Total Screenshots</td><td style="text-align:right;font-weight:700">19</td></tr>
+      <tr><td style="padding:6px 0">User Journeys Mapped</td><td style="text-align:right;font-weight:700">5</td></tr>
+      <tr style="border-top:2px solid var(--gray-200)"><td style="padding:10px 0;font-weight:700">Implementation Readiness</td><td style="text-align:right"><span class="badge badge-green" style="font-size:14px;padding:6px 16px">READY</span></td></tr>
+    </table>
+  </div>
+</section>
+
+</div>
+
+<div style="background:var(--gray-900);color:var(--gray-300);padding:32px 0;margin-top:64px;text-align:center;font-size:14px">
+  <div class="container">
+    <p>ProjectReporting — Visual Analysis & User Journey Map</p>
+    <p style="margin-top:4px;opacity:0.6">Jira: PRT • Confluence: PR Space • All financials in INR (₹)</p>
+  </div>
+</div>
+
+</body>
+</html>

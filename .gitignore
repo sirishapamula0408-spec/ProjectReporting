@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Prisma
+server/prisma/*.db
+server/prisma/*.db-journal
+
+# Vite
+client/.vite/
+
+# Test coverage
+coverage/
+
+# Aspose license
+licenses/
