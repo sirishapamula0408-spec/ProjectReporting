@@ -7,6 +7,7 @@ import { Breadcrumbs, LoadingSpinner, SkeletonLoader } from '../../../components
 import { useToast } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
+import { ProjectTeamTab } from '../../team-members';
 import './ProjectDetailPage.css';
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
@@ -193,9 +194,7 @@ export function ProjectDetailPage() {
         </TabStripTab>
 
         <TabStripTab title="Team">
-          <div className="project-detail__placeholder">
-            <p>Team allocation coming in Epic 3 (PRT-22)</p>
-          </div>
+          <ProjectTeamTab projectId={projectId} />
         </TabStripTab>
       </TabStrip>
     </div>

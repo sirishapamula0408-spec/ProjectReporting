@@ -7,6 +7,7 @@ import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
 import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
+import { TeamRegistryPage } from './features/team-members';
 import { AuthLayout, DashboardLayout } from './components/layout';
 import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
@@ -95,6 +96,15 @@ export default function App() {
                 element={
                   <PrivateRoute allowedRoles={['PM']}>
                     <EditProjectPage />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path={ROUTES.TEAM_REGISTRY}
+                element={
+                  <PrivateRoute allowedRoles={['PM']}>
+                    <TeamRegistryPage />
                   </PrivateRoute>
                 }
               />

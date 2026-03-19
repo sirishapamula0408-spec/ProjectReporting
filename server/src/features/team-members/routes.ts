@@ -13,8 +13,10 @@ router.get(
   authorize(['PM', 'BU_HEAD', 'CFO']),
   asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page as string, 10) || 1;
-    const pageSize = parseInt(req.query.pageSize as string, 10) || 50;
-    const result = await teamMemberService.listTeamMembers(page, pageSize);
+    const pageSize = Math.min(parseInt(req.query.pageSize as string, 10) || 50, 200);
+    const search = req.query.search as string | undefined;
+    const isActive = req.query.isActive === undefined ? undefined : req.query.isActive === 'true';
+    const result = await teamMemberService.listTeamMembers({ page, pageSize, search, isActive });
     res.json(result);
   }),
 );
@@ -25,7 +27,7 @@ router.get(
   authenticate,
   authorize(['PM', 'BU_HEAD', 'CFO']),
   asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id!, 10);
+    const id = parseInt(req.params.id as string, 10);
     const result = await teamMemberService.getTeamMemberById(id);
     res.json(result);
   }),
@@ -50,7 +52,7 @@ router.put(
   authorize(['PM']),
   validateRequest(updateTeamMemberSchema),
   asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id!, 10);
+    const id = parseInt(req.params.id as string, 10);
     const result = await teamMemberService.updateTeamMember(id, req.body);
     res.json(result);
   }),

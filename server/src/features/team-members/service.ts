@@ -4,17 +4,38 @@ import { AppError } from '../../shared/AppError.js';
 import type { CreateTeamMemberInput, UpdateTeamMemberInput } from './validation.js';
 
 function serializeMember(m: any) {
+  const { _count, ...rest } = m;
   return {
-    ...m,
+    ...rest,
     loadedCostRate: m.loadedCostRate.toString(),
+    projectCount: _count?.allocations,
   };
 }
 
-export async function listTeamMembers(page = 1, pageSize = 50) {
-  const where = { isActive: true };
+interface ListParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  isActive?: boolean;
+}
+
+export async function listTeamMembers(params: ListParams = {}) {
+  const { page = 1, pageSize = 50, search, isActive } = params;
+  const where: Prisma.TeamMemberWhereInput = {};
+
+  if (isActive !== undefined) where.isActive = isActive;
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: 'insensitive' } },
+      { role: { contains: search, mode: 'insensitive' } },
+      { department: { contains: search, mode: 'insensitive' } },
+    ];
+  }
+
   const [members, total] = await Promise.all([
     prisma.teamMember.findMany({
       where,
+      include: { _count: { select: { allocations: true } } },
       orderBy: { name: 'asc' },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -57,6 +78,7 @@ export async function updateTeamMember(id: number, input: UpdateTeamMemberInput)
   if (input.department !== undefined) updateData.department = input.department;
   if (input.loadedCostRate !== undefined) updateData.loadedCostRate = new Prisma.Decimal(input.loadedCostRate);
   if (input.skills !== undefined) updateData.skills = input.skills;
+  if (input.isActive !== undefined) updateData.isActive = input.isActive;
 
   const member = await prisma.teamMember.update({
     where: { id },
