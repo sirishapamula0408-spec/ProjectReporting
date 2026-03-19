@@ -6,18 +6,19 @@ import { PrivateRoute, getRoleDashboard } from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
+import { AuthLayout, DashboardLayout } from './components/layout';
 import '@progress/kendo-theme-default/dist/all.css';
 import './styles/tokens.css';
 
 // Placeholder pages — will be replaced in later stories
 function PMDashboard() {
-  return <div>PM Dashboard</div>;
+  return <div style={{ padding: '24px' }}><h1>PM Dashboard</h1><p>Coming in PRT-30/31</p></div>;
 }
 function Portfolio() {
-  return <div>BU Head Portfolio</div>;
+  return <div style={{ padding: '24px' }}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
 }
 function CommandCenter() {
-  return <div>CFO Command Center</div>;
+  return <div style={{ padding: '24px' }}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
 
 /** Redirects authenticated users to their role-appropriate dashboard */
@@ -33,41 +34,52 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            {/* Public */}
-            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            {/* Public — Auth layout (no sidebar) */}
+            <Route element={<AuthLayout />}>
+              <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            </Route>
 
             {/* Role redirect */}
             <Route path="/" element={<RoleRedirect />} />
 
-            {/* PM routes */}
+            {/* Authenticated — Dashboard layout (with sidebar) */}
             <Route
-              path={ROUTES.PM_DASHBOARD}
               element={
-                <PrivateRoute allowedRoles={['PM']}>
-                  <PMDashboard />
+                <PrivateRoute>
+                  <DashboardLayout />
                 </PrivateRoute>
               }
-            />
+            >
+              {/* PM routes */}
+              <Route
+                path={ROUTES.PM_DASHBOARD}
+                element={
+                  <PrivateRoute allowedRoles={['PM']}>
+                    <PMDashboard />
+                  </PrivateRoute>
+                }
+              />
 
-            {/* BU Head routes */}
-            <Route
-              path={ROUTES.PORTFOLIO}
-              element={
-                <PrivateRoute allowedRoles={['BU_HEAD', 'CFO']}>
-                  <Portfolio />
-                </PrivateRoute>
-              }
-            />
+              {/* BU Head routes */}
+              <Route
+                path={ROUTES.PORTFOLIO}
+                element={
+                  <PrivateRoute allowedRoles={['BU_HEAD', 'CFO']}>
+                    <Portfolio />
+                  </PrivateRoute>
+                }
+              />
 
-            {/* CFO routes */}
-            <Route
-              path={ROUTES.COMMAND_CENTER}
-              element={
-                <PrivateRoute allowedRoles={['CFO']}>
-                  <CommandCenter />
-                </PrivateRoute>
-              }
-            />
+              {/* CFO routes */}
+              <Route
+                path={ROUTES.COMMAND_CENTER}
+                element={
+                  <PrivateRoute allowedRoles={['CFO']}>
+                    <CommandCenter />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
