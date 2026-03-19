@@ -6,7 +6,7 @@ import { PrivateRoute, getRoleDashboard } from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
-import { CreateProjectPage, EditProjectPage } from './features/projects';
+import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
 import { AuthLayout, DashboardLayout } from './components/layout';
 import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
@@ -67,10 +67,26 @@ export default function App() {
                 }
               />
               <Route
+                path={ROUTES.PROJECTS}
+                element={
+                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
+                    <ProjectListPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
                 path={ROUTES.PROJECT_NEW}
                 element={
                   <PrivateRoute allowedRoles={['PM']}>
                     <CreateProjectPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path={ROUTES.PROJECT_DETAIL}
+                element={
+                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
+                    <ProjectDetailPage />
                   </PrivateRoute>
                 }
               />
