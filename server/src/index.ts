@@ -8,6 +8,7 @@ import { logger } from './config/logger.js';
 import authRoutes from './features/auth/routes.js';
 import projectRoutes from './features/projects/routes.js';
 import milestoneRoutes from './features/milestones/routes.js';
+import teamMemberRoutes from './features/team-members/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -37,6 +38,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/projects/:id/milestones', milestoneRoutes);
+app.use('/api/team-members', teamMemberRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);
