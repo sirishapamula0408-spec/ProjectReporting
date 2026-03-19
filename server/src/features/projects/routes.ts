@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate, authorize, validateRequest } from '../../middleware/index.js';
 import { asyncHandler } from '../../shared/asyncHandler.js';
-import { createProjectSchema, updateProjectSchema } from './validation.js';
+import { createProjectSchema, updateProjectSchema, statusTransitionSchema } from './validation.js';
 import * as projectService from './service.js';
 import type { AuthUser } from '../../shared/dataScope.js';
 
@@ -53,6 +53,23 @@ router.put(
   asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id!, 10);
     const result = await projectService.updateProject(id, req.body, req.user! as AuthUser);
+    res.json(result);
+  }),
+);
+
+// PATCH /api/projects/:id/status — transition project status
+router.patch(
+  '/:id/status',
+  authenticate,
+  authorize(['PM']),
+  validateRequest(statusTransitionSchema),
+  asyncHandler(async (req, res) => {
+    const id = parseInt(req.params.id!, 10);
+    const result = await projectService.transitionProjectStatus(
+      id,
+      req.body.status,
+      req.user! as AuthUser,
+    );
     res.json(result);
   }),
 );

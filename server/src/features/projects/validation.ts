@@ -13,5 +13,12 @@ export const createProjectSchema = z.object({
 
 export const updateProjectSchema = createProjectSchema.partial().omit({ code: true });
 
+export const statusTransitionSchema = z.object({
+  status: z.enum(['PROPOSAL', 'ACTIVE', 'ON_HOLD', 'COMPLETED', 'CLOSED'], {
+    errorMap: () => ({ message: 'Must be one of: PROPOSAL, ACTIVE, ON_HOLD, COMPLETED, CLOSED' }),
+  }),
+});
+
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
+export type StatusTransitionInput = z.infer<typeof statusTransitionSchema>;

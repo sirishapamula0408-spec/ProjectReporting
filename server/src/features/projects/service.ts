@@ -2,7 +2,9 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError } from '../../shared/AppError.js';
 import { type AuthUser, getProjectScope, canAccessProject, canModifyProject } from '../../shared/dataScope.js';
+import { validateTransition, getValidTransitions } from './stateMachine.js';
 import type { CreateProjectInput, UpdateProjectInput } from './validation.js';
+import type { ProjectStatus } from '@prisma/client';
 
 // Select fields — never return sensitive data, always return decimals as strings
 const projectSelect = {
@@ -127,4 +129,30 @@ export async function updateProject(id: number, input: UpdateProjectInput, user:
   });
 
   return { data: serializeProject(project) };
+}
+
+export async function transitionProjectStatus(id: number, newStatus: ProjectStatus, user: AuthUser) {
+  const existing = await prisma.project.findUnique({ where: { id } });
+  if (!existing) {
+    throw new AppError(404, 'NOT_FOUND', 'Project not found');
+  }
+  if (!canModifyProject(user, existing)) {
+    throw new AppError(403, 'FORBIDDEN', 'Only the project manager can change project status');
+  }
+
+  // Validate the transition using state machine
+  validateTransition(existing.status, newStatus);
+
+  const project = await prisma.project.update({
+    where: { id },
+    data: { status: newStatus },
+    select: projectSelect,
+  });
+
+  return {
+    data: {
+      ...serializeProject(project),
+      validTransitions: getValidTransitions(newStatus),
+    },
+  };
 }
