@@ -1,0 +1,53 @@
+/**
+ * Button Hierarchy CSS (UX-DR13)
+ * Primary, Secondary, Tertiary, Destructive, Disabled
+ * Applied via className on KendoReact Button components.
+ */
+
+/* Primary — solid blue (default KendoReact themeColor="primary") */
+/* Already handled by Kendo theme, adding consistency overrides */
+.btn-primary {
+  font-weight: var(--weight-semibold) !important;
+}
+
+/* Secondary — outlined */
+.btn-secondary {
+  border: 1px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  background: transparent !important;
+  font-weight: var(--weight-medium) !important;
+}
+.btn-secondary:hover {
+  background: var(--color-primary-light) !important;
+}
+
+/* Tertiary — text only */
+.btn-tertiary {
+  border: none !important;
+  background: transparent !important;
+  color: var(--color-primary) !important;
+  font-weight: var(--weight-medium) !important;
+  padding-left: var(--space-2) !important;
+  padding-right: var(--space-2) !important;
+}
+.btn-tertiary:hover {
+  text-decoration: underline;
+}
+
+/* Destructive — outlined red */
+.btn-destructive {
+  border: 1px solid var(--color-red) !important;
+  color: var(--color-red) !important;
+  background: transparent !important;
+  font-weight: var(--weight-medium) !important;
+}
+.btn-destructive:hover {
+  background: var(--color-red-light) !important;
+}
+
+/* Disabled state */
+.btn-disabled,
+button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
