@@ -7,6 +7,7 @@ import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
 import { AuthLayout, DashboardLayout } from './components/layout';
+import { ToastProvider, ErrorBoundary } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
 import './styles/tokens.css';
 
@@ -30,10 +31,12 @@ function RoleRedirect() {
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
             {/* Public — Auth layout (no sidebar) */}
             <Route element={<AuthLayout />}>
               <Route path={ROUTES.LOGIN} element={<LoginPage />} />
@@ -83,9 +86,11 @@ export default function App() {
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </ToastProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
