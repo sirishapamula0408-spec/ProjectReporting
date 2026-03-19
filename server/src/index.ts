@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { sessionMiddleware } from './config/session.js';
+import { errorHandler } from './middleware/errorHandler.js';
 import { logger } from './config/logger.js';
+import authRoutes from './features/auth/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,10 +22,19 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Health check
+// Session middleware
+app.use(sessionMiddleware);
+
+// Health check (unauthenticated)
 app.get('/api/health', (_req, res) => {
   res.json({ data: { status: 'ok', timestamp: new Date().toISOString() } });
 });
+
+// API routes
+app.use('/api/auth', authRoutes);
+
+// Global error handler (must be last)
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
