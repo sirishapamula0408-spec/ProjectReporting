@@ -30,7 +30,7 @@ declare global {
 
 export function authenticate(req: Request, _res: Response, next: NextFunction): void {
   if (!req.session.userId) {
-    throw new AppError(401, 'UNAUTHORIZED', 'Authentication required');
+    return next(new AppError(401, 'UNAUTHORIZED', 'Authentication required'));
   }
 
   req.user = {
