@@ -7,9 +7,11 @@ import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
 import { AuthLayout, DashboardLayout } from './components/layout';
-import { ToastProvider, ErrorBoundary } from './components/shared';
+import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
 import './styles/tokens.css';
+import './styles/buttons.css';
+import './styles/breakpoints.css';
 
 // Placeholder pages — will be replaced in later stories
 function PMDashboard() {
@@ -35,6 +37,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
           <BrowserRouter>
+            <SkipLinks />
             <AuthProvider>
               <Routes>
             {/* Public — Auth layout (no sidebar) */}

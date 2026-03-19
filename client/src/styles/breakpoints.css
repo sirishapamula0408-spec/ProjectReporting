@@ -1,0 +1,44 @@
+/**
+ * Desktop Breakpoint Strategy (UX-DR18)
+ * - 1280px: sidebar collapsed, 2-column dashboard grid
+ * - 1440px+: sidebar expanded, 3-column grid
+ * - 1920px+: 4-column grid
+ */
+
+/* Dashboard grid utility classes */
+.grid-dashboard {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+/* 2-column at 1280px+ */
+@media (min-width: 1280px) {
+  .grid-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-dashboard--full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+/* 3-column at 1440px+ */
+@media (min-width: 1440px) {
+  .grid-dashboard {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 4-column at 1920px+ */
+@media (min-width: 1920px) {
+  .grid-dashboard {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* KPI row — always horizontal, responsive */
+.kpi-row {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
