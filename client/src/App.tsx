@@ -5,11 +5,11 @@ import { AuthProvider } from './context/AuthContext';
 import { PrivateRoute, getRoleDashboard } from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
+import { LoginPage } from './features/auth';
+import '@progress/kendo-theme-default/dist/all.css';
+import './styles/tokens.css';
 
 // Placeholder pages — will be replaced in later stories
-function LoginPage() {
-  return <div>Login Page (PRT-48)</div>;
-}
 function PMDashboard() {
   return <div>PM Dashboard</div>;
 }

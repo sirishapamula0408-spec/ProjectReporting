@@ -1,0 +1,115 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gray-50);
+  padding: var(--space-6);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: var(--space-8);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.login-brand-name {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+}
+
+.login-hero {
+  background: linear-gradient(135deg, var(--color-primary-light), #e8eeff);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-8);
+  margin-bottom: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-title {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.login-subtitle {
+  font-size: var(--text-body);
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-8);
+}
+
+.login-form {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  text-align: left;
+}
+
+.login-field {
+  margin-bottom: var(--space-5);
+}
+
+.login-label {
+  display: block;
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.login-input {
+  width: 100%;
+}
+
+.login-error {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--color-red);
+  margin-top: var(--space-1);
+}
+
+.login-error-message {
+  background: var(--color-red-light);
+  color: var(--color-red);
+  font-size: var(--text-body);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+  text-align: center;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4) !important;
+  font-size: var(--text-body) !important;
+  font-weight: var(--weight-semibold) !important;
+}
+
+.login-footer {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+  margin-top: var(--space-8);
+}
+
+.login-copyright {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+  margin-top: var(--space-1);
+}
