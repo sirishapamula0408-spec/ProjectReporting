@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════
+   Project Detail Page — Enterprise Style
+   ═══════════════════════════════════════ */
+
 .project-detail__header {
   display: flex;
   justify-content: space-between;
@@ -6,7 +10,7 @@
 }
 
 .project-detail__title {
-  font-size: var(--text-h2);
+  font-size: var(--text-h1);
   font-weight: var(--weight-bold);
   color: var(--color-gray-900);
   margin: 0;
@@ -17,10 +21,11 @@
 
 .project-detail__status {
   display: inline-block;
-  padding: 2px 12px;
+  padding: 3px 12px;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-semibold);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
 }
 
 .project-detail__meta {
@@ -33,6 +38,11 @@
   display: flex;
   gap: var(--space-2);
   flex-shrink: 0;
+}
+
+.project-detail__actions .k-button-solid-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
 }
 
 .project-detail__freshness {
@@ -56,7 +66,7 @@
 
 .project-detail__card h3 {
   font-size: var(--text-h3);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   margin: 0 0 var(--space-5) 0;
   color: var(--color-gray-900);
 }
@@ -69,11 +79,12 @@
 
 .project-detail__info-grid .label {
   display: block;
-  font-size: var(--text-caption);
+  font-size: 11px;
   color: var(--color-gray-500);
   margin-bottom: var(--space-1);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
+  font-weight: var(--weight-semibold);
 }
 
 .project-detail__info-grid .value {
@@ -97,31 +108,40 @@
 
 .project-detail__milestone-table th {
   text-align: left;
-  font-size: var(--text-caption);
-  color: var(--color-gray-500);
+  font-size: 11px;
+  color: var(--color-gray-400);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
+  font-weight: var(--weight-semibold);
   padding: var(--space-3) var(--space-4);
-  border-bottom: 2px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
 }
 
 .project-detail__milestone-table td {
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-50);
   font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.project-detail__milestone-table tr:last-child td {
+  border-bottom: none;
 }
 
 .milestone-status {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-semibold);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
 }
+
 .milestone-status--paid {
   background: var(--color-green-light);
   color: var(--color-green);
 }
+
 .milestone-status--due {
   background: var(--color-primary-light);
   color: var(--color-primary);

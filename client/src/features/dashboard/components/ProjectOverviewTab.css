@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════
+   Project Overview Tab — Enterprise Style
+   ═══════════════════════════════════════ */
+
 .project-overview {
   display: flex;
   flex-direction: column;
@@ -5,22 +9,22 @@
   padding: var(--space-4) 0;
 }
 
-/* Chart section cards */
+/* Section cards */
 .project-overview__section {
   background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-5);
+  padding: var(--space-6);
 }
 
 .project-overview__section h3 {
   font-size: var(--text-h3);
-  font-weight: var(--weight-semibold);
-  color: var(--color-gray-800);
-  margin-bottom: var(--space-4);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-4) 0;
 }
 
-/* Charts row — two columns on desktop */
+/* Charts row */
 .project-overview__charts-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -47,23 +51,66 @@
 }
 
 .project-overview__health-item {
-  padding: var(--space-3);
+  padding: var(--space-4);
   background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-100);
   border-radius: var(--radius-md);
 }
 
 .project-overview__health-item h4 {
-  font-size: var(--text-caption);
+  font-size: 11px;
   font-weight: var(--weight-semibold);
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--color-gray-500);
-  margin-bottom: var(--space-2);
+  margin: 0 0 var(--space-2) 0;
 }
 
 .project-overview__health-item p {
   font-size: var(--text-body);
   color: var(--color-gray-700);
   line-height: 1.5;
+  margin: 0;
+}
+
+.project-overview__health-item ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--color-gray-700);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+.project-overview__muted {
+  color: var(--color-gray-400);
+  font-size: var(--text-body);
+  margin: 0;
+}
+
+/* RAG badge */
+.project-overview__rag-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+}
+
+.project-overview__rag-badge--green {
+  background: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.project-overview__rag-badge--amber {
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+}
+
+.project-overview__rag-badge--red {
+  background: #fef2f2;
+  color: var(--color-red);
 }
 
 /* Team composition */
@@ -75,54 +122,34 @@
 
 .project-overview__team-item {
   background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-100);
   border-radius: var(--radius-md);
-  padding: var(--space-3);
+  padding: var(--space-4);
   text-align: center;
-}
-
-.project-overview__team-item .role-name {
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  color: var(--color-gray-500);
-  font-weight: var(--weight-semibold);
 }
 
 .project-overview__team-item .role-count {
   font-size: var(--text-h2);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-800);
+  color: var(--color-gray-900);
+  line-height: 1;
 }
 
-/* Empty state inside sections */
+.project-overview__team-item .role-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-gray-500);
+  font-weight: var(--weight-semibold);
+  margin-top: var(--space-1);
+}
+
+/* Empty state */
 .project-overview__empty {
   text-align: center;
   padding: var(--space-8);
   color: var(--color-gray-400);
   font-size: var(--text-body);
-}
-
-/* Client satisfaction RAG */
-.project-overview__satisfaction-rag {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-full);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-semibold);
-}
-
-.project-overview__satisfaction-rag--GREEN {
-  background: var(--color-green-light);
-  color: var(--color-green);
-}
-
-.project-overview__satisfaction-rag--AMBER {
-  background: var(--color-amber-light);
-  color: var(--color-amber);
-}
-
-.project-overview__satisfaction-rag--RED {
-  background: var(--color-red-light);
-  color: var(--color-red);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
 }
