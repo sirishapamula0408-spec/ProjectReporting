@@ -1,6 +1,8 @@
+import { useState, useCallback } from 'react';
 import { Grid, GridColumn, type GridCellProps } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
 import { useTeamMembers } from '../hooks/useTeamMembers';
+import { AddTeamMemberDialog } from './AddTeamMemberDialog';
 import { SkeletonLoader } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import './TeamRegistryPage.css';
@@ -60,6 +62,9 @@ const skeletonMarginStyle = { marginTop: 24 } as const;
 
 export function TeamRegistryPage() {
   const { data, isLoading } = useTeamMembers();
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const handleOpenAdd = useCallback(() => setShowAddDialog(true), []);
+  const handleCloseAdd = useCallback(() => setShowAddDialog(false), []);
 
   if (isLoading) {
     return (
@@ -83,7 +88,7 @@ export function TeamRegistryPage() {
             Manage team members, roles, and cost rates across all enterprise portfolios
           </p>
         </div>
-        <Button themeColor="primary" onClick={() => { /* placeholder — add team member form coming later */ }}>
+        <Button themeColor="primary" onClick={handleOpenAdd}>
           + Add Team Member
         </Button>
       </div>
@@ -118,6 +123,8 @@ export function TeamRegistryPage() {
           />
         </Grid>
       )}
+
+      <AddTeamMemberDialog visible={showAddDialog} onClose={handleCloseAdd} />
     </div>
   );
 }

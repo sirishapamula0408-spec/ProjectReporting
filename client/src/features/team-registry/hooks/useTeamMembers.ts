@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../../config/api';
 
 export interface TeamMember {
@@ -22,6 +22,27 @@ export function useTeamMembers() {
     queryFn: async () => {
       const res = await api.get<TeamMembersResponse>('/team-members');
       return res.data;
+    },
+  });
+}
+
+export interface CreateTeamMemberInput {
+  name: string;
+  role: string;
+  department: string;
+  loadedCostRate: string;
+  skills: string[];
+}
+
+export function useCreateTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: CreateTeamMemberInput) => {
+      const res = await api.post<{ data: TeamMember }>('/team-members', input);
+      return res.data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-members'] });
     },
   });
 }

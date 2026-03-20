@@ -1,0 +1,39 @@
+.add-member-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+}
+
+.add-member-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.add-member-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.add-member-form__label {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-700);
+}
+
+.add-member-form__error {
+  font-size: var(--text-caption);
+  color: var(--color-red);
+}
+
+.add-member-form__hint {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+}
+
+.add-member-form__submit-btn {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
