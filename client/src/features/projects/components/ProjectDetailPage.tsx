@@ -7,6 +7,7 @@ import { Breadcrumbs, LoadingSpinner, SkeletonLoader } from '../../../components
 import { useToast } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
+import { CostEntryTab } from '../../costs';
 import './ProjectDetailPage.css';
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
@@ -181,9 +182,7 @@ export function ProjectDetailPage() {
         </TabStripTab>
 
         <TabStripTab title="Costs">
-          <div className="project-detail__placeholder">
-            <p>Cost tracking coming in Epic 4 (PRT-26)</p>
-          </div>
+          <CostEntryTab projectId={projectId} />
         </TabStripTab>
 
         <TabStripTab title="Health">

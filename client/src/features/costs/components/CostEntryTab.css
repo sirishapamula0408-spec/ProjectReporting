@@ -1,0 +1,123 @@
+.cost-entry-tab {
+  padding: var(--space-4) 0;
+}
+
+/* KPI Cards */
+.cost-entry-tab__kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.kpi-card {
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.kpi-card__label {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpi-card__value {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-card__unit {
+  font-size: var(--text-xs);
+  color: var(--color-gray-400);
+}
+
+/* Toolbar */
+.cost-entry-tab__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+/* Period Selector */
+.period-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Totals row */
+.cost-entry-tab__totals {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+  border-top: 2px solid var(--color-gray-300);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+}
+
+.cost-entry-tab__totals-label {
+  width: 200px;
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-700);
+  text-transform: uppercase;
+  font-size: var(--text-sm);
+  letter-spacing: 0.05em;
+}
+
+.cost-entry-tab__totals-value {
+  width: 180px;
+  text-align: right;
+}
+
+/* Chart section */
+.cost-entry-tab__chart {
+  margin-top: var(--space-8);
+  border-top: 1px solid var(--color-gray-200);
+  padding-top: var(--space-6);
+}
+
+.cost-entry-tab__chart-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.cost-entry-tab__contract-ref {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+  margin-top: var(--space-3);
+}
+
+.cost-entry-tab__empty-chart {
+  text-align: center;
+  padding: var(--space-8) var(--space-6);
+  color: var(--color-gray-500);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cost-entry-tab__kpi-row {
+    grid-template-columns: 1fr;
+  }
+}
