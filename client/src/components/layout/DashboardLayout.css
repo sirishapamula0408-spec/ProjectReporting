@@ -5,11 +5,12 @@
 
 .dashboard-layout__content {
   flex: 1;
-  margin-left: var(--sidebar-width-expanded);
+  margin-left: var(--sidebar-current-width, var(--sidebar-width-expanded));
   padding: var(--space-8);
   background: var(--color-gray-50);
   min-height: 100vh;
   overflow-x: auto;
   box-sizing: border-box;
-  width: calc(100% - var(--sidebar-width-expanded));
+  width: calc(100% - var(--sidebar-current-width, var(--sidebar-width-expanded)));
+  transition: margin-left 0.2s ease, width 0.2s ease;
 }

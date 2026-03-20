@@ -9,6 +9,11 @@
   top: 0;
   left: 0;
   z-index: 100;
+  transition: width 0.2s ease;
+}
+
+.sidebar--collapsed {
+  width: var(--sidebar-width-collapsed);
 }
 
 .sidebar__brand {
@@ -17,6 +22,7 @@
   gap: var(--space-3);
   padding: var(--space-5) var(--space-4);
   border-bottom: 1px solid var(--color-gray-100);
+  overflow: hidden;
 }
 
 .sidebar__brand-name {
@@ -24,6 +30,29 @@
   font-weight: var(--weight-bold);
   color: var(--color-gray-900);
   white-space: nowrap;
+}
+
+.sidebar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+  margin: var(--space-2) var(--space-2) 0 auto;
+  border-radius: var(--radius-md);
+  color: var(--color-gray-400);
+  transition: color 0.15s, background 0.15s;
+}
+
+.sidebar__toggle:hover {
+  color: var(--color-primary);
+  background: var(--color-gray-50);
+}
+
+.sidebar--collapsed .sidebar__toggle {
+  margin: var(--space-2) auto 0;
 }
 
 .sidebar__nav {
@@ -46,6 +75,8 @@
   font-weight: var(--weight-medium);
   transition: all 0.15s;
   border-left: 3px solid transparent;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .sidebar__link:hover {
@@ -90,6 +121,8 @@
   font-weight: var(--weight-medium);
   cursor: pointer;
   transition: all 0.15s;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .sidebar__new-btn:hover {
@@ -106,6 +139,7 @@
   align-items: center;
   gap: var(--space-3);
   margin-bottom: var(--space-3);
+  overflow: hidden;
 }
 
 .sidebar__avatar {
@@ -150,4 +184,37 @@
 .sidebar__logout:hover {
   color: var(--color-gray-700) !important;
   background: var(--color-gray-50) !important;
+}
+
+/* Collapsed overrides */
+.sidebar--collapsed .sidebar__brand {
+  justify-content: center;
+  padding: var(--space-5) var(--space-2);
+}
+
+.sidebar--collapsed .sidebar__link {
+  justify-content: center;
+  padding: var(--space-3);
+  border-left: none;
+}
+
+.sidebar--collapsed .sidebar__link--active {
+  border-left: none;
+}
+
+.sidebar--collapsed .sidebar__action {
+  padding: 0 var(--space-2) var(--space-4);
+}
+
+.sidebar--collapsed .sidebar__new-btn {
+  padding: var(--space-3);
+}
+
+.sidebar--collapsed .sidebar__footer {
+  padding: var(--space-3) var(--space-2);
+}
+
+.sidebar--collapsed .sidebar__user {
+  justify-content: center;
+  margin-bottom: 0;
 }
