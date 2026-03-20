@@ -20,6 +20,7 @@ const ProjectDetailPage = lazy(() => import('./features/projects/components/Proj
 const CreateProjectPage = lazy(() => import('./features/projects/components/CreateProjectPage').then(m => ({ default: m.CreateProjectPage })));
 const EditProjectPage = lazy(() => import('./features/projects/components/EditProjectPage').then(m => ({ default: m.EditProjectPage })));
 const PMDashboardPage = lazy(() => import('./features/dashboard/components/PmDashboardPage').then(m => ({ default: m.PMDashboardPage })));
+const TeamRegistryPage = lazy(() => import('./features/team-registry/components/TeamRegistryPage').then(m => ({ default: m.TeamRegistryPage })));
 
 const placeholderStyle = { padding: '24px' } as const;
 
@@ -101,6 +102,15 @@ export default function App() {
                 element={
                   <PrivateRoute allowedRoles={['PM']}>
                     <EditProjectPage />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path={ROUTES.TEAM_REGISTRY}
+                element={
+                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
+                    <TeamRegistryPage />
                   </PrivateRoute>
                 }
               />
