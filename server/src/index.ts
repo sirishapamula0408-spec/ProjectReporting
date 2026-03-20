@@ -9,6 +9,7 @@ import authRoutes from './features/auth/routes.js';
 import projectRoutes from './features/projects/routes.js';
 import milestoneRoutes from './features/milestones/routes.js';
 import teamMemberRoutes from './features/team-members/routes.js';
+import costCategoryRoutes from './features/cost-categories/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/projects/:id/milestones', milestoneRoutes);
 app.use('/api/team-members', teamMemberRoutes);
+app.use('/api/projects/:id/cost-categories', costCategoryRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);
