@@ -9,6 +9,7 @@ import authRoutes from './features/auth/routes.js';
 import projectRoutes from './features/projects/routes.js';
 import milestoneRoutes from './features/milestones/routes.js';
 import teamMemberRoutes from './features/team-members/routes.js';
+import dashboardRoutes from './features/dashboards/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173',
+    origin: process.env.NODE_ENV === 'production' ? false : ['http://localhost:5173', 'http://localhost:5174'],
     credentials: true,
   }),
 );
@@ -39,6 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/projects/:id/milestones', milestoneRoutes);
 app.use('/api/team-members', teamMemberRoutes);
+app.use('/api/dashboards', dashboardRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);

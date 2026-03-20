@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Input, NumericTextBox } from '@progress/kendo-react-inputs';
+import { Input, type InputChangeEvent } from '@progress/kendo-react-inputs';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { useToast } from '../../../components/shared';
@@ -54,12 +54,9 @@ export function ProjectForm({
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
   const {
-    register,
-    handleSubmit,
     control,
+    handleSubmit,
     formState: { errors, isDirty },
-    setValue,
-    watch,
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
@@ -144,17 +141,51 @@ export function ProjectForm({
           <div className="project-form__grid project-form__grid--3">
             <div className="project-form__field">
               <label>Project Name</label>
-              <Input {...register('name')} placeholder="e.g. Q4 Infrastructure Upgrade" />
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="e.g. Q4 Infrastructure Upgrade"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
               {errors.name && <span className="project-form__error">{errors.name.message}</span>}
             </div>
             <div className="project-form__field">
               <label>Project Code</label>
-              <Input {...register('code')} placeholder="PRJ-2024-001" disabled={mode === 'edit'} />
+              <Controller
+                name="code"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="PRJ-2024-001"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                    disabled={mode === 'edit'}
+                  />
+                )}
+              />
               {errors.code && <span className="project-form__error">{errors.code.message}</span>}
             </div>
             <div className="project-form__field">
               <label>Client Name</label>
-              <Input {...register('client')} placeholder="Infosys Tech Corp" />
+              <Controller
+                name="client"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="Infosys Tech Corp"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
               {errors.client && <span className="project-form__error">{errors.client.message}</span>}
             </div>
           </div>
@@ -162,20 +193,50 @@ export function ProjectForm({
           <div className="project-form__grid project-form__grid--3">
             <div className="project-form__field">
               <label>Contract Value (₹)</label>
-              <Input
-                {...register('contractValue')}
-                placeholder="85,00,000"
+              <Controller
+                name="contractValue"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="85,00,000"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
               />
               {errors.contractValue && <span className="project-form__error">{errors.contractValue.message}</span>}
             </div>
             <div className="project-form__field">
               <label>Start Date</label>
-              <Input type="date" {...register('startDate')} />
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    type="date"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
               {errors.startDate && <span className="project-form__error">{errors.startDate.message}</span>}
             </div>
             <div className="project-form__field">
               <label>End Date</label>
-              <Input type="date" {...register('endDate')} />
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    type="date"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
               {errors.endDate && <span className="project-form__error">{errors.endDate.message}</span>}
             </div>
           </div>
@@ -183,12 +244,34 @@ export function ProjectForm({
           <div className="project-form__grid project-form__grid--2">
             <div className="project-form__field">
               <label>Business Unit</label>
-              <Input {...register('businessUnit')} placeholder="Engineering" />
+              <Controller
+                name="businessUnit"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="Engineering"
+                    value={field.value}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
               {errors.businessUnit && <span className="project-form__error">{errors.businessUnit.message}</span>}
             </div>
             <div className="project-form__field">
               <label>Description (optional)</label>
-              <Input {...register('description')} placeholder="Project description..." />
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="Project description..."
+                    value={field.value ?? ''}
+                    onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                    onBlur={field.onBlur}
+                  />
+                )}
+              />
             </div>
           </div>
         </section>
@@ -213,21 +296,45 @@ export function ProjectForm({
           {milestoneFields.map((field, index) => (
             <div key={field.id} className="project-form__milestone-row">
               <div className="project-form__field" style={{ flex: 2 }}>
-                <Input
-                  {...register(`milestones.${index}.name`)}
-                  placeholder="Milestone name"
+                <Controller
+                  name={`milestones.${index}.name`}
+                  control={control}
+                  render={({ field: f }) => (
+                    <Input
+                      placeholder="Milestone name"
+                      value={f.value}
+                      onChange={(e: InputChangeEvent) => f.onChange(e.value)}
+                      onBlur={f.onBlur}
+                    />
+                  )}
                 />
               </div>
               <div className="project-form__field" style={{ flex: 1 }}>
-                <Input
-                  {...register(`milestones.${index}.amount`)}
-                  placeholder="₹ Amount"
+                <Controller
+                  name={`milestones.${index}.amount`}
+                  control={control}
+                  render={({ field: f }) => (
+                    <Input
+                      placeholder="₹ Amount"
+                      value={f.value}
+                      onChange={(e: InputChangeEvent) => f.onChange(e.value)}
+                      onBlur={f.onBlur}
+                    />
+                  )}
                 />
               </div>
               <div className="project-form__field" style={{ flex: 1 }}>
-                <Input
-                  type="date"
-                  {...register(`milestones.${index}.dueDate`)}
+                <Controller
+                  name={`milestones.${index}.dueDate`}
+                  control={control}
+                  render={({ field: f }) => (
+                    <Input
+                      type="date"
+                      value={f.value}
+                      onChange={(e: InputChangeEvent) => f.onChange(e.value)}
+                      onBlur={f.onBlur}
+                    />
+                  )}
                 />
               </div>
               <Button

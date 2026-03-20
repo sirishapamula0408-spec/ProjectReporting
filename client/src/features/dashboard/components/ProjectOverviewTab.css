@@ -1,0 +1,128 @@
+.project-overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+/* Chart section cards */
+.project-overview__section {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+
+.project-overview__section h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-800);
+  margin-bottom: var(--space-4);
+}
+
+/* Charts row — two columns on desktop */
+.project-overview__charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+  .project-overview__charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Health summary panel */
+.project-overview__health-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .project-overview__health-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-overview__health-item {
+  padding: var(--space-3);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.project-overview__health-item h4 {
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-2);
+}
+
+.project-overview__health-item p {
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+  line-height: 1.5;
+}
+
+/* Team composition */
+.project-overview__team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+.project-overview__team-item {
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.project-overview__team-item .role-name {
+  font-size: var(--text-caption);
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+  font-weight: var(--weight-semibold);
+}
+
+.project-overview__team-item .role-count {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-800);
+}
+
+/* Empty state inside sections */
+.project-overview__empty {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-400);
+  font-size: var(--text-body);
+}
+
+/* Client satisfaction RAG */
+.project-overview__satisfaction-rag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.project-overview__satisfaction-rag--GREEN {
+  background: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.project-overview__satisfaction-rag--AMBER {
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+}
+
+.project-overview__satisfaction-rag--RED {
+  background: var(--color-red-light);
+  color: var(--color-red);
+}

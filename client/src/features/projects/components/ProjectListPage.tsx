@@ -1,5 +1,6 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, GridColumn } from '@progress/kendo-react-grid';
+import { Grid, GridColumn, type GridCellProps } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
 import { useProjects } from '../hooks/useProjects';
 import { LoadingSpinner, SkeletonLoader } from '../../../components/shared';
@@ -27,15 +28,37 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+/** Extracted grid cell: status badge */
+function StatusCellRenderer(props: GridCellProps) {
+  return (
+    <td>
+      <StatusBadge status={props.dataItem.status} />
+    </td>
+  );
+}
+
+/** Extracted grid cell: contract value formatted as INR */
+function ContractValueCell(props: GridCellProps) {
+  return (
+    <td className="project-list__currency-cell">
+      {formatINR(props.dataItem.contractValue)}
+    </td>
+  );
+}
+
+const skeletonMarginStyle = { marginTop: 24 } as const;
+const gridCursorStyle = { cursor: 'pointer' } as const;
+
 export function ProjectListPage() {
   const navigate = useNavigate();
   const { data, isLoading } = useProjects();
+  const handleRowClick = useCallback((e: any) => navigate(`/projects/${e.dataItem.id}`), [navigate]);
 
   if (isLoading) {
     return (
       <div className="project-list">
         <SkeletonLoader type="kpi-row" count={3} />
-        <div style={{ marginTop: 24 }}>
+        <div style={skeletonMarginStyle}>
           <SkeletonLoader type="grid" count={5} />
         </div>
       </div>
@@ -70,35 +93,17 @@ export function ProjectListPage() {
           sortable
           filterable
           pageable={{ pageSizes: [10, 20, 50] }}
-          onRowClick={(e) => navigate(`/projects/${e.dataItem.id}`)}
+          onRowClick={handleRowClick}
           className="project-list__grid"
-          style={{ cursor: 'pointer' }}
+          style={gridCursorStyle}
         >
           <GridColumn field="code" title="Code" width="120" />
           <GridColumn field="name" title="Project Name" />
           <GridColumn field="client" title="Client" width="180" />
-          <GridColumn
-            field="status"
-            title="Status"
-            width="130"
-            cell={(props) => (
-              <td>
-                <StatusBadge status={props.dataItem.status} />
-              </td>
-            )}
-          />
+          <GridColumn field="status" title="Status" width="130" cell={StatusCellRenderer} />
           <GridColumn field="startDate" title="Start Date" width="120" />
           <GridColumn field="endDate" title="End Date" width="120" />
-          <GridColumn
-            field="contractValue"
-            title="Contract Value"
-            width="160"
-            cell={(props) => (
-              <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
-                {formatINR(props.dataItem.contractValue)}
-              </td>
-            )}
-          />
+          <GridColumn field="contractValue" title="Contract Value" width="160" cell={ContractValueCell} />
           <GridColumn
             field="manager.displayName"
             title="Manager"

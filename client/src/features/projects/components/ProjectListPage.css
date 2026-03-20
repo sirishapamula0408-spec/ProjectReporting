@@ -46,3 +46,8 @@
   font-weight: var(--weight-semibold);
   text-transform: capitalize;
 }
+
+.project-list__currency-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

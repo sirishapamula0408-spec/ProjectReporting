@@ -1,0 +1,124 @@
+.pm-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pm-dashboard__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pm-dashboard__title {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+}
+
+.pm-dashboard__freshness {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+}
+
+/* Status badges */
+.pm-dashboard__status-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* RAG dot + text */
+.pm-dashboard__rag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-body);
+}
+
+.pm-dashboard__rag-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.pm-dashboard__rag-dot--GREEN { background: var(--color-green); }
+.pm-dashboard__rag-dot--AMBER { background: var(--color-amber); }
+.pm-dashboard__rag-dot--RED   { background: var(--color-red); }
+
+/* Budget progress bar */
+.pm-dashboard__progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.pm-dashboard__progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.pm-dashboard__progress-fill--green { background: var(--color-green); }
+.pm-dashboard__progress-fill--amber { background: var(--color-amber); }
+.pm-dashboard__progress-fill--red   { background: var(--color-red); }
+
+.pm-dashboard__progress-label {
+  font-size: var(--text-caption);
+  color: var(--color-gray-500);
+  margin-top: 2px;
+}
+
+/* Project name link */
+.pm-dashboard__project-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.pm-dashboard__project-link:hover {
+  text-decoration: underline;
+}
+
+/* Empty state */
+.pm-dashboard__empty {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: var(--color-gray-500);
+}
+
+.pm-dashboard__empty h3 {
+  font-size: var(--text-h3);
+  margin-bottom: var(--space-2);
+  color: var(--color-gray-700);
+}
+
+/* Grid section */
+.pm-dashboard__grid-section {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+
+.pm-dashboard__grid-section h2 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-800);
+}
+
+.pm-dashboard__tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

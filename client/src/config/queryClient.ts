@@ -10,13 +10,14 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 2 * 60 * 1000, // 2 minutes
+      gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
       retry: (failureCount, error: unknown) => {
         // Don't retry auth errors
         const status = (error as { response?: { status?: number } })?.response?.status;
         if (status === 401 || status === 403) return false;
         return failureCount < 3;
       },
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: 'always',
     },
     mutations: {
       retry: false,

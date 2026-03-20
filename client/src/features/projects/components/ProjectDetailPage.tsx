@@ -7,7 +7,10 @@ import { Breadcrumbs, LoadingSpinner, SkeletonLoader } from '../../../components
 import { useToast } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
+import { ProjectOverviewTab } from '../../dashboard';
 import './ProjectDetailPage.css';
+
+const skeletonMarginStyle = { marginTop: 24 } as const;
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   PROPOSAL: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
@@ -23,6 +26,7 @@ export function ProjectDetailPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [selectedTab, setSelectedTab] = useState(0);
+  const handleTabSelect = useCallback((e: any) => setSelectedTab(e.selected), []);
 
   const { data: project, isLoading } = useProjectDetail(projectId);
   const { data: milestones } = useMilestones(projectId);
@@ -41,10 +45,10 @@ export function ProjectDetailPage() {
     return (
       <div>
         <SkeletonLoader type="text" count={2} />
-        <div style={{ marginTop: 24 }}>
+        <div style={skeletonMarginStyle}>
           <SkeletonLoader type="kpi-row" count={4} />
         </div>
-        <div style={{ marginTop: 24 }}>
+        <div style={skeletonMarginStyle}>
           <SkeletonLoader type="chart" />
         </div>
       </div>
@@ -124,60 +128,9 @@ export function ProjectDetailPage() {
       </div>
 
       {/* Tabs */}
-      <TabStrip selected={selectedTab} onSelect={(e) => setSelectedTab(e.selected)}>
+      <TabStrip selected={selectedTab} onSelect={handleTabSelect}>
         <TabStripTab title="Overview">
-          <div className="project-detail__overview">
-            {/* Project Info Card */}
-            <div className="project-detail__card">
-              <h3>Project Details</h3>
-              <div className="project-detail__info-grid">
-                <div><span className="label">Client</span><span className="value">{project.client}</span></div>
-                <div><span className="label">Contract Value</span><span className="value">{formatINR(project.contractValue)}</span></div>
-                <div><span className="label">Start Date</span><span className="value">{project.startDate}</span></div>
-                <div><span className="label">End Date</span><span className="value">{project.endDate}</span></div>
-                <div><span className="label">Business Unit</span><span className="value">{project.businessUnit}</span></div>
-                <div><span className="label">Manager</span><span className="value">{project.manager.displayName}</span></div>
-              </div>
-              {project.description && (
-                <p className="project-detail__description">{project.description}</p>
-              )}
-            </div>
-
-            {/* Payment Milestones */}
-            <div className="project-detail__card">
-              <h3>Payment Milestones</h3>
-              {(!milestones || milestones.length === 0) ? (
-                <p className="project-detail__empty-text">No milestones defined. Edit the project to add milestones.</p>
-              ) : (
-                <table className="project-detail__milestone-table">
-                  <thead>
-                    <tr>
-                      <th>Milestone</th>
-                      <th>Amount</th>
-                      <th>Due Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {milestones.map((m) => (
-                      <tr key={m.id}>
-                        <td>{m.name}</td>
-                        <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
-                          {formatINR(m.amount)}
-                        </td>
-                        <td>{m.dueDate}</td>
-                        <td>
-                          <span className={`milestone-status ${m.isPaid ? 'milestone-status--paid' : 'milestone-status--due'}`}>
-                            {m.isPaid ? 'PAID' : 'DUE'}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
+          <ProjectOverviewTab projectId={projectId} />
         </TabStripTab>
 
         <TabStripTab title="Costs">

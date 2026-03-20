@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './config/queryClient';
@@ -5,24 +6,28 @@ import { AuthProvider } from './context/AuthContext';
 import { PrivateRoute, getRoleDashboard } from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
-import { LoginPage } from './features/auth';
-import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
 import { AuthLayout, DashboardLayout } from './components/layout';
-import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
+import { ToastProvider, ErrorBoundary, SkipLinks, LoadingSpinner } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
 import './styles/tokens.css';
 import './styles/buttons.css';
 import './styles/breakpoints.css';
 
-// Placeholder pages — will be replaced in later stories
-function PMDashboard() {
-  return <div style={{ padding: '24px' }}><h1>PM Dashboard</h1><p>Coming in PRT-30/31</p></div>;
-}
+// Route-level code splitting
+const LoginPage = lazy(() => import('./features/auth/components/LoginPage').then(m => ({ default: m.LoginPage })));
+const ProjectListPage = lazy(() => import('./features/projects/components/ProjectListPage').then(m => ({ default: m.ProjectListPage })));
+const ProjectDetailPage = lazy(() => import('./features/projects/components/ProjectDetailPage').then(m => ({ default: m.ProjectDetailPage })));
+const CreateProjectPage = lazy(() => import('./features/projects/components/CreateProjectPage').then(m => ({ default: m.CreateProjectPage })));
+const EditProjectPage = lazy(() => import('./features/projects/components/EditProjectPage').then(m => ({ default: m.EditProjectPage })));
+const PMDashboardPage = lazy(() => import('./features/dashboard/components/PmDashboardPage').then(m => ({ default: m.PMDashboardPage })));
+
+const placeholderStyle = { padding: '24px' } as const;
+
 function Portfolio() {
-  return <div style={{ padding: '24px' }}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
+  return <div style={placeholderStyle}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
 }
 function CommandCenter() {
-  return <div style={{ padding: '24px' }}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
+  return <div style={placeholderStyle}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
 
 /** Redirects authenticated users to their role-appropriate dashboard */
@@ -40,6 +45,7 @@ export default function App() {
           <BrowserRouter>
             <SkipLinks />
             <AuthProvider>
+              <Suspense fallback={<LoadingSpinner />}>
               <Routes>
             {/* Public — Auth layout (no sidebar) */}
             <Route element={<AuthLayout />}>
@@ -62,7 +68,7 @@ export default function App() {
                 path={ROUTES.PM_DASHBOARD}
                 element={
                   <PrivateRoute allowedRoles={['PM']}>
-                    <PMDashboard />
+                    <PMDashboardPage />
                   </PrivateRoute>
                 }
               />
@@ -123,6 +129,7 @@ export default function App() {
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
+              </Suspense>
             </AuthProvider>
           </BrowserRouter>
         </ToastProvider>

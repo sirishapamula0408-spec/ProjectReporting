@@ -13,16 +13,18 @@ export function CreateProjectPage() {
     const { milestones, ...projectData } = data;
     const project = await createProject.mutateAsync(projectData);
 
-    // Create milestones for the new project
+    // Create milestones for the new project in parallel
     if (milestones && milestones.length > 0) {
-      for (const m of milestones) {
-        await fetch(`/api/projects/${project.id}/milestones`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(m),
-        });
-      }
+      await Promise.all(
+        milestones.map((m: any) =>
+          fetch(`/api/projects/${project.id}/milestones`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(m),
+          })
+        )
+      );
     }
 
     navigate(`/projects/${project.id}`, { replace: true });

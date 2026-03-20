@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Input } from '@progress/kendo-react-inputs';
+import { Input, type InputChangeEvent } from '@progress/kendo-react-inputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { useAuth } from '../../../context/AuthContext';
 import { getRoleDashboard } from '../../../components/PrivateRoute';
@@ -24,11 +24,12 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { username: '', password: '' },
   });
 
   const onSubmit = async (data: LoginForm) => {
@@ -84,12 +85,20 @@ export function LoginPage() {
             <label className="login-label" htmlFor="username">
               Username or Email
             </label>
-            <Input
-              id="username"
-              placeholder="name@company.com"
-              {...register('username')}
-              valid={!errors.username}
-              className="login-input"
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="username"
+                  placeholder="name@company.com"
+                  value={field.value}
+                  onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                  onBlur={field.onBlur}
+                  valid={!errors.username}
+                  className="login-input"
+                />
+              )}
             />
             {errors.username && <span className="login-error">{errors.username.message}</span>}
           </div>
@@ -98,13 +107,21 @@ export function LoginPage() {
             <label className="login-label" htmlFor="password">
               Password
             </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              {...register('password')}
-              valid={!errors.password}
-              className="login-input"
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={field.value}
+                  onChange={(e: InputChangeEvent) => field.onChange(e.value)}
+                  onBlur={field.onBlur}
+                  valid={!errors.password}
+                  className="login-input"
+                />
+              )}
             />
             {errors.password && <span className="login-error">{errors.password.message}</span>}
           </div>
