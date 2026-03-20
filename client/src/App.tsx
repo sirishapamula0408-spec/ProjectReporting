@@ -7,6 +7,7 @@ import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
 import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
+import { PortfolioDashboardPage } from './features/portfolio';
 import { AuthLayout, DashboardLayout } from './components/layout';
 import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
@@ -18,9 +19,7 @@ import './styles/breakpoints.css';
 function PMDashboard() {
   return <div style={{ padding: '24px' }}><h1>PM Dashboard</h1><p>Coming in PRT-30/31</p></div>;
 }
-function Portfolio() {
-  return <div style={{ padding: '24px' }}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
-}
+// Portfolio placeholder removed — now using PortfolioDashboardPage
 function CommandCenter() {
   return <div style={{ padding: '24px' }}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
@@ -104,7 +103,7 @@ export default function App() {
                 path={ROUTES.PORTFOLIO}
                 element={
                   <PrivateRoute allowedRoles={['BU_HEAD', 'CFO']}>
-                    <Portfolio />
+                    <PortfolioDashboardPage />
                   </PrivateRoute>
                 }
               />

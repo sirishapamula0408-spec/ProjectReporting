@@ -5,6 +5,8 @@ import { useState, useCallback } from 'react';
 import { useProjectDetail, useMilestones, useTransitionStatus } from '../hooks/useProjects';
 import { Breadcrumbs, LoadingSpinner, SkeletonLoader } from '../../../components/shared';
 import { useToast } from '../../../components/shared';
+import { useAuth } from '../../../context/AuthContext';
+import { ReviewNotesPanel, ExportButtons, useExportProjectPdf, useExportProjectExcel } from '../../portfolio';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
 import './ProjectDetailPage.css';
@@ -24,9 +26,30 @@ export function ProjectDetailPage() {
   const { showToast } = useToast();
   const [selectedTab, setSelectedTab] = useState(0);
 
+  const { user } = useAuth();
   const { data: project, isLoading } = useProjectDetail(projectId);
   const { data: milestones } = useMilestones(projectId);
   const transitionStatus = useTransitionStatus(projectId);
+  const exportPdf = useExportProjectPdf(projectId);
+  const exportExcel = useExportProjectExcel(projectId);
+
+  const handleExportPdf = useCallback(async () => {
+    try {
+      await exportPdf.mutateAsync();
+      showToast('Project PDF exported successfully', 'success');
+    } catch {
+      showToast('Failed to export PDF', 'error');
+    }
+  }, [exportPdf, showToast]);
+
+  const handleExportExcel = useCallback(async () => {
+    try {
+      await exportExcel.mutateAsync();
+      showToast('Project Excel exported successfully', 'success');
+    } catch {
+      showToast('Failed to export Excel', 'error');
+    }
+  }, [exportExcel, showToast]);
 
   const handleStatusChange = useCallback(async (newStatus: string) => {
     try {
@@ -90,6 +113,12 @@ export function ProjectDetailPage() {
           </p>
         </div>
         <div className="project-detail__actions">
+          <ExportButtons
+            onExportPdf={handleExportPdf}
+            onExportExcel={handleExportExcel}
+            isPdfLoading={exportPdf.isPending}
+            isExcelLoading={exportExcel.isPending}
+          />
           <Button
             className="btn-secondary"
             onClick={() => navigate(`/projects/${projectId}/edit`)}
@@ -197,6 +226,12 @@ export function ProjectDetailPage() {
             <p>Team allocation coming in Epic 3 (PRT-22)</p>
           </div>
         </TabStripTab>
+
+        {(user?.role === 'BU_HEAD' || user?.role === 'CFO') && (
+          <TabStripTab title="Reviews">
+            <ReviewNotesPanel projectId={projectId} />
+          </TabStripTab>
+        )}
       </TabStrip>
     </div>
   );
