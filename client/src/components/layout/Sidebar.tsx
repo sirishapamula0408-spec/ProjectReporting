@@ -87,10 +87,10 @@ export function Sidebar() {
       <div className="sidebar__brand">
         <div className="sidebar__logo">
           <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="white" />
-            <rect x="8" y="14" width="4" height="10" rx="1" fill="var(--color-primary)" />
-            <rect x="14" y="10" width="4" height="14" rx="1" fill="var(--color-primary)" />
-            <rect x="20" y="6" width="4" height="18" rx="1" fill="var(--color-primary)" />
+            <rect width="32" height="32" rx="8" fill="var(--color-primary)" />
+            <rect x="8" y="14" width="4" height="10" rx="1" fill="white" />
+            <rect x="14" y="10" width="4" height="14" rx="1" fill="white" />
+            <rect x="20" y="6" width="4" height="18" rx="1" fill="white" />
           </svg>
         </div>
         <span className="sidebar__brand-name">ProjectReporting</span>
