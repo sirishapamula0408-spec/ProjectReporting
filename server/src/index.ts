@@ -10,6 +10,7 @@ import projectRoutes from './features/projects/routes.js';
 import milestoneRoutes from './features/milestones/routes.js';
 import teamMemberRoutes from './features/team-members/routes.js';
 import forecastRoutes from './features/forecast/routes.js';
+import burnRevenueRoutes from './features/burn-revenue/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/projects/:id/milestones', milestoneRoutes);
 app.use('/api/team-members', teamMemberRoutes);
 app.use('/api/projects/:id/forecast', forecastRoutes);
+app.use('/api/projects/:id/burn-revenue', burnRevenueRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);
