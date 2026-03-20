@@ -7,6 +7,7 @@ import { Breadcrumbs, LoadingSpinner, SkeletonLoader } from '../../../components
 import { useToast } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
+import { HealthTab } from '../../health';
 import './ProjectDetailPage.css';
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
@@ -187,9 +188,7 @@ export function ProjectDetailPage() {
         </TabStripTab>
 
         <TabStripTab title="Health">
-          <div className="project-detail__placeholder">
-            <p>Health updates coming in Epic 5 (PRT-29)</p>
-          </div>
+          <HealthTab projectId={projectId} />
         </TabStripTab>
 
         <TabStripTab title="Team">

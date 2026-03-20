@@ -7,6 +7,7 @@ import { useAuth } from './context/AuthContext';
 import { ROUTES } from './config/routes';
 import { LoginPage } from './features/auth';
 import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
+import { PmDashboardPage } from './features/dashboard';
 import { AuthLayout, DashboardLayout } from './components/layout';
 import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
 import '@progress/kendo-theme-default/dist/all.css';
@@ -15,9 +16,6 @@ import './styles/buttons.css';
 import './styles/breakpoints.css';
 
 // Placeholder pages — will be replaced in later stories
-function PMDashboard() {
-  return <div style={{ padding: '24px' }}><h1>PM Dashboard</h1><p>Coming in PRT-30/31</p></div>;
-}
 function Portfolio() {
   return <div style={{ padding: '24px' }}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
 }
@@ -62,7 +60,7 @@ export default function App() {
                 path={ROUTES.PM_DASHBOARD}
                 element={
                   <PrivateRoute allowedRoles={['PM']}>
-                    <PMDashboard />
+                    <PmDashboardPage />
                   </PrivateRoute>
                 }
               />

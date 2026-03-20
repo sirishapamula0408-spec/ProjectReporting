@@ -1,0 +1,214 @@
+.health-tab {
+  padding: var(--space-5) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Period selector row */
+.health-tab__period-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.health-tab__period-row label {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-700);
+}
+
+/* Section card */
+.health-tab__section {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.health-tab__section h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-4) 0;
+}
+
+/* RAG selector */
+.health-tab__rag-group {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.health-tab__rag-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  cursor: pointer;
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.health-tab__rag-btn:hover {
+  border-color: var(--color-gray-400);
+}
+
+.health-tab__rag-btn--green.health-tab__rag-btn--selected {
+  border-color: var(--color-green);
+  background: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.health-tab__rag-btn--amber.health-tab__rag-btn--selected {
+  border-color: var(--color-amber);
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+}
+
+.health-tab__rag-btn--red.health-tab__rag-btn--selected {
+  border-color: var(--color-red);
+  background: var(--color-red-light);
+  color: var(--color-red);
+}
+
+.health-tab__rag-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.health-tab__rag-dot--green {
+  background: var(--color-green);
+}
+
+.health-tab__rag-dot--amber {
+  background: var(--color-amber);
+}
+
+.health-tab__rag-dot--red {
+  background: var(--color-red);
+}
+
+/* Text areas */
+.health-tab__textarea {
+  width: 100%;
+  min-height: 80px;
+}
+
+.health-tab__field {
+  margin-bottom: var(--space-4);
+}
+
+.health-tab__field:last-child {
+  margin-bottom: 0;
+}
+
+.health-tab__field label {
+  display: block;
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-gray-700);
+  margin-bottom: var(--space-2);
+}
+
+/* Risks section */
+.health-tab__risk-form {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-end;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.health-tab__risk-form .health-tab__field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.health-tab__risk-form .health-tab__field--small {
+  flex: 0 0 160px;
+}
+
+.health-tab__risk-form .health-tab__field--btn {
+  flex: 0 0 auto;
+  padding-bottom: 0;
+}
+
+/* Risk status badge */
+.health-tab__risk-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.health-tab__risk-status--OPEN {
+  background: var(--color-red-light);
+  color: var(--color-red);
+}
+
+.health-tab__risk-status--MITIGATED {
+  background: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.health-tab__risk-status--CLOSED {
+  background: var(--color-gray-200);
+  color: var(--color-gray-600);
+}
+
+.health-tab__risk-status--MATERIALIZED {
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+}
+
+/* Probability badge */
+.health-tab__prob {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+.health-tab__prob--LOW {
+  background: var(--color-green-light);
+  color: var(--color-green);
+}
+
+.health-tab__prob--MEDIUM {
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+}
+
+.health-tab__prob--HIGH {
+  background: var(--color-red-light);
+  color: var(--color-red);
+}
+
+/* Save button row */
+.health-tab__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .health-tab__risk-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .health-tab__risk-form .health-tab__field--small {
+    flex: 1;
+  }
+  .health-tab__rag-group {
+    flex-direction: column;
+  }
+}
