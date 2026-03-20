@@ -126,14 +126,16 @@ const NAV_ITEMS: Record<Role, NavItem[]> = {
   BU_HEAD: [
     { path: ROUTES.PORTFOLIO, label: 'Portfolio', iconSvg: <PortfolioIcon /> },
     { path: ROUTES.PROJECTS, label: 'All Projects', iconSvg: <DashboardIcon /> },
-    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
-    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
+    { path: ROUTES.TEAM_REGISTRY, label: 'Team', iconSvg: <TeamIcon /> },
+    { path: '/financials', label: 'Financials', iconSvg: <FinancialsIcon /> },
+    { path: '/reports', label: 'Reports', iconSvg: <ReportsIcon /> },
   ],
   CFO: [
     { path: ROUTES.COMMAND_CENTER, label: 'Command Center', iconSvg: <CommandIcon /> },
     { path: ROUTES.PORTFOLIO, label: 'Portfolio', iconSvg: <PortfolioIcon /> },
-    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
-    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
+    { path: ROUTES.TEAM_REGISTRY, label: 'Team', iconSvg: <TeamIcon /> },
+    { path: '/financials', label: 'Financials', iconSvg: <FinancialsIcon /> },
+    { path: '/reports', label: 'Reports', iconSvg: <ReportsIcon /> },
   ],
 };
 

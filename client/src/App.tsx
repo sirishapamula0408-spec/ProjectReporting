@@ -27,6 +27,12 @@ const placeholderStyle = { padding: '24px' } as const;
 function CommandCenter() {
   return <div style={placeholderStyle}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
+function Financials() {
+  return <div style={placeholderStyle}><h1>Financials</h1><p>Financial analytics and cost tracking — coming soon.</p></div>;
+}
+function Reports() {
+  return <div style={placeholderStyle}><h1>Reports</h1><p>Report generation and export — coming soon.</p></div>;
+}
 
 /** Redirects authenticated users to their role-appropriate dashboard */
 function RoleRedirect() {
@@ -128,6 +134,24 @@ export default function App() {
                 element={
                   <PrivateRoute allowedRoles={['CFO']}>
                     <CommandCenter />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Shared routes */}
+              <Route
+                path="/financials"
+                element={
+                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
+                    <Financials />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/reports"
+                element={
+                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
+                    <Reports />
                   </PrivateRoute>
                 }
               />
