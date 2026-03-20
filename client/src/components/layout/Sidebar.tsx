@@ -10,6 +10,7 @@ interface NavItem {
   path: string;
   label: string;
   iconSvg: React.ReactNode;
+  placeholder?: boolean;
 }
 
 const DashboardIcon = () => (
@@ -21,12 +22,44 @@ const DashboardIcon = () => (
   </svg>
 );
 
+const ProjectsIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="2" y="4" width="16" height="13" rx="2" />
+    <path d="M7 4V3a1 1 0 011-1h4a1 1 0 011 1v1" />
+    <path d="M2 9h16" />
+  </svg>
+);
+
 const TeamIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
     <circle cx="10" cy="6" r="3" />
     <path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" />
     <circle cx="16" cy="6" r="2" />
     <path d="M18 15c0-2-1.3-3.7-3-4.5" />
+  </svg>
+);
+
+const FinancialsIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M10 2v16" />
+    <path d="M14 5H8.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H6" />
+  </svg>
+);
+
+const RisksIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M10 3L2 17h16L10 3z" />
+    <path d="M10 8v4" />
+    <circle cx="10" cy="14" r="0.5" fill="currentColor" />
+  </svg>
+);
+
+const ReportsIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="3" y="2" width="14" height="16" rx="2" />
+    <path d="M7 6h6" />
+    <path d="M7 10h6" />
+    <path d="M7 14h3" />
   </svg>
 );
 
@@ -45,10 +78,25 @@ const CommandIcon = () => (
   </svg>
 );
 
-const NewProjectIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <circle cx="10" cy="10" r="8" />
-    <path d="M10 6v8M6 10h8" />
+const NewEntryIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M9 3v12M3 9h12" />
+  </svg>
+);
+
+const HelpIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <circle cx="9" cy="9" r="7.5" />
+    <path d="M6.5 6.5a2.5 2.5 0 014.5 1.5c0 1.5-2 2-2 3.5" />
+    <circle cx="9" cy="14" r="0.5" fill="currentColor" />
+  </svg>
+);
+
+const LogOutIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M6 15H3a1 1 0 01-1-1V4a1 1 0 011-1h3" />
+    <path d="M11 12l4-3-4-3" />
+    <path d="M15 9H7" />
   </svg>
 );
 
@@ -69,16 +117,23 @@ const STORAGE_KEY = 'prt-sidebar-collapsed';
 const NAV_ITEMS: Record<Role, NavItem[]> = {
   PM: [
     { path: ROUTES.PM_DASHBOARD, label: 'Dashboard', iconSvg: <DashboardIcon /> },
-    { path: ROUTES.PROJECTS, label: 'Projects', iconSvg: <PortfolioIcon /> },
+    { path: ROUTES.PROJECTS, label: 'Projects', iconSvg: <ProjectsIcon /> },
     { path: ROUTES.TEAM_REGISTRY, label: 'Team', iconSvg: <TeamIcon /> },
+    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
+    { path: '#risks', label: 'Risks', iconSvg: <RisksIcon />, placeholder: true },
+    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
   ],
   BU_HEAD: [
     { path: ROUTES.PORTFOLIO, label: 'Portfolio', iconSvg: <PortfolioIcon /> },
     { path: ROUTES.PROJECTS, label: 'All Projects', iconSvg: <DashboardIcon /> },
+    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
+    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
   ],
   CFO: [
     { path: ROUTES.COMMAND_CENTER, label: 'Command Center', iconSvg: <CommandIcon /> },
     { path: ROUTES.PORTFOLIO, label: 'Portfolio', iconSvg: <PortfolioIcon /> },
+    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
+    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
   ],
 };
 
@@ -93,7 +148,6 @@ export function Sidebar() {
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, String(collapsed)); }
     catch { /* ignore */ }
-    // Update CSS custom property on root so DashboardLayout can respond
     document.documentElement.style.setProperty(
       '--sidebar-current-width',
       collapsed ? 'var(--sidebar-width-collapsed)' : 'var(--sidebar-width-expanded)',
@@ -136,39 +190,76 @@ export function Sidebar() {
         {collapsed ? <ExpandIcon /> : <CollapseIcon />}
       </button>
 
-      {/* Navigation */}
-      <nav className="sidebar__nav">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`
-            }
-            title={collapsed ? item.label : undefined}
-          >
-            <span className="sidebar__link-icon">{item.iconSvg}</span>
-            {!collapsed && <span className="sidebar__link-label">{item.label}</span>}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* New Project Button (PM only) */}
-      {user.role === 'PM' && (
-        <div className="sidebar__action">
-          <Button
-            themeColor="light"
-            className="sidebar__new-btn"
-            onClick={() => navigate(ROUTES.PROJECT_NEW)}
-            title={collapsed ? 'New Project' : undefined}
-          >
-            <NewProjectIcon />
-            {!collapsed && <span>New Project</span>}
-          </Button>
+      {/* Menu Label */}
+      {!collapsed && (
+        <div className="sidebar__menu-header">
+          <span className="sidebar__menu-label">MAIN MENU</span>
+          <span className="sidebar__menu-subtitle">Enterprise Suite</span>
         </div>
       )}
 
-      {/* User info + Logout */}
+      {/* Navigation */}
+      <nav className="sidebar__nav">
+        {navItems.map((item) =>
+          item.placeholder ? (
+            <span
+              key={item.path}
+              className="sidebar__link sidebar__link--placeholder"
+              title={collapsed ? item.label : undefined}
+            >
+              <span className="sidebar__link-icon">{item.iconSvg}</span>
+              {!collapsed && <span className="sidebar__link-label">{item.label}</span>}
+            </span>
+          ) : (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`
+              }
+              title={collapsed ? item.label : undefined}
+            >
+              <span className="sidebar__link-icon">{item.iconSvg}</span>
+              {!collapsed && <span className="sidebar__link-label">{item.label}</span>}
+            </NavLink>
+          )
+        )}
+      </nav>
+
+      {/* New Entry Button */}
+      <div className="sidebar__action">
+        <Button
+          themeColor="primary"
+          className="sidebar__new-btn"
+          onClick={() => navigate(ROUTES.PROJECT_NEW)}
+          title={collapsed ? 'New Entry' : undefined}
+        >
+          <NewEntryIcon />
+          {!collapsed && <span>New Entry</span>}
+        </Button>
+      </div>
+
+      {/* Bottom links */}
+      <div className="sidebar__bottom-links">
+        <button
+          className="sidebar__bottom-link"
+          title={collapsed ? 'Help Center' : undefined}
+          onClick={() => { /* placeholder */ }}
+        >
+          <HelpIcon />
+          {!collapsed && <span>Help Center</span>}
+        </button>
+        <button
+          className="sidebar__bottom-link sidebar__bottom-link--logout"
+          onClick={handleLogout}
+          title={collapsed ? 'Log Out' : undefined}
+        >
+          <LogOutIcon />
+          {!collapsed && <span>Log Out</span>}
+        </button>
+      </div>
+
+      {/* User info */}
       <div className="sidebar__footer">
         <div className="sidebar__user">
           <div className="sidebar__avatar">
@@ -183,17 +274,6 @@ export function Sidebar() {
             </div>
           )}
         </div>
-        {!collapsed && (
-          <Button
-            fillMode="flat"
-            size="small"
-            className="sidebar__logout"
-            onClick={handleLogout}
-            title="Logout"
-          >
-            Logout
-          </Button>
-        )}
       </div>
     </aside>
   );
