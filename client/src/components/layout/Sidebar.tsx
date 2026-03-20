@@ -21,32 +21,12 @@ const DashboardIcon = () => (
   </svg>
 );
 
-const FinancialsIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M10 2v16M6 6l4-4 4 4M4 10h12M4 14h12M7 18h6" />
-  </svg>
-);
-
 const TeamIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
     <circle cx="10" cy="6" r="3" />
     <path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" />
     <circle cx="16" cy="6" r="2" />
     <path d="M18 15c0-2-1.3-3.7-3-4.5" />
-  </svg>
-);
-
-const RisksIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M10 2L18 17H2L10 2z" />
-    <path d="M10 8v4M10 14v1" />
-  </svg>
-);
-
-const ReportsIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <rect x="3" y="2" width="14" height="16" rx="2" />
-    <path d="M7 6h6M7 10h6M7 14h3" />
   </svg>
 );
 
@@ -155,7 +135,7 @@ export function Sidebar() {
           <div className="sidebar__user-info">
             <span className="sidebar__user-name">{user.displayName}</span>
             <span className="sidebar__user-role">
-              {user.role === 'PM' ? 'Project Manager' : user.role === 'BU_HEAD' ? 'BU Head' : 'CFO'}
+              {{ PM: 'Project Manager', BU_HEAD: 'BU Head', CFO: 'CFO' }[user.role as string] ?? user.role}
             </span>
           </div>
         </div>
