@@ -321,3 +321,111 @@ export async function getProjectDashboard(projectId: number, user: AuthUser) {
     },
   };
 }
+
+/**
+ * Portfolio Dashboard — BU_HEAD and CFO only.
+ */
+export async function getPortfolioDashboard(user: AuthUser) {
+  if (user.role === 'PM') {
+    throw new AppError(403, 'FORBIDDEN', 'Portfolio dashboard is not available for PM role');
+  }
+
+  const where = getProjectScope(user);
+
+  const projects = await prisma.project.findMany({
+    where,
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      status: true,
+      contractValue: true,
+      businessUnit: true,
+      updatedAt: true,
+      manager: { select: { id: true, displayName: true } },
+      costEntries: {
+        select: { actualAmount: true, period: true },
+        orderBy: { period: 'desc' },
+      },
+      healthUpdates: {
+        select: { clientSatisfactionRag: true, period: true },
+        orderBy: { period: 'desc' },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: 'desc' },
+  });
+
+  const projectSummaries = projects.map((p) => {
+    const contractVal = new Decimal(p.contractValue.toString());
+    const totalActualCost = p.costEntries.reduce(
+      (sum, ce) => sum.plus(new Decimal(ce.actualAmount.toString())),
+      new Decimal(0),
+    );
+
+    const periodTotals: Record<string, Decimal> = {};
+    for (const ce of p.costEntries) {
+      const existing = periodTotals[ce.period] ?? new Decimal(0);
+      periodTotals[ce.period] = existing.plus(new Decimal(ce.actualAmount.toString()));
+    }
+    const sortedPeriods = Object.keys(periodTotals).sort().reverse().slice(0, 6).reverse();
+    const burnRateTrend = sortedPeriods.map((period) => ({
+      period,
+      amount: (periodTotals[period] ?? new Decimal(0)).toString(),
+    }));
+
+    const margin = contractVal.isZero()
+      ? new Decimal(0)
+      : contractVal.minus(totalActualCost).div(contractVal).times(100);
+
+    const budgetUsedPct = contractVal.isZero()
+      ? new Decimal(0)
+      : totalActualCost.div(contractVal).times(100);
+
+    const latestHealth = p.healthUpdates[0]?.clientSatisfactionRag ?? null;
+
+    return {
+      id: p.id,
+      code: p.code,
+      name: p.name,
+      managerName: p.manager.displayName,
+      status: p.status,
+      healthRag: latestHealth,
+      burnRateTrend,
+      marginPct: margin.toDecimalPlaces(2).toString(),
+      budgetUsedPct: budgetUsedPct.toDecimalPlaces(2).toString(),
+      lastUpdated: p.updatedAt.toISOString(),
+    };
+  });
+
+  const totalProjects = projectSummaries.length;
+  const projectsByHealth = {
+    RED: projectSummaries.filter((p) => p.healthRag === 'RED').length,
+    AMBER: projectSummaries.filter((p) => p.healthRag === 'AMBER').length,
+    GREEN: projectSummaries.filter((p) => p.healthRag === 'GREEN').length,
+    NONE: projectSummaries.filter((p) => p.healthRag === null).length,
+  };
+
+  const totalBurnRate = projectSummaries.reduce((sum, p) => {
+    const lastEntry = p.burnRateTrend[p.burnRateTrend.length - 1];
+    return sum.plus(lastEntry ? new Decimal(lastEntry.amount) : new Decimal(0));
+  }, new Decimal(0));
+
+  const averageMargin = totalProjects > 0
+    ? projectSummaries
+        .reduce((sum, p) => sum.plus(new Decimal(p.marginPct)), new Decimal(0))
+        .div(totalProjects)
+    : new Decimal(0);
+
+  return {
+    data: {
+      projects: projectSummaries,
+      kpis: {
+        totalProjects,
+        projectsByHealth,
+        totalBurnRate: totalBurnRate.toDecimalPlaces(2).toString(),
+        averageMargin: averageMargin.toDecimalPlaces(2).toString(),
+      },
+    },
+  };
+}

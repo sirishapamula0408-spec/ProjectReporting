@@ -21,12 +21,9 @@ const CreateProjectPage = lazy(() => import('./features/projects/components/Crea
 const EditProjectPage = lazy(() => import('./features/projects/components/EditProjectPage').then(m => ({ default: m.EditProjectPage })));
 const PMDashboardPage = lazy(() => import('./features/dashboard/components/PmDashboardPage').then(m => ({ default: m.PMDashboardPage })));
 const TeamRegistryPage = lazy(() => import('./features/team-registry/components/TeamRegistryPage').then(m => ({ default: m.TeamRegistryPage })));
+const PortfolioDashboardPage = lazy(() => import('./features/portfolio/components/PortfolioDashboardPage').then(m => ({ default: m.PortfolioDashboardPage })));
 
 const placeholderStyle = { padding: '24px' } as const;
-
-function Portfolio() {
-  return <div style={placeholderStyle}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
-}
 function CommandCenter() {
   return <div style={placeholderStyle}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
@@ -120,7 +117,7 @@ export default function App() {
                 path={ROUTES.PORTFOLIO}
                 element={
                   <PrivateRoute allowedRoles={['BU_HEAD', 'CFO']}>
-                    <Portfolio />
+                    <PortfolioDashboardPage />
                   </PrivateRoute>
                 }
               />

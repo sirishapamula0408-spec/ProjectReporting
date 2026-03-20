@@ -29,4 +29,15 @@ router.get(
   }),
 );
 
+// GET /api/dashboards/portfolio — Portfolio dashboard (BU_HEAD and CFO only)
+router.get(
+  '/portfolio',
+  authenticate,
+  authorize(['BU_HEAD', 'CFO']),
+  asyncHandler(async (req, res) => {
+    const result = await dashboardService.getPortfolioDashboard(req.user! as AuthUser);
+    res.json(result);
+  }),
+);
+
 export default router;
