@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@progress/kendo-react-buttons';
 import { useAuth } from '../../context/AuthContext';
@@ -52,6 +52,20 @@ const NewProjectIcon = () => (
   </svg>
 );
 
+const CollapseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M10 3L5 8l5 5" />
+  </svg>
+);
+
+const ExpandIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M6 3l5 5-5 5" />
+  </svg>
+);
+
+const STORAGE_KEY = 'prt-sidebar-collapsed';
+
 const NAV_ITEMS: Record<Role, NavItem[]> = {
   PM: [
     { path: ROUTES.PM_DASHBOARD, label: 'Dashboard', iconSvg: <DashboardIcon /> },
@@ -71,6 +85,22 @@ const NAV_ITEMS: Record<Role, NavItem[]> = {
 export function Sidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem(STORAGE_KEY) === 'true'; }
+    catch { return false; }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, String(collapsed)); }
+    catch { /* ignore */ }
+    // Update CSS custom property on root so DashboardLayout can respond
+    document.documentElement.style.setProperty(
+      '--sidebar-current-width',
+      collapsed ? 'var(--sidebar-width-collapsed)' : 'var(--sidebar-width-expanded)',
+    );
+  }, [collapsed]);
+
+  const handleToggle = useCallback(() => setCollapsed((prev) => !prev), []);
 
   const handleLogout = useCallback(async () => {
     await logout();
@@ -82,7 +112,7 @@ export function Sidebar() {
   const navItems = NAV_ITEMS[user.role as Role] || [];
 
   return (
-    <aside className="sidebar" id="sidebar-nav">
+    <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`} id="sidebar-nav">
       {/* Brand */}
       <div className="sidebar__brand">
         <div className="sidebar__logo">
@@ -93,8 +123,18 @@ export function Sidebar() {
             <rect x="20" y="6" width="4" height="18" rx="1" fill="white" />
           </svg>
         </div>
-        <span className="sidebar__brand-name">ProjectReporting</span>
+        {!collapsed && <span className="sidebar__brand-name">ProjectReporting</span>}
       </div>
+
+      {/* Toggle */}
+      <button
+        className="sidebar__toggle"
+        onClick={handleToggle}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        title={collapsed ? 'Expand' : 'Collapse'}
+      >
+        {collapsed ? <ExpandIcon /> : <CollapseIcon />}
+      </button>
 
       {/* Navigation */}
       <nav className="sidebar__nav">
@@ -105,9 +145,10 @@ export function Sidebar() {
             className={({ isActive }) =>
               `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`
             }
+            title={collapsed ? item.label : undefined}
           >
             <span className="sidebar__link-icon">{item.iconSvg}</span>
-            <span className="sidebar__link-label">{item.label}</span>
+            {!collapsed && <span className="sidebar__link-label">{item.label}</span>}
           </NavLink>
         ))}
       </nav>
@@ -119,9 +160,10 @@ export function Sidebar() {
             themeColor="light"
             className="sidebar__new-btn"
             onClick={() => navigate(ROUTES.PROJECT_NEW)}
+            title={collapsed ? 'New Project' : undefined}
           >
             <NewProjectIcon />
-            <span>New Project</span>
+            {!collapsed && <span>New Project</span>}
           </Button>
         </div>
       )}
@@ -132,22 +174,26 @@ export function Sidebar() {
           <div className="sidebar__avatar">
             {user.displayName.charAt(0).toUpperCase()}
           </div>
-          <div className="sidebar__user-info">
-            <span className="sidebar__user-name">{user.displayName}</span>
-            <span className="sidebar__user-role">
-              {{ PM: 'Project Manager', BU_HEAD: 'BU Head', CFO: 'CFO' }[user.role as string] ?? user.role}
-            </span>
-          </div>
+          {!collapsed && (
+            <div className="sidebar__user-info">
+              <span className="sidebar__user-name">{user.displayName}</span>
+              <span className="sidebar__user-role">
+                {{ PM: 'Project Manager', BU_HEAD: 'BU Head', CFO: 'CFO' }[user.role as string] ?? user.role}
+              </span>
+            </div>
+          )}
         </div>
-        <Button
-          fillMode="flat"
-          size="small"
-          className="sidebar__logout"
-          onClick={handleLogout}
-          title="Logout"
-        >
-          Logout
-        </Button>
+        {!collapsed && (
+          <Button
+            fillMode="flat"
+            size="small"
+            className="sidebar__logout"
+            onClick={handleLogout}
+            title="Logout"
+          >
+            Logout
+          </Button>
+        )}
       </div>
     </aside>
   );
