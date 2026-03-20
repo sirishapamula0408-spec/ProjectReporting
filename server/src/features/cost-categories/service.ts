@@ -281,18 +281,64 @@ export async function batchUpsertCostEntries(
 ) {
   await getProjectOrThrow(projectId, user, true);
 
-  const results = [];
-  for (const item of items) {
-    const result = await upsertCostEntry(
-      projectId,
-      item.costCategoryId,
-      item.period,
-      item.actualAmount,
-      item.notes,
-      user,
-    );
-    results.push(result.data);
+  // Verify all categories belong to project
+  const categoryIds = [...new Set(items.map((i) => i.costCategoryId))];
+  const categories = await prisma.costCategory.findMany({
+    where: { id: { in: categoryIds }, projectId },
+    select: { id: true },
+  });
+  if (categories.length !== categoryIds.length) {
+    throw new AppError(400, 'INVALID_CATEGORY', 'One or more cost categories do not belong to this project');
   }
+
+  const results = await prisma.$transaction(async (tx) => {
+    const txResults = [];
+    for (const item of items) {
+      const existing = await tx.costEntry.findUnique({
+        where: { costCategoryId_period: { costCategoryId: item.costCategoryId, period: item.period } },
+      });
+
+      if (existing) {
+        await tx.costEntryAudit.create({
+          data: {
+            costEntryId: existing.id,
+            previousAmount: existing.actualAmount,
+            newAmount: new Prisma.Decimal(item.actualAmount),
+            changedById: user.id,
+            reason: item.notes || null,
+          },
+        });
+        const updated = await tx.costEntry.update({
+          where: { id: existing.id },
+          data: {
+            actualAmount: new Prisma.Decimal(item.actualAmount),
+            notes: item.notes !== undefined ? item.notes : existing.notes,
+          },
+          include: { costCategory: { select: { categoryType: true } } },
+        });
+        txResults.push({
+          id: updated.id, projectId, costCategoryId: updated.costCategoryId,
+          categoryType: updated.costCategory.categoryType, period: updated.period,
+          actualAmount: serializeDecimal(updated.actualAmount),
+        });
+      } else {
+        const created = await tx.costEntry.create({
+          data: {
+            projectId, costCategoryId: item.costCategoryId, period: item.period,
+            actualAmount: new Prisma.Decimal(item.actualAmount),
+            notes: item.notes || null, enteredById: user.id,
+          },
+          include: { costCategory: { select: { categoryType: true } } },
+        });
+        txResults.push({
+          id: created.id, projectId, costCategoryId: created.costCategoryId,
+          categoryType: created.costCategory.categoryType, period: created.period,
+          actualAmount: serializeDecimal(created.actualAmount),
+        });
+      }
+    }
+    return txResults;
+  });
 
   return { data: results };
 }

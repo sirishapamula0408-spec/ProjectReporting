@@ -36,6 +36,7 @@ router.get(
   '/planned-amounts',
   authenticate,
   authorize(['PM', 'BU_HEAD', 'CFO']),
+  validateQuery(periodQuerySchema),
   asyncHandler(async (req, res) => {
     const projectId = parseInt(req.params.id as string, 10);
     const user = (req as any).user as AuthUser;
@@ -81,6 +82,7 @@ router.get(
   '/cost-entries',
   authenticate,
   authorize(['PM', 'BU_HEAD', 'CFO']),
+  validateQuery(periodQuerySchema),
   asyncHandler(async (req, res) => {
     const projectId = parseInt(req.params.id as string, 10);
     const user = (req as any).user as AuthUser;
