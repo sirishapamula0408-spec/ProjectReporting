@@ -48,49 +48,44 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
-      {/* Top Navigation Bar */}
-      <header className="login-topbar">
-        <div className="login-topbar__left">
-          <div className="login-topbar__logo">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect width="32" height="32" rx="8" fill="var(--color-primary)" />
-              <rect x="8" y="14" width="4" height="10" rx="1" fill="white" />
-              <rect x="14" y="10" width="4" height="14" rx="1" fill="white" />
-              <rect x="20" y="6" width="4" height="18" rx="1" fill="white" />
+      {/* ── Left Brand Panel ── */}
+      <div className="login-brand-panel">
+        <div className="login-brand-panel__content">
+          <div className="login-brand-panel__logo">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.2)" />
+              <rect x="9" y="17" width="5" height="14" rx="1.5" fill="white" />
+              <rect x="17.5" y="12" width="5" height="19" rx="1.5" fill="white" />
+              <rect x="26" y="7" width="5" height="24" rx="1.5" fill="white" />
             </svg>
-          </div>
-          <span className="login-topbar__brand">ProjectReporting</span>
-        </div>
-        <div className="login-topbar__right">
-          <Button themeColor="primary" fillMode="outline" size="small">
-            Help
-          </Button>
-        </div>
-      </header>
-
-      {/* Blue accent line under topbar */}
-      <div className="login-topbar__accent" />
-
-      {/* Main content area */}
-      <div className="login-content">
-        <div className="login-container">
-          {/* Hero area */}
-          <div className="login-hero">
-            <div className="login-hero-icon">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <rect width="40" height="40" rx="10" fill="var(--color-primary)" opacity="0.15" />
-                <rect x="10" y="18" width="5" height="12" rx="1" fill="var(--color-primary)" />
-                <rect x="17.5" y="14" width="5" height="16" rx="1" fill="var(--color-primary)" />
-                <rect x="25" y="10" width="5" height="20" rx="1" fill="var(--color-primary)" />
-              </svg>
-            </div>
+            <span className="login-brand-panel__name">ProjectReporting</span>
           </div>
 
-          {/* Title */}
-          <h1 className="login-title">Welcome Back</h1>
-          <p className="login-subtitle">Internal portal for enterprise reporting and analytics</p>
+          <h1 className="login-brand-panel__headline">
+            Enterprise Project<br />
+            Financial Intelligence
+          </h1>
 
-          {/* Form */}
+          <p className="login-brand-panel__tagline">
+            Gain full visibility into your global project portfolio with
+            real-time financial tracking and predictive analytics.
+          </p>
+        </div>
+
+        <div className="login-brand-panel__footer">
+          <span>ENTERPRISE V4.2.0</span>
+          <span>ISO 27001 CERTIFIED</span>
+        </div>
+      </div>
+
+      {/* ── Right Form Panel ── */}
+      <div className="login-form-panel">
+        <div className="login-form-panel__content">
+          <h2 className="login-form-panel__title">Sign In</h2>
+          <p className="login-form-panel__subtitle">
+            Enter your corporate credentials to access the portal.
+          </p>
+
           <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="login-field">
               <label className="login-label" htmlFor="username">
@@ -179,26 +174,57 @@ export function LoginPage() {
             </Button>
           </form>
 
-          {/* Footer text */}
-          <p className="login-footer">
-            Secure internal application. All activities are logged and monitored.
-          </p>
-          <p className="login-copyright">&copy; 2024 ProjectReporting Enterprise Solutions.</p>
+          {/* SSO Section */}
+          <div className="login-sso">
+            <div className="login-sso__divider">
+              <span>OR CONTINUE WITH SSO</span>
+            </div>
+            <div className="login-sso__buttons">
+              <button type="button" className="login-sso__btn" onClick={(e) => e.preventDefault()}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="#1a73e8" strokeWidth="1.5" />
+                </svg>
+                Okta
+              </button>
+              <button type="button" className="login-sso__btn" onClick={(e) => e.preventDefault()}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="1" y="1" width="6" height="6" fill="#f25022" />
+                  <rect x="9" y="1" width="6" height="6" fill="#7fba00" />
+                  <rect x="1" y="9" width="6" height="6" fill="#00a4ef" />
+                  <rect x="9" y="9" width="6" height="6" fill="#ffb900" />
+                </svg>
+                Azure AD
+              </button>
+            </div>
+          </div>
+
+          {/* Security Notice */}
+          <div className="login-security-notice">
+            <div className="login-security-notice__icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-primary)" strokeWidth="1.5">
+                <path d="M10 1L3 5v4c0 5 3.5 8.5 7 10 3.5-1.5 7-5 7-10V5L10 1z" />
+                <path d="M7 10l2 2 4-4" />
+              </svg>
+            </div>
+            <div className="login-security-notice__text">
+              <strong>Security Notice:</strong> Secure internal application. All activities are
+              logged and monitored. Unauthorized access is strictly prohibited.
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="login-form-footer">
+            <div className="login-form-footer__links">
+              <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Terms of Service</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Contact Support</a>
+            </div>
+            <p className="login-form-footer__copyright">
+              &copy; 2024 ProjectReporting Enterprise Solutions
+            </p>
+          </div>
         </div>
       </div>
-
-      {/* Bottom footer bar */}
-      <footer className="login-bottom-bar">
-        <div className="login-bottom-links">
-          <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
-          <span className="login-bottom-divider">|</span>
-          <a href="#" onClick={(e) => e.preventDefault()}>Terms of Service</a>
-          <span className="login-bottom-divider">|</span>
-          <a href="#" onClick={(e) => e.preventDefault()}>Security Overview</a>
-          <span className="login-bottom-divider">|</span>
-          <a href="#" onClick={(e) => e.preventDefault()}>Contact Support</a>
-        </div>
-      </footer>
     </div>
   );
 }
