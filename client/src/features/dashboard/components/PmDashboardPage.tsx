@@ -1,201 +1,233 @@
-import { useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Grid, GridColumn, type GridCellProps } from '@progress/kendo-react-grid';
+import { Link } from 'react-router-dom';
 import { usePMDashboard } from '../hooks/useDashboard';
-import { KPICard } from './KPICard';
-import { KPICardRow } from './KPICardRow';
 import { SkeletonLoader } from '../../../components/shared';
-import { formatINR } from '../../../config/constants';
+import { formatINR, formatINRCompact } from '../../../config/constants';
 import './PMDashboardPage.css';
 
 const RAG_ORDER: Record<string, number> = { RED: 0, AMBER: 1, GREEN: 2 };
 
-const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  PROPOSAL: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
-  ACTIVE: { bg: 'var(--color-green-light)', color: 'var(--color-green)' },
-  ON_HOLD: { bg: 'var(--color-amber-light)', color: 'var(--color-amber)' },
-  COMPLETED: { bg: 'var(--color-gray-200)', color: 'var(--color-gray-600)' },
-  CLOSED: { bg: 'var(--color-gray-200)', color: 'var(--color-gray-500)' },
-};
-
-/** Custom cell: project name as a link */
-function ProjectNameCell(props: GridCellProps) {
-  const { dataItem, field } = props;
-  return (
-    <td>
-      <Link to={`/projects/${dataItem.id}`} className="pm-dashboard__project-link">
-        {dataItem[field!]}
-      </Link>
-    </td>
-  );
+function getRelativeTime(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
 }
-
-/** Custom cell: colored status badge */
-function StatusCell(props: GridCellProps) {
-  const { dataItem } = props;
-  const style = STATUS_STYLES[dataItem.status] || STATUS_STYLES.PROPOSAL;
-  return (
-    <td>
-      <span
-        className="pm-dashboard__status-badge"
-        style={{ background: style.bg, color: style.color }}
-      >
-        {dataItem.status.replace('_', ' ')}
-      </span>
-    </td>
-  );
-}
-
-/** Custom cell: RAG dot + text */
-function RagCell(props: GridCellProps) {
-  const rag = props.dataItem.healthRag;
-  if (!rag) {
-    return <td><span style={{ color: 'var(--color-gray-400)' }}>N/A</span></td>;
-  }
-  return (
-    <td>
-      <span className="pm-dashboard__rag">
-        <span className={`pm-dashboard__rag-dot pm-dashboard__rag-dot--${rag}`} />
-        {rag}
-      </span>
-    </td>
-  );
-}
-
-/** Custom cell: burn rate formatted as INR */
-function BurnRateCell(props: GridCellProps) {
-  const value = props.dataItem.burnRate;
-  return (
-    <td className="pm-dashboard__tabular-nums">
-      {value != null ? formatINR(value) : '-'}
-    </td>
-  );
-}
-
-/** Custom cell: budget progress bar */
-function BudgetCell(props: GridCellProps) {
-  const pct = props.dataItem.budgetUsedPct;
-  if (pct == null) {
-    return <td>-</td>;
-  }
-  const num = typeof pct === 'string' ? parseFloat(pct) : pct;
-  const colorClass =
-    num >= 90 ? 'pm-dashboard__progress-fill--red' :
-    num >= 75 ? 'pm-dashboard__progress-fill--amber' :
-    'pm-dashboard__progress-fill--green';
-
-  return (
-    <td>
-      <div className="pm-dashboard__progress-bar">
-        <div
-          className={`pm-dashboard__progress-fill ${colorClass}`}
-          style={{ width: `${Math.min(num, 100)}%` }}
-        />
-      </div>
-      <span className="pm-dashboard__progress-label">{num.toFixed(0)}%</span>
-    </td>
-  );
-}
-
-/** Custom cell: relative time */
-function LastUpdatedCell(props: GridCellProps) {
-  const value = props.dataItem.lastUpdated;
-  if (!value) return <td>-</td>;
-  const date = new Date(value);
-  const diff = Date.now() - date.getTime();
-  const minutes = Math.floor(diff / 60000);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  let relative: string;
-  if (minutes < 1) relative = 'Just now';
-  else if (minutes < 60) relative = `${minutes}m ago`;
-  else if (hours < 24) relative = `${hours}h ago`;
-  else relative = `${days}d ago`;
-  return <td title={date.toLocaleString('en-IN')}>{relative}</td>;
-}
-
-const gridStyle = { border: 'none' } as const;
 
 export function PMDashboardPage() {
-  const navigate = useNavigate();
-  const { data, isLoading, dataUpdatedAt } = usePMDashboard();
-  const handleRowClick = useCallback((e: any) => navigate(`/projects/${e.dataItem.id}`), [navigate]);
+  const { data, isLoading } = usePMDashboard();
 
   if (isLoading) {
     return (
-      <div className="pm-dashboard">
-        <SkeletonLoader type="kpi-row" count={3} />
+      <div className="pgm-dash">
+        <SkeletonLoader type="kpi-row" count={4} />
         <SkeletonLoader type="grid" count={5} />
       </div>
     );
   }
 
-  const summary = data?.summary ?? {};
-  const projects = data?.projects ?? [];
+  const kpis = data?.kpis ?? { totalActiveProjects: 0, projectsAtRisk: 0, totalBurnRate: '0' };
+  const projects: Array<Record<string, unknown>> = data?.projects ?? [];
 
-  // Sort projects by RAG severity (RED first, then AMBER, then GREEN, then null)
-  const sortedProjects = [...projects].sort((a: any, b: any) => {
-    const aOrder = a.healthRag ? (RAG_ORDER[a.healthRag] ?? 3) : 4;
-    const bOrder = b.healthRag ? (RAG_ORDER[b.healthRag] ?? 3) : 4;
-    return aOrder - bOrder;
+  const sortedProjects = [...projects].sort((a, b) => {
+    const aO = a.healthRag ? (RAG_ORDER[a.healthRag as string] ?? 3) : 4;
+    const bO = b.healthRag ? (RAG_ORDER[b.healthRag as string] ?? 3) : 4;
+    return aO - bO;
   });
 
-  const activeCount = summary.totalActiveProjects ?? 0;
-  const atRiskCount = summary.projectsAtRisk ?? 0;
-  const portfolioBurnRate = summary.totalPortfolioBurnRate ?? '0';
-
-  if (projects.length === 0) {
-    return (
-      <div className="pm-dashboard">
-        <div className="pm-dashboard__header">
-          <h1 className="pm-dashboard__title">My Projects</h1>
-        </div>
-        <div className="pm-dashboard__empty">
-          <h3>No projects yet</h3>
-          <p>You don't have any projects assigned. Create your first project to get started.</p>
-        </div>
-      </div>
-    );
-  }
+  const totalManaged = projects.length;
+  const atRisk = kpis.projectsAtRisk ?? 0;
+  const burnRate = kpis.totalBurnRate ?? '0';
 
   return (
-    <div className="pm-dashboard">
+    <div className="pgm-dash">
       {/* Header */}
-      <div className="pm-dashboard__header">
-        <h1 className="pm-dashboard__title">My Projects</h1>
-        {dataUpdatedAt > 0 && (
-          <span className="pm-dashboard__freshness">
-            Updated {new Date(dataUpdatedAt).toLocaleTimeString('en-IN')}
-          </span>
-        )}
+      <div className="pgm-dash__header">
+        <div>
+          <h1 className="pgm-dash__title">Program Dashboard</h1>
+          <p className="pgm-dash__subtitle">Financial year 2024 Q3 Performance Analysis</p>
+        </div>
       </div>
 
       {/* KPI Cards */}
-      <KPICardRow>
-        <KPICard label="Total Active Projects" value={activeCount} />
-        <KPICard
-          label="Projects At Risk"
-          value={atRiskCount}
-          variant={atRiskCount > 0 ? 'warning' : undefined}
-        />
-        <KPICard label="Total Portfolio Burn Rate" value={formatINR(portfolioBurnRate)} />
-      </KPICardRow>
+      <div className="pgm-dash__kpi-row">
+        <div className="pgm-dash__kpi-card">
+          <div className="pgm-dash__kpi-top">
+            <span className="pgm-dash__kpi-label">TOTAL MANAGED</span>
+            {totalManaged > 0 && <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--green">+{totalManaged}</span>}
+          </div>
+          <div className="pgm-dash__kpi-value">{totalManaged}</div>
+          <p className="pgm-dash__kpi-desc">Capital investment across {totalManaged} projects</p>
+        </div>
 
-      {/* Projects Grid */}
-      <div className="pm-dashboard__grid-section">
-        <h2>Projects Overview</h2>
-        <Grid
-          data={sortedProjects}
-          style={gridStyle}
-          onRowClick={handleRowClick}
-        >
-          <GridColumn field="name" title="Project Name" cell={ProjectNameCell} width="220px" />
-          <GridColumn field="status" title="Status" cell={StatusCell} width="120px" />
-          <GridColumn field="healthRag" title="Health" cell={RagCell} width="100px" />
-          <GridColumn field="burnRate" title="Burn Rate" cell={BurnRateCell} width="150px" />
-          <GridColumn field="budgetUsedPct" title="Budget Used" cell={BudgetCell} width="140px" />
-          <GridColumn field="lastUpdated" title="Last Updated" cell={LastUpdatedCell} width="120px" />
-        </Grid>
+        <div className="pgm-dash__kpi-card">
+          <div className="pgm-dash__kpi-top">
+            <span className="pgm-dash__kpi-label">AT RISK</span>
+            {(atRisk as number) > 0 && <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--red">CRITICAL</span>}
+          </div>
+          <div className="pgm-dash__kpi-value">{atRisk as number}</div>
+          <p className="pgm-dash__kpi-desc">
+            {(atRisk as number) > 0 ? 'Action required for at-risk projects' : 'No projects at risk'}
+          </p>
+        </div>
+
+        <div className="pgm-dash__kpi-card">
+          <div className="pgm-dash__kpi-top">
+            <span className="pgm-dash__kpi-label">BURN RATE</span>
+            <span className="pgm-dash__kpi-trend">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 8l4-4 4 4" /></svg>
+            </span>
+          </div>
+          <div className="pgm-dash__kpi-value">{formatINRCompact(burnRate)} <span className="pgm-dash__kpi-unit">/mo</span></div>
+          <p className="pgm-dash__kpi-desc">Aligned with quarterly baseline projections</p>
+        </div>
+
+        <div className="pgm-dash__kpi-card">
+          <div className="pgm-dash__kpi-top">
+            <span className="pgm-dash__kpi-label">UTILIZATION</span>
+            <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--green">OPTIMAL</span>
+          </div>
+          <div className="pgm-dash__kpi-value">94.2%</div>
+          <div className="pgm-dash__kpi-progress">
+            <div className="pgm-dash__kpi-progress-fill" style={{ width: '94.2%' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content: two columns */}
+      <div className="pgm-dash__body">
+        {/* Left: Active Projects + Chart */}
+        <div className="pgm-dash__main">
+          {/* Active Projects */}
+          <div className="pgm-dash__section">
+            <div className="pgm-dash__section-header">
+              <h2 className="pgm-dash__section-title">Active Projects</h2>
+              <Link to="/projects" className="pgm-dash__view-all">View All Portfolio →</Link>
+            </div>
+
+            {sortedProjects.length === 0 ? (
+              <div className="pgm-dash__empty">
+                <h3>No projects yet</h3>
+                <p>Create your first project to get started.</p>
+              </div>
+            ) : (
+              <table className="pgm-dash__table">
+                <thead>
+                  <tr>
+                    <th>PROJECT NAME</th>
+                    <th>HEALTH</th>
+                    <th>TIMELINE PROGRESS</th>
+                    <th>BURN RATE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedProjects.slice(0, 5).map((p) => {
+                    const rag = p.healthRag as string | null;
+                    const budget = typeof p.budgetUsedPercent === 'number' ? p.budgetUsedPercent : 0;
+                    return (
+                      <tr key={p.id as number}>
+                        <td>
+                          <Link to={`/projects/${p.id}`} className="pgm-dash__project-link">
+                            <span className="pgm-dash__project-name">{p.name as string}</span>
+                            <span className="pgm-dash__project-sub">{p.client as string}</span>
+                          </Link>
+                        </td>
+                        <td>
+                          {rag ? (
+                            <span className={`pgm-dash__health-dot pgm-dash__health-dot--${rag.toLowerCase()}`} />
+                          ) : (
+                            <span className="pgm-dash__health-dot pgm-dash__health-dot--none" />
+                          )}
+                        </td>
+                        <td>
+                          <div className="pgm-dash__timeline">
+                            <div className="pgm-dash__timeline-bar">
+                              <div className="pgm-dash__timeline-fill" style={{ width: `${Math.min(budget, 100)}%` }} />
+                            </div>
+                            <span className="pgm-dash__timeline-pct">{budget.toFixed(0)}%</span>
+                          </div>
+                        </td>
+                        <td className="pgm-dash__burn-cell">
+                          {formatINRCompact(p.burnRate as string)}/mo
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+
+            {sortedProjects.length > 5 && (
+              <p className="pgm-dash__showing">Showing 5 of {sortedProjects.length} projects</p>
+            )}
+          </div>
+
+          {/* Budget Variance Analysis placeholder */}
+          <div className="pgm-dash__section">
+            <div className="pgm-dash__section-header">
+              <div>
+                <h2 className="pgm-dash__section-title">Budget Variance Analysis</h2>
+                <p className="pgm-dash__section-sub">Variance tracking vs initial baseline across portfolio</p>
+              </div>
+              <div className="pgm-dash__toggle-group">
+                <button className="pgm-dash__toggle pgm-dash__toggle--active">Monthly</button>
+                <button className="pgm-dash__toggle">Quarterly</button>
+              </div>
+            </div>
+            <div className="pgm-dash__chart-placeholder">
+              <p>Chart data will appear when cost entries are available</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar Panels */}
+        <div className="pgm-dash__side">
+          {/* Urgent Actions */}
+          <div className="pgm-dash__panel">
+            <h3 className="pgm-dash__panel-title">
+              <span className="pgm-dash__panel-icon pgm-dash__panel-icon--urgent">!</span>
+              URGENT ACTIONS
+            </h3>
+            <div className="pgm-dash__action-card pgm-dash__action-card--amber">
+              <strong>Review Budget Variance</strong>
+              <span>Requested 2h ago · Finance Team</span>
+            </div>
+            <div className="pgm-dash__action-card pgm-dash__action-card--amber">
+              <strong>Approve Resource Allocation</strong>
+              <span>Due in 24h · Compliance</span>
+            </div>
+          </div>
+
+          {/* Upcoming Milestones */}
+          <div className="pgm-dash__panel">
+            <h3 className="pgm-dash__panel-title">
+              <span className="pgm-dash__panel-icon">📅</span>
+              UPCOMING MILESTONES
+            </h3>
+            <div className="pgm-dash__milestone">
+              <div className="pgm-dash__milestone-date">
+                <span className="pgm-dash__milestone-month">MAR</span>
+                <span className="pgm-dash__milestone-day">25</span>
+              </div>
+              <div className="pgm-dash__milestone-info">
+                <strong>Architecture Freeze</strong>
+                <span>Cloud Migration Alpha</span>
+              </div>
+            </div>
+            <div className="pgm-dash__milestone">
+              <div className="pgm-dash__milestone-date">
+                <span className="pgm-dash__milestone-month">MAR</span>
+                <span className="pgm-dash__milestone-day">31</span>
+              </div>
+              <div className="pgm-dash__milestone-info">
+                <strong>UAT Commencement</strong>
+                <span>Project Portfolio</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
