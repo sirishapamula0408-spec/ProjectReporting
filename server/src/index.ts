@@ -12,6 +12,7 @@ import teamMemberRoutes from './features/team-members/routes.js';
 import forecastRoutes from './features/forecast/routes.js';
 import burnRevenueRoutes from './features/burn-revenue/routes.js';
 import scopeCreepRoutes from './features/scope-creep/routes.js';
+import healthUpdateRoutes from './features/health-updates/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use('/api/team-members', teamMemberRoutes);
 app.use('/api/projects/:id/forecast', forecastRoutes);
 app.use('/api/projects/:id/burn-revenue', burnRevenueRoutes);
 app.use('/api/projects/:id/scope-creep', scopeCreepRoutes);
+app.use('/api/projects/:id/health-updates', healthUpdateRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);
