@@ -9,6 +9,7 @@ import { LoginPage } from './features/auth';
 import { CreateProjectPage, EditProjectPage, ProjectListPage, ProjectDetailPage } from './features/projects';
 import { AuthLayout, DashboardLayout } from './components/layout';
 import { ToastProvider, ErrorBoundary, SkipLinks } from './components/shared';
+import { CFOCommandCenter } from './features/cfo-dashboard';
 import '@progress/kendo-theme-default/dist/all.css';
 import './styles/tokens.css';
 import './styles/buttons.css';
@@ -20,9 +21,6 @@ function PMDashboard() {
 }
 function Portfolio() {
   return <div style={{ padding: '24px' }}><h1>BU Head Portfolio</h1><p>Coming in PRT-33</p></div>;
-}
-function CommandCenter() {
-  return <div style={{ padding: '24px' }}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
 }
 
 /** Redirects authenticated users to their role-appropriate dashboard */
@@ -114,7 +112,7 @@ export default function App() {
                 path={ROUTES.COMMAND_CENTER}
                 element={
                   <PrivateRoute allowedRoles={['CFO']}>
-                    <CommandCenter />
+                    <CFOCommandCenter />
                   </PrivateRoute>
                 }
               />
