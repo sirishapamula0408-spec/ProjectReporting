@@ -1,0 +1,194 @@
+.risk-register {
+  padding: var(--space-2) 0;
+}
+
+.risk-register__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+}
+
+.risk-register__header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.risk-register__title {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+.risk-register__badge-count {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  background: var(--color-gray-200, #E5E7EB);
+  color: var(--color-gray-600, #4B5563);
+}
+
+.risk-register__add-btn {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary, #2563EB);
+  color: var(--color-white, #FFFFFF);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+
+.risk-register__add-btn:hover {
+  opacity: 0.9;
+}
+
+.risk-register__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.risk-register__kpi-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.risk-register__kpi-card--alert {
+  border-left: 4px solid var(--color-red, #DC2626);
+}
+
+.risk-register__kpi-label {
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.risk-register__kpi-value {
+  font-size: var(--text-kpi);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  line-height: 1.2;
+}
+
+.risk-register__kpi-value--positive {
+  color: var(--color-green, #059669);
+}
+
+.risk-register__tabs {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding-bottom: 0;
+}
+
+.risk-register__tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-gray-500);
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.risk-register__tab--active {
+  color: var(--color-primary, #2563EB);
+  border-bottom-color: var(--color-primary, #2563EB);
+  font-weight: var(--weight-semibold);
+}
+
+.risk-register__section-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.risk-register__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.risk-register__table thead th {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.risk-register__table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-50);
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.risk-register__cell--id {
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+  white-space: nowrap;
+}
+
+.risk-register__cell--money {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.risk-register__cell--plan {
+  max-width: 280px;
+  font-size: var(--text-caption);
+  color: var(--color-gray-500);
+}
+
+.risk-register__badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+}
+
+.risk-register__footer-banner {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.risk-register__footer-banner strong {
+  color: var(--color-red, #DC2626);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+  .risk-register__kpis {
+    grid-template-columns: 1fr;
+  }
+}

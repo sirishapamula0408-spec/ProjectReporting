@@ -125,3 +125,50 @@
     align-items: stretch;
   }
 }
+
+/* Section hints */
+.project-form__section-hint {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+}
+
+/* Resource Assignment Table */
+.project-form__resource-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-4);
+}
+
+.project-form__resource-table th {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.project-form__resource-table td {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.project-form__empty-row {
+  text-align: center;
+  padding: var(--space-8) var(--space-4) !important;
+  color: var(--color-gray-400);
+}
+
+/* Budget Planning Placeholder */
+.project-form__budget-placeholder {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-400);
+  font-size: var(--text-body);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-gray-200);
+}

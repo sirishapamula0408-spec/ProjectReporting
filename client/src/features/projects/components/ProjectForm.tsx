@@ -276,6 +276,44 @@ export function ProjectForm({
           </div>
         </section>
 
+        {/* Section 2: Resource Assignment */}
+        <section className="project-form__section">
+          <div className="project-form__section-header">
+            <h2 className="project-form__section-title">Section 2 — Resource Assignment</h2>
+            <span className="project-form__section-hint">Assign team members and define their allocation rates</span>
+          </div>
+          <table className="project-form__resource-table">
+            <thead>
+              <tr>
+                <th>TEAM MEMBER</th>
+                <th>ROLE</th>
+                <th>ALLOCATION (%)</th>
+                <th>START DATE</th>
+                <th>END DATE</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan={6} className="project-form__empty-row">
+                  No resources assigned yet. Use the Team Registry to add team members first.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        {/* Section 3: Budget Planning */}
+        <section className="project-form__section">
+          <div className="project-form__section-header">
+            <h2 className="project-form__section-title">Section 3 — Budget Planning (8 Categories)</h2>
+            <span className="project-form__section-hint">Plan monthly budget across cost categories</span>
+          </div>
+          <div className="project-form__budget-placeholder">
+            Budget planning grid will be available after project creation. Enter planned amounts per category per month.
+          </div>
+        </section>
+
         {/* Section 4: Payment Milestones */}
         <section className="project-form__section">
           <div className="project-form__section-header">

@@ -1,0 +1,149 @@
+.cfo-command-center {
+  padding: var(--space-2) 0;
+}
+
+.cfo-command-center__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+}
+
+.cfo-command-center__title {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+.cfo-command-center__subtitle {
+  font-size: var(--text-body);
+  color: var(--color-gray-500);
+  margin: var(--space-1) 0 0;
+}
+
+.cfo-command-center__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.cfo-command-center__kpi-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cfo-command-center__kpi-label {
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cfo-command-center__kpi-value {
+  font-size: var(--text-kpi);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  line-height: 1.2;
+}
+
+.cfo-command-center__kpi-value--positive {
+  color: var(--color-green, #059669);
+}
+
+.cfo-command-center__sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.cfo-command-center__section-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.cfo-command-center__section-title {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-5) 0;
+}
+
+.cfo-command-center__placeholder {
+  background: var(--color-gray-50);
+  border: 2px dashed var(--color-gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfo-command-center__placeholder-text {
+  font-size: var(--text-body);
+  color: var(--color-gray-400);
+}
+
+.cfo-command-center__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cfo-command-center__table thead th {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.cfo-command-center__table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-50);
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.cfo-command-center__cell--name {
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-900);
+}
+
+.cfo-command-center__cell--money {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.cfo-command-center__badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+}
+
+@media (max-width: 1024px) {
+  .cfo-command-center__sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .cfo-command-center__kpis {
+    grid-template-columns: 1fr;
+  }
+}

@@ -119,9 +119,9 @@ const NAV_ITEMS: Record<Role, NavItem[]> = {
     { path: ROUTES.PM_DASHBOARD, label: 'Dashboard', iconSvg: <DashboardIcon /> },
     { path: ROUTES.PROJECTS, label: 'Projects', iconSvg: <ProjectsIcon /> },
     { path: ROUTES.TEAM_REGISTRY, label: 'Team', iconSvg: <TeamIcon /> },
-    { path: '#financials', label: 'Financials', iconSvg: <FinancialsIcon />, placeholder: true },
-    { path: '#risks', label: 'Risks', iconSvg: <RisksIcon />, placeholder: true },
-    { path: '#reports', label: 'Reports', iconSvg: <ReportsIcon />, placeholder: true },
+    { path: '/financials', label: 'Financials', iconSvg: <FinancialsIcon /> },
+    { path: '/risks', label: 'Risks', iconSvg: <RisksIcon /> },
+    { path: '/reports', label: 'Reports', iconSvg: <ReportsIcon /> },
   ],
   BU_HEAD: [
     { path: ROUTES.PORTFOLIO, label: 'Portfolio', iconSvg: <PortfolioIcon /> },

@@ -22,17 +22,13 @@ const EditProjectPage = lazy(() => import('./features/projects/components/EditPr
 const PMDashboardPage = lazy(() => import('./features/dashboard/components/PmDashboardPage').then(m => ({ default: m.PMDashboardPage })));
 const TeamRegistryPage = lazy(() => import('./features/team-registry/components/TeamRegistryPage').then(m => ({ default: m.TeamRegistryPage })));
 const PortfolioDashboardPage = lazy(() => import('./features/portfolio/components/PortfolioDashboardPage').then(m => ({ default: m.PortfolioDashboardPage })));
-
-const placeholderStyle = { padding: '24px' } as const;
-function CommandCenter() {
-  return <div style={placeholderStyle}><h1>CFO Command Center</h1><p>Coming in PRT-44</p></div>;
-}
-function Financials() {
-  return <div style={placeholderStyle}><h1>Financials</h1><p>Financial analytics and cost tracking — coming soon.</p></div>;
-}
-function Reports() {
-  return <div style={placeholderStyle}><h1>Reports</h1><p>Report generation and export — coming soon.</p></div>;
-}
+const CFOCommandCenter = lazy(() => import('./features/cfo-dashboard').then(m => ({ default: m.CFOCommandCenter })));
+const RiskRegisterPage = lazy(() => import('./features/risk-register').then(m => ({ default: m.RiskRegisterPage })));
+const ScopeCreepPage = lazy(() => import('./features/scope-creep').then(m => ({ default: m.ScopeCreepPage })));
+const TeamAllocationPage = lazy(() => import('./features/team-allocation').then(m => ({ default: m.TeamAllocationPage })));
+const ClientSatisfactionPage = lazy(() => import('./features/client-satisfaction').then(m => ({ default: m.ClientSatisfactionPage })));
+const TrendAnalysisPage = lazy(() => import('./features/trend-analysis').then(m => ({ default: m.TrendAnalysisPage })));
+const BurnRevenuePage = lazy(() => import('./features/burn-revenue').then(m => ({ default: m.BurnRevenuePage })));
 
 /** Redirects authenticated users to their role-appropriate dashboard */
 function RoleRedirect() {
@@ -133,28 +129,20 @@ export default function App() {
                 path={ROUTES.COMMAND_CENTER}
                 element={
                   <PrivateRoute allowedRoles={['CFO']}>
-                    <CommandCenter />
+                    <CFOCommandCenter />
                   </PrivateRoute>
                 }
               />
 
               {/* Shared routes */}
-              <Route
-                path="/financials"
-                element={
-                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
-                    <Financials />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/reports"
-                element={
-                  <PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}>
-                    <Reports />
-                  </PrivateRoute>
-                }
-              />
+              <Route path="/risks" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><RiskRegisterPage /></PrivateRoute>} />
+              <Route path="/scope-creep" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><ScopeCreepPage /></PrivateRoute>} />
+              <Route path="/team-allocation" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><TeamAllocationPage /></PrivateRoute>} />
+              <Route path="/client-satisfaction" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><ClientSatisfactionPage /></PrivateRoute>} />
+              <Route path="/trend-analysis" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><TrendAnalysisPage /></PrivateRoute>} />
+              <Route path="/burn-vs-revenue" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><BurnRevenuePage /></PrivateRoute>} />
+              <Route path="/financials" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><TrendAnalysisPage /></PrivateRoute>} />
+              <Route path="/reports" element={<PrivateRoute allowedRoles={['PM', 'BU_HEAD', 'CFO']}><BurnRevenuePage /></PrivateRoute>} />
             </Route>
 
             {/* Fallback */}
