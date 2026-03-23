@@ -144,16 +144,16 @@
 }
 
 .login-form-panel__title {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--color-gray-900);
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
 }
 
 .login-form-panel__subtitle {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-gray-500);
-  margin: 0 0 32px 0;
+  margin: 0 0 24px 0;
 }
 
 /* ── Tab Toggle ── */
@@ -251,8 +251,8 @@
 }
 
 .login-input .k-input-inner {
-  padding: 14px 16px !important;
-  font-size: 14px !important;
+  padding: 12px 14px !important;
+  font-size: 13px !important;
 }
 
 .login-input--with-icon .k-input-inner {
@@ -319,8 +319,8 @@
 .login-button {
   width: 100%;
   margin-top: 8px;
-  padding: 16px !important;
-  font-size: 15px !important;
+  padding: 14px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   background-color: var(--color-primary) !important;
   border-color: var(--color-primary) !important;
@@ -332,6 +332,14 @@
 .login-button:hover {
   background-color: #1d4ed8 !important;
   border-color: #1d4ed8 !important;
+}
+
+/* Sign up note */
+.login-signup-note {
+  font-size: 12px;
+  color: var(--color-gray-400);
+  text-align: center;
+  margin-top: 16px;
 }
 
 /* ── Responsive ── */

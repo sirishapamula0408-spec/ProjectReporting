@@ -113,9 +113,13 @@ export function LoginPage() {
       {/* ── Right Form Panel ── */}
       <div className="login-form-panel">
         <div className="login-form-panel__content">
-          <h2 className="login-form-panel__title">Welcome back</h2>
+          <h2 className="login-form-panel__title">
+            {activeTab === 'login' ? 'Welcome back' : 'Create account'}
+          </h2>
           <p className="login-form-panel__subtitle">
-            Sign in to continue to your workspace.
+            {activeTab === 'login'
+              ? 'Sign in to continue to your workspace.'
+              : 'Enter your details to get started.'}
           </p>
 
           {/* Tab toggle */}
@@ -135,6 +139,51 @@ export function LoginPage() {
               SIGN UP
             </button>
           </div>
+
+          {activeTab === 'signup' ? (
+            <div className="login-form">
+              <div className="login-field">
+                <label className="login-label">FULL NAME</label>
+                <div className="login-input-wrapper">
+                  <span className="login-input-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-gray-400)" strokeWidth="1.5">
+                      <circle cx="8" cy="5" r="3" />
+                      <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" />
+                    </svg>
+                  </span>
+                  <Input placeholder="John Doe" className="login-input login-input--with-icon" disabled />
+                </div>
+              </div>
+              <div className="login-field">
+                <label className="login-label">EMAIL ADDRESS</label>
+                <div className="login-input-wrapper">
+                  <span className="login-input-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-gray-400)" strokeWidth="1.5">
+                      <rect x="1" y="3" width="14" height="10" rx="2" />
+                      <path d="M1 5l7 4 7-4" />
+                    </svg>
+                  </span>
+                  <Input placeholder="name@company.com" className="login-input login-input--with-icon" disabled />
+                </div>
+              </div>
+              <div className="login-field">
+                <label className="login-label">PASSWORD</label>
+                <div className="login-input-wrapper">
+                  <span className="login-input-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-gray-400)" strokeWidth="1.5">
+                      <rect x="3" y="7" width="10" height="8" rx="2" />
+                      <path d="M5 7V5a3 3 0 016 0v2" />
+                    </svg>
+                  </span>
+                  <Input type="password" placeholder="Create a password" className="login-input login-input--with-icon" disabled />
+                </div>
+              </div>
+              <Button themeColor="primary" size="large" className="login-button" disabled>
+                Sign Up →
+              </Button>
+              <p className="login-signup-note">Contact your administrator for account creation.</p>
+            </div>
+          ) : (
 
           <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="login-field">
@@ -244,6 +293,7 @@ export function LoginPage() {
               {isSubmitting ? 'Logging in...' : 'Log In  →'}
             </Button>
           </form>
+          )}
         </div>
       </div>
     </div>
