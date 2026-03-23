@@ -280,7 +280,7 @@ export function ProjectForm({
         </section>
 
         {/* Section 2: Resource Assignment */}
-        <ResourceAssignment projectId={projectId} mode={mode} />
+        <ResourceAssignment projectId={projectId} mode={mode} projectStartDate={watch('startDate')} projectEndDate={watch('endDate')} />
 
         {/* Section 3: Budget Planning */}
         <BudgetPlanning projectId={projectId} startDate={watch('startDate')} endDate={watch('endDate')} mode={mode} />

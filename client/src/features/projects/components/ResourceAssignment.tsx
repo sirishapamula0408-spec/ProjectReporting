@@ -12,6 +12,8 @@ import './ResourceAssignment.css';
 interface ResourceAssignmentProps {
   projectId?: number;
   mode: 'create' | 'edit';
+  projectStartDate?: string;
+  projectEndDate?: string;
 }
 
 interface AddResourceFormData {
@@ -21,7 +23,7 @@ interface AddResourceFormData {
   endDate: string;
 }
 
-export function ResourceAssignment({ projectId, mode }: ResourceAssignmentProps) {
+export function ResourceAssignment({ projectId, mode, projectStartDate, projectEndDate }: ResourceAssignmentProps) {
   const { showToast } = useToast();
   const [showDialog, setShowDialog] = useState(false);
 
@@ -94,7 +96,15 @@ export function ResourceAssignment({ projectId, mode }: ResourceAssignmentProps)
     <section className="project-form__section">
       <div className="project-form__section-header">
         <h2 className="project-form__section-title">Section 2 — Resource Assignment</h2>
-        <Button type="button" className="btn-tertiary" onClick={() => setShowDialog(true)}>
+        <Button type="button" className="btn-tertiary" onClick={() => {
+          reset({
+            teamMemberId: null,
+            allocationPct: '',
+            startDate: projectStartDate ?? '',
+            endDate: projectEndDate ?? '',
+          });
+          setShowDialog(true);
+        }}>
           + Add Resource
         </Button>
       </div>
