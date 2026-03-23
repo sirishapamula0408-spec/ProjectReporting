@@ -27,8 +27,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   flex: 1;
-  padding-top: 80px; /* increased space below logo */
+  padding-top: 120px; /* large gap below logo to ECM DIVISION */
 }
 
 /* Logo — pinned top-left */
@@ -85,7 +86,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 36px;
+  margin-top: 16px;
   max-width: 240px;
   align-self: center;
 }
