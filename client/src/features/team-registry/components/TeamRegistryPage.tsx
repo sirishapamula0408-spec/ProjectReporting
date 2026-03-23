@@ -1,7 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Grid, GridColumn, type GridCellProps } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { Input, type InputChangeEvent } from '@progress/kendo-react-inputs';
 import { useTeamMembers, useUpdateTeamMember, useDeleteTeamMember } from '../hooks/useTeamMembers';
 import { AddTeamMemberDialog } from './AddTeamMemberDialog';
 import { SkeletonLoader } from '../../../components/shared';
@@ -61,31 +60,30 @@ export function TeamRegistryPage() {
   const { showToast } = useToast();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editData, setEditData] = useState<{ name: string; role: string; department: string; loadedCostRate: string }>({ name: '', role: '', department: '', loadedCostRate: '' });
+  const editRef = useRef({ name: '', role: '', department: '', loadedCostRate: '' });
 
   const handleOpenAdd = useCallback(() => setShowAddDialog(true), []);
   const handleCloseAdd = useCallback(() => setShowAddDialog(false), []);
 
   const handleEdit = useCallback((member: { id: number; name: string; role: string; department: string; loadedCostRate: string }) => {
+    editRef.current = { name: member.name, role: member.role, department: member.department, loadedCostRate: member.loadedCostRate };
     setEditingId(member.id);
-    setEditData({ name: member.name, role: member.role, department: member.department, loadedCostRate: member.loadedCostRate });
   }, []);
 
   const handleCancelEdit = useCallback(() => {
     setEditingId(null);
-    setEditData({ name: '', role: '', department: '', loadedCostRate: '' });
   }, []);
 
   const handleSaveEdit = useCallback(async () => {
     if (!editingId) return;
     try {
-      await updateMember.mutateAsync({ id: editingId, ...editData });
+      await updateMember.mutateAsync({ id: editingId, ...editRef.current });
       showToast('Team member updated', 'success');
       setEditingId(null);
     } catch {
       showToast('Failed to update team member', 'error');
     }
-  }, [editingId, editData, updateMember, showToast]);
+  }, [editingId, updateMember, showToast]);
 
   const handleDelete = useCallback(async (id: number, name: string) => {
     if (!window.confirm(`Are you sure you want to deactivate "${name}"?`)) return;
@@ -107,103 +105,6 @@ export function TeamRegistryPage() {
   }
 
   const members = data?.data ?? [];
-
-  // Inline edit cell renderers
-  function EditableNameCell(props: GridCellProps) {
-    const item = props.dataItem;
-    if (editingId === item.id) {
-      return (
-        <td>
-          <Input
-            value={editData.name}
-            onChange={(e: InputChangeEvent) => setEditData((d) => ({ ...d, name: String(e.value) }))}
-            style={{ width: '100%' }}
-          />
-        </td>
-      );
-    }
-    return <NameCell {...props} />;
-  }
-
-  function EditableRoleCell(props: GridCellProps) {
-    if (editingId === props.dataItem.id) {
-      return (
-        <td>
-          <Input
-            value={editData.role}
-            onChange={(e: InputChangeEvent) => setEditData((d) => ({ ...d, role: String(e.value) }))}
-            style={{ width: '100%' }}
-          />
-        </td>
-      );
-    }
-    return <td>{props.dataItem.role}</td>;
-  }
-
-  function EditableDeptCell(props: GridCellProps) {
-    if (editingId === props.dataItem.id) {
-      return (
-        <td>
-          <Input
-            value={editData.department}
-            onChange={(e: InputChangeEvent) => setEditData((d) => ({ ...d, department: String(e.value) }))}
-            style={{ width: '100%' }}
-          />
-        </td>
-      );
-    }
-    return <td>{props.dataItem.department}</td>;
-  }
-
-  function EditableCostCell(props: GridCellProps) {
-    if (editingId === props.dataItem.id) {
-      return (
-        <td>
-          <Input
-            value={editData.loadedCostRate}
-            onChange={(e: InputChangeEvent) => setEditData((d) => ({ ...d, loadedCostRate: String(e.value) }))}
-            style={{ width: '100%' }}
-          />
-        </td>
-      );
-    }
-    return <CostRateCell {...props} />;
-  }
-
-  function ActionsCell(props: GridCellProps) {
-    const item = props.dataItem;
-    if (editingId === item.id) {
-      return (
-        <td>
-          <div className="team-registry__actions">
-            <Button size="small" themeColor="primary" onClick={handleSaveEdit} disabled={updateMember.isPending}>
-              Save
-            </Button>
-            <Button size="small" onClick={handleCancelEdit}>
-              Cancel
-            </Button>
-          </div>
-        </td>
-      );
-    }
-    return (
-      <td>
-        <div className="team-registry__actions">
-          <button className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
-            </svg>
-          </button>
-          <button className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5" />
-              <path d="M3 4l1 10a1 1 0 001 1h6a1 1 0 001-1l1-10" />
-            </svg>
-          </button>
-        </div>
-      </td>
-    );
-  }
 
   return (
     <div className="team-registry">
@@ -231,13 +132,98 @@ export function TeamRegistryPage() {
           pageable={{ pageSizes: [10, 20, 50] }}
           className="team-registry__grid"
         >
-          <GridColumn field="name" title="Name" width="200" cell={EditableNameCell} />
-          <GridColumn field="role" title="Role" width="140" cell={EditableRoleCell} />
-          <GridColumn field="department" title="Department" width="140" cell={EditableDeptCell} />
-          <GridColumn field="loadedCostRate" title="Cost Rate (INR)" width="160" cell={EditableCostCell} />
+          <GridColumn field="name" title="Name" width="200" cell={(props: GridCellProps) => {
+            if (editingId === props.dataItem.id) {
+              return (
+                <td>
+                  <input
+                    className="team-registry__inline-input"
+                    defaultValue={editRef.current.name}
+                    onChange={(e) => { editRef.current.name = e.target.value; }}
+                  />
+                </td>
+              );
+            }
+            return <NameCell {...props} />;
+          }} />
+          <GridColumn field="role" title="Role" width="140" cell={(props: GridCellProps) => {
+            if (editingId === props.dataItem.id) {
+              return (
+                <td>
+                  <input
+                    className="team-registry__inline-input"
+                    defaultValue={editRef.current.role}
+                    onChange={(e) => { editRef.current.role = e.target.value; }}
+                  />
+                </td>
+              );
+            }
+            return <td>{props.dataItem.role}</td>;
+          }} />
+          <GridColumn field="department" title="Department" width="140" cell={(props: GridCellProps) => {
+            if (editingId === props.dataItem.id) {
+              return (
+                <td>
+                  <input
+                    className="team-registry__inline-input"
+                    defaultValue={editRef.current.department}
+                    onChange={(e) => { editRef.current.department = e.target.value; }}
+                  />
+                </td>
+              );
+            }
+            return <td>{props.dataItem.department}</td>;
+          }} />
+          <GridColumn field="loadedCostRate" title="Cost Rate (INR)" width="160" cell={(props: GridCellProps) => {
+            if (editingId === props.dataItem.id) {
+              return (
+                <td>
+                  <input
+                    className="team-registry__inline-input"
+                    defaultValue={editRef.current.loadedCostRate}
+                    onChange={(e) => { editRef.current.loadedCostRate = e.target.value; }}
+                  />
+                </td>
+              );
+            }
+            return <CostRateCell {...props} />;
+          }} />
           <GridColumn field="skills" title="Skills" cell={SkillsCell} />
           <GridColumn field="isActive" title="Status" width="100" cell={StatusCell} />
-          <GridColumn title="Actions" width="120" cell={ActionsCell} />
+          <GridColumn title="Actions" width="130" cell={(props: GridCellProps) => {
+            const item = props.dataItem;
+            if (editingId === item.id) {
+              return (
+                <td>
+                  <div className="team-registry__actions">
+                    <Button size="small" themeColor="primary" onClick={handleSaveEdit} disabled={updateMember.isPending}>
+                      Save
+                    </Button>
+                    <Button size="small" onClick={handleCancelEdit}>
+                      Cancel
+                    </Button>
+                  </div>
+                </td>
+              );
+            }
+            return (
+              <td>
+                <div className="team-registry__actions">
+                  <button className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
+                    </svg>
+                  </button>
+                  <button className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5" />
+                      <path d="M3 4l1 10a1 1 0 001 1h6a1 1 0 001-1l1-10" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            );
+          }} />
         </Grid>
       )}
 
