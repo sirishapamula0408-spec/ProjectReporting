@@ -1,0 +1,95 @@
+.budget-planning__placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px dashed #d1d5db;
+}
+
+.budget-planning__grid-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.budget-planning__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.budget-planning__table th,
+.budget-planning__table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.budget-planning__category-header,
+.budget-planning__category-cell {
+  text-align: left !important;
+  min-width: 160px;
+  background: #f9fafb;
+  font-weight: 500;
+}
+
+.budget-planning__month-header {
+  min-width: 100px;
+  font-weight: 600;
+  background: #f3f4f6;
+  text-align: center !important;
+}
+
+.budget-planning__total-header {
+  min-width: 120px;
+  font-weight: 600;
+  background: #f3f4f6;
+}
+
+.budget-planning__amount-cell {
+  padding: 0.25rem !important;
+}
+
+.budget-planning__input {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: right;
+  font-size: 0.875rem;
+  background: transparent;
+  transition: border-color 0.15s;
+}
+
+.budget-planning__input:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #fff;
+}
+
+.budget-planning__input:hover {
+  border-color: #d1d5db;
+}
+
+.budget-planning__row-total {
+  font-weight: 600;
+  background: #f9fafb;
+  color: #1f2937;
+}
+
+.budget-planning__col-total {
+  font-weight: 600;
+  background: #f3f4f6;
+}
+
+.budget-planning__grand-total {
+  font-weight: 700;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.budget-planning__totals-row {
+  border-top: 2px solid #d1d5db;
+}

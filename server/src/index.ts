@@ -11,6 +11,8 @@ import milestoneRoutes from './features/milestones/routes.js';
 import teamMemberRoutes from './features/team-members/routes.js';
 import dashboardRoutes from './features/dashboards/routes.js';
 import exportRoutes from './features/exports/routes.js';
+import allocationRoutes from './features/allocations/routes.js';
+import budgetRoutes from './features/budget/routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,6 +45,8 @@ app.use('/api/projects/:id/milestones', milestoneRoutes);
 app.use('/api/team-members', teamMemberRoutes);
 app.use('/api/dashboards', dashboardRoutes);
 app.use('/api/exports', exportRoutes);
+app.use('/api/projects/:projectId/allocations', allocationRoutes);
+app.use('/api/projects/:projectId/budget', budgetRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);

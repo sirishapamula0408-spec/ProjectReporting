@@ -1,0 +1,68 @@
+.resource-assignment__placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px dashed #d1d5db;
+}
+
+.resource-assignment__member {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resource-assignment__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #6366f1;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.resource-assignment__allocation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resource-assignment__progress-bar {
+  width: 80px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.resource-assignment__progress-fill {
+  height: 100%;
+  background: #6366f1;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.resource-assignment__dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.resource-assignment__dialog-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.resource-assignment__dialog-field label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
