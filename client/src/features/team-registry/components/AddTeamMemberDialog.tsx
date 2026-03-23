@@ -11,9 +11,9 @@ import './AddTeamMemberDialog.css';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
-  role: z.string().min(1, 'Role is required').max(100),
-  department: z.string().min(1, 'Department is required').max(100),
-  loadedCostRate: z.string().min(1, 'Cost rate is required').regex(/^\d+(\.\d{1,2})?$/, 'Must be a valid amount (e.g. 45000.00)'),
+  role: z.string().max(100).optional().default(''),
+  department: z.string().max(100).optional().default(''),
+  loadedCostRate: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Must be a valid amount').optional().default('0'),
   skillsText: z.string().optional(),
 });
 
@@ -98,7 +98,7 @@ export function AddTeamMemberDialog({ visible, onClose }: AddTeamMemberDialogPro
 
         <div className="add-member-form__row">
           <div className="add-member-form__field">
-            <label className="add-member-form__label">Role *</label>
+            <label className="add-member-form__label">Role</label>
             <Controller
               name="role"
               control={control}
@@ -116,7 +116,7 @@ export function AddTeamMemberDialog({ visible, onClose }: AddTeamMemberDialogPro
           </div>
 
           <div className="add-member-form__field">
-            <label className="add-member-form__label">Department *</label>
+            <label className="add-member-form__label">Department</label>
             <Controller
               name="department"
               control={control}
@@ -135,7 +135,7 @@ export function AddTeamMemberDialog({ visible, onClose }: AddTeamMemberDialogPro
         </div>
 
         <div className="add-member-form__field">
-          <label className="add-member-form__label">Loaded Cost Rate (₹) *</label>
+          <label className="add-member-form__label">Loaded Cost Rate (₹)</label>
           <Controller
             name="loadedCostRate"
             control={control}
