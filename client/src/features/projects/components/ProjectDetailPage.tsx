@@ -8,9 +8,202 @@ import { useToast } from '../../../components/shared';
 import { formatINR } from '../../../config/constants';
 import { ROUTES } from '../../../config/routes';
 import { ProjectOverviewTab } from '../../dashboard';
+import { useProjectDashboard } from '../../dashboard/hooks/useDashboard';
+import { useAllocations } from '../hooks/useAllocations';
+import { useBudgetPlan } from '../hooks/useBudget';
 import './ProjectDetailPage.css';
 
 const skeletonMarginStyle = { marginTop: 24 } as const;
+
+const CATEGORY_LABELS: Record<string, string> = {
+  EMPLOYEE_SALARY: 'Employee Salary',
+  SUBSCRIPTIONS: 'Subscriptions',
+  TRAVEL: 'Travel',
+  ACCOMMODATION: 'Accommodation',
+  FOOD_ALLOWANCE: 'Food Allowance',
+  GIFTS: 'Gifts',
+  INFRASTRUCTURE: 'Infrastructure',
+  CONTRACTOR: 'Contractor',
+};
+
+/** Costs Tab — fetches budget plan data */
+function CostsTab({ projectId }: { projectId: number }) {
+  const { data: budgetItems = [] } = useBudgetPlan(projectId);
+  const { data: dashData } = useProjectDashboard(projectId);
+  const costBreakdown = dashData?.costBreakdown ?? [];
+
+  // Group budget by category
+  const categoryTotals: Record<string, number> = {};
+  budgetItems.forEach((item: { categoryType: string; amount: string }) => {
+    categoryTotals[item.categoryType] = (categoryTotals[item.categoryType] ?? 0) + parseFloat(item.amount || '0');
+  });
+
+  const categories = Object.keys(CATEGORY_LABELS);
+  let totalPlanned = 0;
+  let totalActual = 0;
+
+  return (
+    <div className="project-detail__tab-content">
+      <div className="project-detail__card">
+        <h3>Budget by Category</h3>
+        <table className="project-detail__data-table">
+          <thead>
+            <tr><th>CATEGORY</th><th>PLANNED</th><th>ACTUAL</th><th>VARIANCE</th></tr>
+          </thead>
+          <tbody>
+            {categories.map((cat) => {
+              const planned = categoryTotals[cat] ?? 0;
+              const actualEntry = costBreakdown.find((c: { category: string }) => c.category === cat);
+              const actual = actualEntry ? parseFloat(actualEntry.actual || '0') : 0;
+              const variance = planned - actual;
+              totalPlanned += planned;
+              totalActual += actual;
+              return (
+                <tr key={cat}>
+                  <td>{CATEGORY_LABELS[cat]}</td>
+                  <td>{formatINR(String(planned))}</td>
+                  <td>{formatINR(String(actual))}</td>
+                  <td style={{ color: variance < 0 ? 'var(--color-red)' : 'var(--color-green)' }}>
+                    {formatINR(String(variance))}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot>
+            <tr className="project-detail__total-row">
+              <td>TOTAL</td>
+              <td>{formatINR(String(totalPlanned))}</td>
+              <td>{formatINR(String(totalActual))}</td>
+              <td>{formatINR(String(totalPlanned - totalActual))}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/** Health Tab — fetches dashboard health data */
+function HealthTab({ projectId }: { projectId: number }) {
+  const { data: dashData } = useProjectDashboard(projectId);
+  const health = dashData?.healthSummary;
+
+  return (
+    <div className="project-detail__tab-content">
+      <div className="project-detail__card">
+        <h3>Health Status</h3>
+        <div className="project-detail__health-grid">
+          <div className="project-detail__health-item">
+            <span className="project-detail__health-label">CLIENT SATISFACTION</span>
+            <span className="project-detail__health-value">
+              {health?.clientSatisfactionRag ?? 'Not assessed'}
+            </span>
+          </div>
+          <div className="project-detail__health-item">
+            <span className="project-detail__health-label">ESCALATION COUNT</span>
+            <span className="project-detail__health-value">
+              {health?.escalationCount ?? 0}
+            </span>
+          </div>
+          <div className="project-detail__health-item">
+            <span className="project-detail__health-label">CHANGE REQUESTS</span>
+            <span className="project-detail__health-value">
+              {health?.changeRequestVolume ?? 0}
+            </span>
+          </div>
+          <div className="project-detail__health-item">
+            <span className="project-detail__health-label">AVG RESPONSE TIME</span>
+            <span className="project-detail__health-value">
+              {health?.avgResponseTimeDays ? `${health.avgResponseTimeDays}d` : '—'}
+            </span>
+          </div>
+        </div>
+        {health?.period && (
+          <p className="project-detail__hint">Period: {health.period}</p>
+        )}
+        {!health && (
+          <p className="project-detail__hint">No health update submitted yet.</p>
+        )}
+      </div>
+      <div className="project-detail__card">
+        <h3>Achievements &amp; Challenges</h3>
+        <div className="project-detail__two-col">
+          <div>
+            <h4 className="project-detail__sub-label">KEY ACHIEVEMENTS</h4>
+            {health?.achievements && health.achievements.length > 0 ? (
+              <ul className="project-detail__list">
+                {health.achievements.map((a: string, i: number) => <li key={i}>{a}</li>)}
+              </ul>
+            ) : (
+              <p className="project-detail__muted">No achievements recorded yet.</p>
+            )}
+          </div>
+          <div>
+            <h4 className="project-detail__sub-label">ACTIVE CHALLENGES</h4>
+            {health?.challenges && health.challenges.length > 0 ? (
+              <ul className="project-detail__list">
+                {health.challenges.map((c: string, i: number) => <li key={i}>{c}</li>)}
+              </ul>
+            ) : (
+              <p className="project-detail__muted">No challenges reported yet.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Team Tab — fetches allocations data */
+function TeamTab({ projectId }: { projectId: number }) {
+  const { data: allocations = [] } = useAllocations(projectId);
+
+  return (
+    <div className="project-detail__tab-content">
+      <div className="project-detail__card">
+        <h3>Team Allocation ({allocations.length} members)</h3>
+        <table className="project-detail__data-table">
+          <thead>
+            <tr>
+              <th>TEAM MEMBER</th>
+              <th>ROLE</th>
+              <th>ALLOCATION %</th>
+              <th>START DATE</th>
+              <th>END DATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allocations.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="project-detail__empty-cell">
+                  No team members assigned. Add resources from the Edit Project page.
+                </td>
+              </tr>
+            ) : (
+              allocations.map((alloc: { id: number; teamMember?: { name: string; role: string }; allocationPct: string; startDate: string; endDate: string | null }) => (
+                <tr key={alloc.id}>
+                  <td>{alloc.teamMember?.name ?? '—'}</td>
+                  <td>{alloc.teamMember?.role || '—'}</td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ flex: 1, height: 6, background: 'var(--color-gray-100)', borderRadius: 3, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${Math.min(parseFloat(alloc.allocationPct), 100)}%`, background: 'var(--color-primary)', borderRadius: 3 }} />
+                      </div>
+                      <span style={{ fontSize: '12px', minWidth: 36 }}>{alloc.allocationPct}%</span>
+                    </div>
+                  </td>
+                  <td>{alloc.startDate}</td>
+                  <td>{alloc.endDate ?? '—'}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   PROPOSAL: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
@@ -134,99 +327,15 @@ export function ProjectDetailPage() {
         </TabStripTab>
 
         <TabStripTab title="Costs">
-          <div className="project-detail__tab-content">
-            <div className="project-detail__card">
-              <h3>Monthly Cost Entry</h3>
-              <table className="project-detail__data-table">
-                <thead>
-                  <tr>
-                    <th>CATEGORY</th>
-                    <th>PLANNED</th>
-                    <th>ACTUAL</th>
-                    <th>VARIANCE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>Employee Salary</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                  <tr><td>Subscriptions</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                  <tr><td>Travel</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                  <tr><td>Accommodation</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                  <tr><td>Infrastructure</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                  <tr><td>Contractor</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                </tbody>
-                <tfoot>
-                  <tr className="project-detail__total-row"><td>TOTAL</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td><td>{formatINR('0')}</td></tr>
-                </tfoot>
-              </table>
-              <p className="project-detail__hint">Add cost entries from the Budget Planning section in Edit Project.</p>
-            </div>
-          </div>
+          <CostsTab projectId={projectId} />
         </TabStripTab>
 
         <TabStripTab title="Health">
-          <div className="project-detail__tab-content">
-            <div className="project-detail__card">
-              <h3>Health Status</h3>
-              <div className="project-detail__health-grid">
-                <div className="project-detail__health-item">
-                  <span className="project-detail__health-label">CLIENT SATISFACTION</span>
-                  <span className="project-detail__health-value">Not assessed</span>
-                </div>
-                <div className="project-detail__health-item">
-                  <span className="project-detail__health-label">ESCALATION COUNT</span>
-                  <span className="project-detail__health-value">0</span>
-                </div>
-                <div className="project-detail__health-item">
-                  <span className="project-detail__health-label">CHANGE REQUESTS</span>
-                  <span className="project-detail__health-value">0</span>
-                </div>
-                <div className="project-detail__health-item">
-                  <span className="project-detail__health-label">AVG RESPONSE TIME</span>
-                  <span className="project-detail__health-value">—</span>
-                </div>
-              </div>
-              <p className="project-detail__hint">Submit a health update to populate this section.</p>
-            </div>
-            <div className="project-detail__card">
-              <h3>Achievements &amp; Challenges</h3>
-              <div className="project-detail__two-col">
-                <div>
-                  <h4 className="project-detail__sub-label">KEY ACHIEVEMENTS</h4>
-                  <p className="project-detail__muted">No achievements recorded yet.</p>
-                </div>
-                <div>
-                  <h4 className="project-detail__sub-label">ACTIVE CHALLENGES</h4>
-                  <p className="project-detail__muted">No challenges reported yet.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <HealthTab projectId={projectId} />
         </TabStripTab>
 
         <TabStripTab title="Team">
-          <div className="project-detail__tab-content">
-            <div className="project-detail__card">
-              <h3>Team Allocation</h3>
-              <table className="project-detail__data-table">
-                <thead>
-                  <tr>
-                    <th>TEAM MEMBER</th>
-                    <th>ROLE</th>
-                    <th>ALLOCATION %</th>
-                    <th>START DATE</th>
-                    <th>END DATE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colSpan={5} className="project-detail__empty-cell">
-                      No team members assigned. Add resources from the Edit Project page.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <TeamTab projectId={projectId} />
         </TabStripTab>
       </TabStrip>
     </div>
