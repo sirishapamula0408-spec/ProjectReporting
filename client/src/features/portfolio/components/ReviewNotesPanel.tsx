@@ -58,8 +58,9 @@ export function ReviewNotesPanel({ projectId }: ReviewNotesPanelProps) {
       setNoteText('');
       setDecision(DECISION_OPTIONS[0]);
       showToast('Review note posted successfully', 'success');
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to post review note', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to post review note';
+      showToast(msg, 'error');
     }
   };
 

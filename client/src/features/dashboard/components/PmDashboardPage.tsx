@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Button } from '@progress/kendo-react-buttons';
 import { usePMDashboard } from '../hooks/useDashboard';
 import { SkeletonLoader } from '../../../components/shared';
 import { formatINR, formatINRCompact } from '../../../config/constants';
@@ -172,8 +173,8 @@ export function PMDashboardPage() {
                 <p className="pgm-dash__section-sub">Variance tracking vs initial baseline across portfolio</p>
               </div>
               <div className="pgm-dash__toggle-group">
-                <button className="pgm-dash__toggle pgm-dash__toggle--active">Monthly</button>
-                <button className="pgm-dash__toggle">Quarterly</button>
+                <Button fillMode="flat" className="pgm-dash__toggle pgm-dash__toggle--active">Monthly</Button>
+                <Button fillMode="flat" className="pgm-dash__toggle">Quarterly</Button>
               </div>
             </div>
             <div className="pgm-dash__chart-placeholder">

@@ -22,7 +22,7 @@ export function EditProjectPage() {
     return <div>Project not found</div>;
   }
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
     const { milestones: _, ...projectData } = data;
     await updateProject.mutateAsync(projectData);
     navigate(`/projects/${projectId}`, { replace: true });

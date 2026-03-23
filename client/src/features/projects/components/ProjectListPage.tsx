@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@progress/kendo-react-buttons';
+import { Input, type InputChangeEvent } from '@progress/kendo-react-inputs';
 import { useProjects } from '../hooks/useProjects';
 import { SkeletonLoader } from '../../../components/shared';
 import { ROUTES } from '../../../config/routes';
@@ -55,8 +56,8 @@ export function ProjectListPage() {
     return list;
   }, [projects, activeTab, search]);
 
-  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+  const handleSearch = useCallback((e: InputChangeEvent) => {
+    setSearch(e.value ?? '');
   }, []);
 
   if (isLoading) {
@@ -85,13 +86,14 @@ export function ProjectListPage() {
       <div className="pf-list__filters">
         <div className="pf-list__tabs">
           {TABS.map((tab) => (
-            <button
+            <Button
               key={tab}
+              fillMode="flat"
               className={`pf-list__tab ${activeTab === tab ? 'pf-list__tab--active' : ''}`}
               onClick={() => setActiveTab(tab)}
             >
               {tab}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="pf-list__search-row">
@@ -99,8 +101,7 @@ export function ProjectListPage() {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-gray-400)" strokeWidth="1.5">
               <circle cx="7" cy="7" r="5" /><path d="M11 11l3.5 3.5" />
             </svg>
-            <input
-              type="text"
+            <Input
               placeholder="Filter by client or manager..."
               value={search}
               onChange={handleSearch}
@@ -169,13 +170,13 @@ export function ProjectListPage() {
                   <span>{managerName}</span>
                 </div>
                 <div className="pf-list__col pf-list__col--actions">
-                  <button className="pf-list__menu-btn" onClick={(e) => e.preventDefault()}>
+                  <Button fillMode="flat" className="pf-list__menu-btn" onClick={(e) => e.preventDefault()}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="var(--color-gray-400)">
                       <circle cx="8" cy="3" r="1.5" />
                       <circle cx="8" cy="8" r="1.5" />
                       <circle cx="8" cy="13" r="1.5" />
                     </svg>
-                  </button>
+                  </Button>
                 </div>
               </Link>
             );

@@ -209,17 +209,17 @@ export function TeamRegistryPage() {
             return (
               <td>
                 <div className="team-registry__actions">
-                  <button className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
+                  <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
                     </svg>
-                  </button>
-                  <button className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
+                  </Button>
+                  <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5" />
                       <path d="M3 4l1 10a1 1 0 001 1h6a1 1 0 001-1l1-10" />
                     </svg>
-                  </button>
+                  </Button>
                 </div>
               </td>
             );

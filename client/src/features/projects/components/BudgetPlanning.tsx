@@ -140,8 +140,9 @@ export function BudgetPlanning({ projectId, startDate, endDate, mode }: BudgetPl
     try {
       await saveBudgetPlan.mutateAsync({ items });
       showToast('Budget plan saved successfully', 'success');
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to save budget plan', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to save budget plan';
+      showToast(msg, 'error');
     }
   };
 

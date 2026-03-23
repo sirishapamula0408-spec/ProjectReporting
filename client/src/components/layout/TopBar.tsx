@@ -1,3 +1,4 @@
+import { Button } from '@progress/kendo-react-buttons';
 import { useAuth } from '../../context/AuthContext';
 import './TopBar.css';
 
@@ -70,12 +71,12 @@ export function TopBar() {
             aria-label="Search"
           />
         </div>
-        <button className="topbar__icon-btn" aria-label="Notifications" title="Notifications">
+        <Button fillMode="flat" className="topbar__icon-btn" aria-label="Notifications" title="Notifications">
           <BellIcon />
-        </button>
-        <button className="topbar__icon-btn" aria-label="Settings" title="Settings">
+        </Button>
+        <Button fillMode="flat" className="topbar__icon-btn" aria-label="Settings" title="Settings">
           <GearIcon />
-        </button>
+        </Button>
         {user && (
           <div className="topbar__avatar" title={user.displayName}>
             {user.displayName.charAt(0).toUpperCase()}

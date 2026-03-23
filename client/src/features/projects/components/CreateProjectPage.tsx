@@ -9,14 +9,14 @@ export function CreateProjectPage() {
   const createProject = useCreateProject();
   const createMilestone = useCreateMilestone(0); // Will set after project creation
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: { milestones?: Array<{ name: string; amount: string; dueDate: string }>; [key: string]: unknown }) => {
     const { milestones, ...projectData } = data;
     const project = await createProject.mutateAsync(projectData);
 
     // Create milestones for the new project in parallel
     if (milestones && milestones.length > 0) {
       await Promise.all(
-        milestones.map((m: any) =>
+        milestones.map((m: { name: string; amount: string; dueDate: string }) =>
           fetch(`/api/projects/${project.id}/milestones`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

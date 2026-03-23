@@ -67,8 +67,9 @@ export function ResourceAssignment({ projectId, mode }: ResourceAssignmentProps)
       showToast('Resource assigned successfully', 'success');
       setShowDialog(false);
       reset();
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to assign resource', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to assign resource';
+      showToast(msg, 'error');
     }
   };
 
@@ -76,8 +77,9 @@ export function ResourceAssignment({ projectId, mode }: ResourceAssignmentProps)
     try {
       await deleteAllocation.mutateAsync(allocationId);
       showToast('Resource removed', 'success');
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to remove resource', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to remove resource';
+      showToast(msg, 'error');
     }
   };
 

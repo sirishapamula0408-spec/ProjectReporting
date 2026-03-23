@@ -88,8 +88,9 @@ export function ProjectForm({
         mode === 'create' ? 'Project created successfully' : 'Project updated successfully',
         'success',
       );
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to save project', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to save project';
+      showToast(msg, 'error');
     }
   };
 

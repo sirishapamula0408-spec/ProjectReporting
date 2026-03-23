@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '@progress/kendo-react-buttons';
 import './ClientSatisfactionPage.css';
 
 type RagOption = 'ON_TRACK' | 'MINOR_ISSUES' | 'CRITICAL_RISKS';
@@ -82,7 +83,7 @@ export function ClientSatisfactionPage() {
       </div>
 
       <div className="client-satisfaction__actions">
-        <button type="button" className="client-satisfaction__save-btn">Save Assessment</button>
+        <Button type="button" themeColor="primary" className="client-satisfaction__save-btn">Save Assessment</Button>
       </div>
     </div>
   );

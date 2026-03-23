@@ -124,20 +124,22 @@ export function LoginPage() {
 
           {/* Tab toggle */}
           <div className="login-tabs">
-            <button
+            <Button
+              fillMode="flat"
               className={`login-tabs__tab ${activeTab === 'login' ? 'login-tabs__tab--active' : ''}`}
               onClick={() => setActiveTab('login')}
               type="button"
             >
               LOG IN
-            </button>
-            <button
+            </Button>
+            <Button
+              fillMode="flat"
               className={`login-tabs__tab ${activeTab === 'signup' ? 'login-tabs__tab--active' : ''}`}
               onClick={() => setActiveTab('signup')}
               type="button"
             >
               SIGN UP
-            </button>
+            </Button>
           </div>
 
           {activeTab === 'signup' ? (
@@ -248,8 +250,9 @@ export function LoginPage() {
                     />
                   )}
                 />
-                <button
+                <Button
                   type="button"
+                  fillMode="flat"
                   className="login-input-suffix"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -268,7 +271,7 @@ export function LoginPage() {
                       </>
                     )}
                   </svg>
-                </button>
+                </Button>
               </div>
               {errors.password && <span className="login-error">{errors.password.message}</span>}
             </div>

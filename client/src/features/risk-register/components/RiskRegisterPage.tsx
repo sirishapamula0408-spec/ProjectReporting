@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '@progress/kendo-react-buttons';
 import { formatINR } from '../../../config/constants';
 import './RiskRegisterPage.css';
 
@@ -42,7 +43,7 @@ export function RiskRegisterPage() {
           <h1 className="risk-register__title">Risk Register</h1>
           <span className="risk-register__badge-count">{risks.length} risks</span>
         </div>
-        <button className="risk-register__add-btn" type="button">+ Add Risk</button>
+        <Button themeColor="primary" className="risk-register__add-btn" type="button">+ Add Risk</Button>
       </div>
 
       <div className="risk-register__kpis">
@@ -62,14 +63,15 @@ export function RiskRegisterPage() {
 
       <div className="risk-register__tabs">
         {(['ALL', 'OPEN', 'MITIGATED', 'CLOSED'] as FilterTab[]).map((tab) => (
-          <button
+          <Button
             key={tab}
             type="button"
+            fillMode="flat"
             className={`risk-register__tab ${activeTab === tab ? 'risk-register__tab--active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab === 'ALL' ? 'All' : tab.charAt(0) + tab.slice(1).toLowerCase()}
-          </button>
+          </Button>
         ))}
       </div>
 

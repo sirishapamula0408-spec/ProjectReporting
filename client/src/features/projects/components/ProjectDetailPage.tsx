@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { TabStrip, TabStripTab } from '@progress/kendo-react-layout';
+import { TabStrip, TabStripTab, type TabStripSelectEventArguments } from '@progress/kendo-react-layout';
 import { Button } from '@progress/kendo-react-buttons';
 import { useState, useCallback } from 'react';
 import { useProjectDetail, useMilestones, useTransitionStatus } from '../hooks/useProjects';
@@ -219,7 +219,7 @@ export function ProjectDetailPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [selectedTab, setSelectedTab] = useState(0);
-  const handleTabSelect = useCallback((e: any) => setSelectedTab(e.selected), []);
+  const handleTabSelect = useCallback((e: TabStripSelectEventArguments) => setSelectedTab(e.selected), []);
 
   const { data: project, isLoading } = useProjectDetail(projectId);
   const { data: milestones } = useMilestones(projectId);
@@ -229,8 +229,9 @@ export function ProjectDetailPage() {
     try {
       await transitionStatus.mutateAsync(newStatus);
       showToast(`Project status changed to ${newStatus}`, 'success');
-    } catch (err: any) {
-      showToast(err?.response?.data?.error?.message || 'Failed to change status', 'error');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'Failed to change status';
+      showToast(msg, 'error');
     }
   }, [transitionStatus, showToast]);
 
