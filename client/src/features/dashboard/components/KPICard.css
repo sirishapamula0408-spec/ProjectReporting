@@ -24,7 +24,7 @@
 }
 
 .kpi-card__value {
-  font-size: 2rem;
+  font-size: var(--text-h2);
   font-weight: var(--weight-bold);
   color: var(--color-gray-900);
   font-variant-numeric: tabular-nums;

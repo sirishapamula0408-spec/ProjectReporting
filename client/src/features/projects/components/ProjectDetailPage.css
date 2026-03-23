@@ -157,6 +157,122 @@
   font-size: var(--text-body);
 }
 
+/* Tab content */
+.project-detail__tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+/* Data tables inside tabs */
+.project-detail__data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.project-detail__data-table th {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.project-detail__data-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-gray-50);
+  font-size: var(--text-body);
+  color: var(--color-gray-700);
+}
+
+.project-detail__data-table tfoot td {
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+  border-top: 2px solid var(--color-gray-200);
+  border-bottom: none;
+}
+
+.project-detail__total-row td {
+  font-weight: var(--weight-bold);
+}
+
+.project-detail__empty-cell {
+  text-align: center;
+  padding: var(--space-8) var(--space-4) !important;
+  color: var(--color-gray-400);
+}
+
+.project-detail__hint {
+  font-size: var(--text-caption);
+  color: var(--color-gray-400);
+  margin-top: var(--space-4);
+}
+
+/* Health grid */
+.project-detail__health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.project-detail__health-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-md);
+}
+
+.project-detail__health-label {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-detail__health-value {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  color: var(--color-gray-900);
+}
+
+.project-detail__two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.project-detail__sub-label {
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.project-detail__muted {
+  font-size: var(--text-body);
+  color: var(--color-gray-400);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .project-detail__health-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .project-detail__two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-detail__placeholder {
   text-align: center;
   padding: var(--space-12);
