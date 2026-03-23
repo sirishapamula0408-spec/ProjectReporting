@@ -28,7 +28,7 @@
   flex-direction: column;
   justify-content: center;
   flex: 1;
-  padding-top: 60px; /* space below absolute logo */
+  padding-top: 80px; /* increased space below logo */
 }
 
 /* Logo — pinned top-left */
@@ -54,27 +54,27 @@
 }
 
 .login-brand-panel__division {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 700;
   color: white;
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
   letter-spacing: 0.03em;
 }
 
 .login-brand-panel__division-sub {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.45);
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 0 0 32px 0;
+  margin: 0 0 24px 0;
 }
 
 .login-brand-panel__headline {
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 700;
   color: white;
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0;
   text-align: left;
   letter-spacing: -0.01em;
@@ -92,19 +92,19 @@
 .login-brand-panel__feature-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
+  gap: 14px;
+  padding: 14px 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
+  border-radius: 10px;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   background: rgba(255, 255, 255, 0.04);
 }
 
 .login-brand-panel__feature-icon {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,7 +117,7 @@
 .login-brand-panel__footer {
   position: relative;
   z-index: 1;
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.3);
 }
 
