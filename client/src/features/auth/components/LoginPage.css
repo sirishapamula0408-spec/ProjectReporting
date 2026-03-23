@@ -39,7 +39,7 @@
 }
 
 .login-brand-panel__name {
-  font-size: var(--text-h3);
+  font-size: var(--text-body);
   font-weight: var(--weight-bold);
   color: white;
   letter-spacing: -0.02em;
@@ -51,7 +51,7 @@
 }
 
 .login-brand-panel__division {
-  font-size: 1.75rem;
+  font-size: var(--text-h2);
   font-weight: var(--weight-bold);
   color: white;
   margin: 0 0 var(--space-1) 0;
@@ -59,20 +59,20 @@
 }
 
 .login-brand-panel__division-sub {
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: var(--weight-medium);
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin: 0 0 var(--space-8) 0;
+  margin: 0 0 var(--space-6) 0;
 }
 
 .login-brand-panel__headline {
-  font-size: 2.5rem;
+  font-size: var(--text-h1);
   font-weight: var(--weight-bold);
   color: white;
   line-height: 1.2;
-  margin: 0 0 var(--space-10) 0;
+  margin: 0 0 var(--space-8) 0;
   letter-spacing: -0.02em;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .login-form-panel__title {
-  font-size: 2rem;
+  font-size: var(--text-h1);
   font-weight: var(--weight-bold);
   color: var(--color-gray-900);
   margin: 0 0 var(--space-2) 0;
@@ -155,7 +155,7 @@
 .login-tabs__tab {
   flex: 1;
   padding: var(--space-3);
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: var(--weight-semibold);
   letter-spacing: 0.06em;
   border: none;
