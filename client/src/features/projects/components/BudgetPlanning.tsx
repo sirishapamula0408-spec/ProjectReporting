@@ -153,7 +153,7 @@ export function BudgetPlanning({ projectId, startDate, endDate, mode }: BudgetPl
           <span className="project-form__section-hint">Plan monthly budget across cost categories</span>
         </div>
         <div className="budget-planning__placeholder">
-          Save project first to set up budget.
+          Click "Save Changes" to create the project, then you'll be redirected to set up the budget plan.
         </div>
       </section>
     );

@@ -27,7 +27,7 @@ export function CreateProjectPage() {
       );
     }
 
-    navigate(`/projects/${project.id}`, { replace: true });
+    navigate(`/projects/${project.id}/edit`, { replace: true });
   };
 
   return (

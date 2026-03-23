@@ -49,7 +49,7 @@ export function ResourceAssignment({ projectId, mode }: ResourceAssignmentProps)
           <span className="project-form__section-hint">Assign team members and define their allocation rates</span>
         </div>
         <div className="resource-assignment__placeholder">
-          Save project first to add resources.
+          Click "Save Changes" to create the project, then you'll be redirected to add resources and budget details.
         </div>
       </section>
     );
