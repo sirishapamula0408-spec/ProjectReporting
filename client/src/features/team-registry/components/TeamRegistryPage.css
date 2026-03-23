@@ -105,3 +105,32 @@
   border-color: var(--color-primary) !important;
   color: white !important;
 }
+
+/* Action buttons */
+.team-registry__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.team-registry__action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  color: var(--color-gray-400);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.team-registry__action-btn--edit:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.team-registry__action-btn--delete:hover {
+  color: var(--color-red);
+  background: #fef2f2;
+}

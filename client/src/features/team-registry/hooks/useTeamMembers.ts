@@ -46,3 +46,28 @@ export function useCreateTeamMember() {
     },
   });
 }
+
+export function useUpdateTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...input }: Partial<CreateTeamMemberInput> & { id: number }) => {
+      const res = await api.put<{ data: TeamMember }>(`/team-members/${id}`, input);
+      return res.data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-members'] });
+    },
+  });
+}
+
+export function useDeleteTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      await api.put(`/team-members/${id}`, { isActive: false } as unknown as Partial<CreateTeamMemberInput>);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-members'] });
+    },
+  });
+}
