@@ -17,7 +17,7 @@ export function DashboardLayout() {
           <Outlet />
           <footer className="dashboard-layout__footer">
             <span className="dashboard-layout__footer-copy">
-              &copy; 2024 PROJECTREPORTING ENTERPRISE. ALL RIGHTS RESERVED.
+              &copy; 2026 PROJECTREPORTING ENTERPRISE. ALL RIGHTS RESERVED.
             </span>
             <a href="#privacy" className="dashboard-layout__footer-link">
               PRIVACY POLICY

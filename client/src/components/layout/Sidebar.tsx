@@ -223,14 +223,6 @@ export function Sidebar() {
       {/* Bottom links */}
       <div className="sidebar__bottom-links">
         <button
-          className="sidebar__bottom-link"
-          title={collapsed ? 'Help Center' : undefined}
-          onClick={() => { /* placeholder */ }}
-        >
-          <HelpIcon />
-          {!collapsed && <span>Help Center</span>}
-        </button>
-        <button
           className="sidebar__bottom-link sidebar__bottom-link--logout"
           onClick={handleLogout}
           title={collapsed ? 'Log Out' : undefined}
