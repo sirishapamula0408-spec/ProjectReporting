@@ -6,6 +6,7 @@
 .login-page {
   min-height: 100vh;
   display: flex;
+  background: var(--color-white);
 }
 
 /* ── Left Brand Panel ── */
@@ -135,7 +136,7 @@
   align-items: center;
   justify-content: center;
   padding: 48px;
-  background: white;
+  background: var(--color-white);
   overflow-y: auto;
 }
 
