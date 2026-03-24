@@ -3,7 +3,7 @@
    ═══════════════════════════════════════ */
 
 .pgm-dash__header { margin-bottom: var(--space-6); }
-.pgm-dash__title { font-size: var(--text-xl); font-weight: var(--weight-semibold); color: var(--text-primary); margin: 0; letter-spacing: var(--tracking-snug); }
+.pgm-dash__title { font-size: var(--text-page); font-weight: var(--weight-bold); color: var(--text-strong); margin: 0; letter-spacing: var(--tracking-tight); }
 .pgm-dash__subtitle { font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-1) 0 0; }
 
 /* ── KPI Cards ── */
@@ -31,14 +31,14 @@
 .pgm-dash__kpi-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
 }
 
 .pgm-dash__kpi-badge {
-  font-size: var(--text-badge);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
   padding: 2px 8px;
   border-radius: var(--radius-full);
   letter-spacing: var(--tracking-wider);
@@ -125,7 +125,7 @@
 .pgm-dash__table th {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   text-align: left;

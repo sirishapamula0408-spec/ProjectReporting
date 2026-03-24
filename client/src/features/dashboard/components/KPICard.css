@@ -20,7 +20,7 @@
   font-weight: var(--weight-medium);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
 }
 
 .kpi-card__value {

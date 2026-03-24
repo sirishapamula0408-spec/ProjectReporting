@@ -10,9 +10,9 @@
 }
 
 .client-satisfaction__title {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--text-page);
+  font-weight: var(--weight-bold);
+  color: var(--text-strong);
   margin: 0;
 }
 
@@ -80,7 +80,7 @@
 .client-satisfaction__notes-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
 }
@@ -121,7 +121,7 @@
 .client-satisfaction__metric-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
 }

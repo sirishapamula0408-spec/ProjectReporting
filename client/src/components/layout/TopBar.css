@@ -26,9 +26,9 @@
 }
 
 .topbar__logo-text {
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--text-active);
   white-space: nowrap;
   letter-spacing: var(--tracking-snug);
 }

@@ -10,9 +10,9 @@
 }
 
 .trend-analysis__title {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--text-page);
+  font-weight: var(--weight-bold);
+  color: var(--text-strong);
   margin: 0;
 }
 
@@ -36,7 +36,7 @@
 .trend-analysis__kpi-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
 }
@@ -100,7 +100,7 @@
 .trend-analysis__table thead th {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   text-align: left;

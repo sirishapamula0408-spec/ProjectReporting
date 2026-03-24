@@ -16,9 +16,9 @@
 }
 
 .risk-register__title {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--text-page);
+  font-weight: var(--weight-bold);
+  color: var(--text-strong);
   margin: 0;
 }
 
@@ -26,8 +26,8 @@
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-badge);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   background: var(--color-gray-200, #E5E7EB);
@@ -73,7 +73,7 @@
 .risk-register__kpi-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
 }
@@ -131,7 +131,7 @@
 .risk-register__table thead th {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   text-align: left;
@@ -167,8 +167,8 @@
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-badge);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   white-space: nowrap;

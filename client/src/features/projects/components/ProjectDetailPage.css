@@ -10,22 +10,22 @@
 }
 
 .project-detail__title {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--text-page);
+  font-weight: var(--weight-bold);
+  color: var(--text-strong);
   margin: 0;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  letter-spacing: var(--tracking-snug);
+  letter-spacing: var(--tracking-tight);
 }
 
 .project-detail__status {
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-badge);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
 }
@@ -82,7 +82,7 @@
 .project-detail__info-grid .label {
   display: block;
   font-size: var(--text-2xs);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   margin-bottom: var(--space-1);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
@@ -111,7 +111,7 @@
 .project-detail__milestone-table th {
   text-align: left;
   font-size: var(--text-2xs);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   font-weight: var(--weight-semibold);
@@ -134,8 +134,8 @@
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-badge);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
 }
@@ -177,7 +177,7 @@
 .project-detail__data-table th {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   text-align: left;
@@ -235,7 +235,7 @@
 .project-detail__health-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
 }
@@ -255,7 +255,7 @@
 .project-detail__sub-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--text-muted);
+  color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   margin: 0 0 var(--space-2) 0;

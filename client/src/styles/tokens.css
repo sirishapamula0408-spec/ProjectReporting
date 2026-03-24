@@ -34,21 +34,21 @@
   --font-family: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
-  /* Typography Scale — Fintech-inspired (PRT-82) */
+  /* Typography Scale — Fintech-inspired (PRT-82, refined) */
   --text-3xl: 32px;      /* Display KPI — large metrics */
   --text-2xl: 28px;      /* Display KPI — standard metrics */
-  --text-xl: 20px;       /* Page titles */
-  --text-lg: 18px;       /* Page titles — compact */
+  --text-page: 24px;     /* Page titles (24–26px bold) */
+  --text-xl: 20px;       /* Section titles */
+  --text-lg: 18px;       /* Brand logo, card headings */
   --text-md: 16px;       /* Card headings, widget titles */
-  --text-base: 14px;     /* Body text, nav items, inputs */
-  --text-sm: 13px;       /* Body compact, data values, buttons */
-  --text-xs: 12px;       /* Labels, meta info, captions */
-  --text-2xs: 11px;      /* Table headers, badge labels */
-  --text-badge: 10px;    /* Status badges */
+  --text-base: 14px;     /* Body text, member names, nav items */
+  --text-sm: 13px;       /* Subtitles, action links, buttons */
+  --text-xs: 12px;       /* Email/meta, badges */
+  --text-2xs: 11px;      /* Table headers, invited-by, badges */
 
   /* Legacy aliases (backward compat — prefer new tokens) */
   --text-h1: var(--text-3xl);
-  --text-h2: var(--text-xl);
+  --text-h2: var(--text-page);
   --text-h3: var(--text-lg);
   --text-body: var(--text-base);
   --text-caption: var(--text-xs);
@@ -81,7 +81,7 @@
   --text-strong: #111827;
   --text-positive: #10B981;
   --text-negative: #EF4444;
-  --text-active: #4F46E5;
+  --text-active: #1D4ED8;
 
   /* Status Badge Colors */
   --badge-green-bg: #D1FAE5;
