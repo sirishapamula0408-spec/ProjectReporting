@@ -18,19 +18,19 @@
 }
 
 .add-member-form__label {
-  font-size: var(--text-body);
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-700);
+  color: var(--text-secondary);
 }
 
 .add-member-form__error {
-  font-size: var(--text-caption);
-  color: var(--color-red);
+  font-size: var(--text-xs);
+  color: var(--text-negative);
 }
 
 .add-member-form__hint {
-  font-size: var(--text-caption);
-  color: var(--color-gray-400);
+  font-size: var(--text-xs);
+  color: var(--text-placeholder);
 }
 
 .add-member-form__submit-btn {

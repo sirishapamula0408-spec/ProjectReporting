@@ -10,25 +10,28 @@
 }
 
 .project-form__title {
-  font-size: var(--text-h2);
-  font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
   margin: 0;
+  letter-spacing: var(--tracking-snug);
 }
 
 .project-form__status {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-badge);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
   margin-left: var(--space-3);
   vertical-align: middle;
 }
 
-.project-form__status--active { background: var(--color-green-light); color: var(--color-green); }
-.project-form__status--proposal { background: var(--color-primary-light); color: var(--color-primary); }
-.project-form__status--on_hold { background: var(--color-amber-light); color: var(--color-amber); }
+.project-form__status--active { background: var(--badge-green-bg); color: var(--badge-green-text); }
+.project-form__status--proposal { background: var(--badge-blue-bg); color: var(--badge-blue-text); }
+.project-form__status--on_hold { background: var(--badge-amber-bg); color: var(--badge-amber-text); }
 .project-form__status--completed { background: var(--color-gray-200); color: var(--color-gray-600); }
 .project-form__status--closed { background: var(--color-gray-200); color: var(--color-gray-500); }
 
@@ -38,12 +41,12 @@
 }
 
 .project-form__warning {
-  background: var(--color-amber-light);
-  color: var(--color-amber);
+  background: var(--badge-amber-bg);
+  color: var(--badge-amber-text);
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-6);
-  font-size: var(--text-body);
+  font-size: var(--text-sm);
   font-weight: var(--weight-medium);
 }
 
@@ -63,9 +66,9 @@
 }
 
 .project-form__section-title {
-  font-size: var(--text-h3);
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   margin: 0 0 var(--space-5) 0;
 }
 
@@ -84,10 +87,11 @@
 
 .project-form__field label {
   display: block;
-  font-size: var(--text-body);
+  font-size: var(--text-xs);
   font-weight: var(--weight-medium);
-  color: var(--color-gray-700);
+  color: var(--text-secondary);
   margin-bottom: var(--space-1);
+  letter-spacing: var(--tracking-wide);
 }
 
 .project-form__field .k-input {
@@ -96,14 +100,14 @@
 
 .project-form__error {
   display: block;
-  font-size: var(--text-caption);
-  color: var(--color-red);
+  font-size: var(--text-xs);
+  color: var(--text-negative);
   margin-top: var(--space-1);
 }
 
 .project-form__empty {
-  color: var(--color-gray-400);
-  font-size: var(--text-body);
+  color: var(--text-placeholder);
+  font-size: var(--text-sm);
   text-align: center;
   padding: var(--space-6);
 }
@@ -128,8 +132,8 @@
 
 /* Section hints */
 .project-form__section-hint {
-  font-size: var(--text-caption);
-  color: var(--color-gray-400);
+  font-size: var(--text-xs);
+  color: var(--text-placeholder);
 }
 
 /* Resource Assignment Table */
@@ -140,11 +144,11 @@
 }
 
 .project-form__resource-table th {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-400);
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-widest);
   text-align: left;
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-200);
@@ -152,8 +156,8 @@
 
 .project-form__resource-table td {
   padding: var(--space-3) var(--space-4);
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 
 .project-form__empty-row {
@@ -166,8 +170,8 @@
 .project-form__budget-placeholder {
   text-align: center;
   padding: var(--space-8);
-  color: var(--color-gray-400);
-  font-size: var(--text-body);
+  color: var(--text-placeholder);
+  font-size: var(--text-sm);
   background: var(--color-gray-50);
   border-radius: var(--radius-md);
   border: 1px dashed var(--color-gray-200);

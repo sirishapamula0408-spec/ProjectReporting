@@ -18,8 +18,8 @@
 }
 
 .breadcrumbs__link {
-  font-size: var(--text-body);
-  color: var(--color-primary);
+  font-size: var(--text-sm);
+  color: var(--text-active);
   text-decoration: none;
 }
 .breadcrumbs__link:hover {
@@ -27,12 +27,12 @@
 }
 
 .breadcrumbs__separator {
-  color: var(--color-gray-400);
-  font-size: var(--text-body);
+  color: var(--text-placeholder);
+  font-size: var(--text-sm);
 }
 
 .breadcrumbs__current {
-  font-size: var(--text-body);
-  color: var(--color-gray-600);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
   font-weight: var(--weight-medium);
 }

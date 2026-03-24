@@ -28,10 +28,11 @@
 }
 
 .sidebar__brand-name {
-  font-size: var(--text-body);
-  font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
   white-space: nowrap;
+  letter-spacing: var(--tracking-snug);
 }
 
 /* Toggle */
@@ -67,16 +68,16 @@
 }
 
 .sidebar__menu-label {
-  font-size: 0.6875rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-400);
-  letter-spacing: 0.08em;
+  color: var(--text-placeholder);
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
 }
 
 .sidebar__menu-subtitle {
-  font-size: var(--text-caption);
-  color: var(--color-gray-400);
+  font-size: var(--text-xs);
+  color: var(--text-placeholder);
   font-weight: var(--weight-regular);
 }
 
@@ -96,8 +97,8 @@
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   text-decoration: none;
-  color: var(--color-gray-600);
-  font-size: var(--text-body);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   transition: all 0.15s;
   border-left: 3px solid transparent;
@@ -107,13 +108,13 @@
 
 .sidebar__link:hover {
   background: var(--color-gray-50);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
 }
 
 .sidebar__link--active {
   background: var(--color-primary-light);
-  color: var(--color-primary);
-  border-left-color: var(--color-primary);
+  color: var(--text-active);
+  border-left-color: var(--text-active);
   font-weight: var(--weight-semibold);
 }
 
@@ -183,8 +184,8 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-gray-500);
-  font-size: var(--text-body);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
   font-family: var(--font-family);
   border-radius: var(--radius-md);
   transition: color 0.15s, background 0.15s;
@@ -223,8 +224,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: var(--weight-bold);
-  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
   flex-shrink: 0;
 }
 
@@ -235,17 +236,17 @@
 }
 
 .sidebar__user-name {
-  font-size: var(--text-body);
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .sidebar__user-role {
-  font-size: var(--text-caption);
-  color: var(--color-gray-500);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
 }
 
 /* Collapsed overrides */

@@ -5,9 +5,10 @@
  */
 
 /* Primary — solid blue (default KendoReact themeColor="primary") */
-/* Already handled by Kendo theme, adding consistency overrides */
 .btn-primary {
   font-weight: var(--weight-semibold) !important;
+  font-size: var(--text-sm) !important;
+  letter-spacing: var(--tracking-wide) !important;
 }
 
 /* Secondary — outlined */
@@ -16,6 +17,8 @@
   color: var(--color-primary) !important;
   background: transparent !important;
   font-weight: var(--weight-medium) !important;
+  font-size: var(--text-sm) !important;
+  letter-spacing: var(--tracking-wide) !important;
 }
 .btn-secondary:hover {
   background: var(--color-primary-light) !important;
@@ -25,8 +28,9 @@
 .btn-tertiary {
   border: none !important;
   background: transparent !important;
-  color: var(--color-primary) !important;
+  color: var(--text-active) !important;
   font-weight: var(--weight-medium) !important;
+  font-size: var(--text-sm) !important;
   padding-left: var(--space-2) !important;
   padding-right: var(--space-2) !important;
 }
@@ -36,10 +40,11 @@
 
 /* Destructive — outlined red */
 .btn-destructive {
-  border: 1px solid var(--color-red) !important;
-  color: var(--color-red) !important;
+  border: 1px solid var(--text-negative) !important;
+  color: var(--text-negative) !important;
   background: transparent !important;
   font-weight: var(--weight-medium) !important;
+  font-size: var(--text-sm) !important;
 }
 .btn-destructive:hover {
   background: var(--color-red-light) !important;

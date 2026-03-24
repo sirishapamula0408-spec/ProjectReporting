@@ -18,9 +18,9 @@
 }
 
 .project-overview__section h3 {
-  font-size: var(--text-h3);
-  font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
   margin: 0 0 var(--space-4) 0;
 }
 
@@ -58,32 +58,32 @@
 }
 
 .project-overview__health-item h4 {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-gray-500);
+  letter-spacing: var(--tracking-widest);
+  color: var(--text-muted);
   margin: 0 0 var(--space-2) 0;
 }
 
 .project-overview__health-item p {
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
-  line-height: 1.5;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
   margin: 0;
 }
 
 .project-overview__health-item ul {
   margin: 0;
   padding-left: var(--space-5);
-  color: var(--color-gray-700);
-  font-size: var(--text-body);
-  line-height: 1.6;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
 }
 
 .project-overview__muted {
-  color: var(--color-gray-400);
-  font-size: var(--text-body);
+  color: var(--text-placeholder);
+  font-size: var(--text-sm);
   margin: 0;
 }
 
@@ -91,26 +91,27 @@
 .project-overview__rag-badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 12px;
+  padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
+  font-size: var(--text-badge);
   font-weight: var(--weight-bold);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
 }
 
 .project-overview__rag-badge--green {
-  background: var(--color-green-light);
-  color: var(--color-green);
+  background: var(--badge-green-bg);
+  color: var(--badge-green-text);
 }
 
 .project-overview__rag-badge--amber {
-  background: var(--color-amber-light);
-  color: var(--color-amber);
+  background: var(--badge-amber-bg);
+  color: var(--badge-amber-text);
 }
 
 .project-overview__rag-badge--red {
-  background: #fef2f2;
-  color: var(--color-red);
+  background: var(--badge-red-bg);
+  color: var(--badge-red-text);
 }
 
 /* Team composition */
@@ -129,18 +130,19 @@
 }
 
 .project-overview__team-item .role-count {
-  font-size: var(--text-h2);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   line-height: 1;
+  letter-spacing: var(--tracking-tight);
 }
 
 .project-overview__team-item .role-name {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-gray-500);
-  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
   margin-top: var(--space-1);
 }
 
@@ -148,8 +150,8 @@
 .project-overview__empty {
   text-align: center;
   padding: var(--space-8);
-  color: var(--color-gray-400);
-  font-size: var(--text-body);
+  color: var(--text-placeholder);
+  font-size: var(--text-sm);
   background: var(--color-gray-50);
   border-radius: var(--radius-md);
 }
