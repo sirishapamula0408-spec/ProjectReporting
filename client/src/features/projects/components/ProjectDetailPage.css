@@ -12,7 +12,7 @@
 .project-detail__title {
   font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--text-strong);
+  color: var(--text-primary);
   margin: 0;
   display: flex;
   align-items: center;
@@ -93,7 +93,7 @@
   display: block;
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--text-strong);
+  color: var(--text-primary);
 }
 
 .project-detail__description {

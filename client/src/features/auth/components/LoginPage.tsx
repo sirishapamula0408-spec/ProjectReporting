@@ -190,7 +190,7 @@ export function LoginPage() {
           <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="login-field">
               <label className="login-label" htmlFor="username">
-                USERNAME
+                Username or Email
               </label>
               <div className="login-input-wrapper">
                 <span className="login-input-icon">
@@ -222,7 +222,7 @@ export function LoginPage() {
             <div className="login-field">
               <div className="login-label-row">
                 <label className="login-label" htmlFor="password">
-                  PASSWORD
+                  Password
                 </label>
                 <span className="login-forgot-link">
                   CONTACT ADMIN TO RESET
@@ -280,7 +280,7 @@ export function LoginPage() {
 
             <div className="login-keep-signed-in">
               <Checkbox
-                label="KEEP ME SIGNED IN"
+                label="Keep me signed in on this device"
                 value={keepSignedIn}
                 onChange={(e: CheckboxChangeEvent) => setKeepSignedIn(e.value ?? false)}
               />
@@ -297,7 +297,7 @@ export function LoginPage() {
               className="login-button"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Logging in...' : 'Log In  →'}
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
           )}

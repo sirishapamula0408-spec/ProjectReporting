@@ -12,7 +12,7 @@
 .project-form__title {
   font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--text-strong);
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: var(--tracking-tight);
 }

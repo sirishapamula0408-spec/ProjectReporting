@@ -12,7 +12,7 @@
 .client-satisfaction__title {
   font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--text-strong);
+  color: var(--text-primary);
   margin: 0;
 }
 

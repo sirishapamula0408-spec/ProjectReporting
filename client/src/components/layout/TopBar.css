@@ -26,11 +26,10 @@
 }
 
 .topbar__logo-text {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   font-weight: var(--weight-bold);
   color: var(--text-active);
   white-space: nowrap;
-  letter-spacing: var(--tracking-snug);
 }
 
 /* Tabs */
