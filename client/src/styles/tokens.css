@@ -141,7 +141,7 @@ body {
   font-family: var(--font-family);
   font-size: var(--text-base);
   color: var(--text-primary);
-  background: var(--color-gray-50);
+  background: var(--color-white);
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
