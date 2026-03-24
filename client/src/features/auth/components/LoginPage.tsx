@@ -42,7 +42,7 @@ export function LoginPage() {
       const user = await login(data.username, data.password);
       navigate(getRoleDashboard(user.role as Role), { replace: true });
     } catch {
-      setError('Invalid email or password');
+      setError('Invalid username or password');
     } finally {
       setIsSubmitting(false);
     }
@@ -190,13 +190,13 @@ export function LoginPage() {
           <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="login-field">
               <label className="login-label" htmlFor="username">
-                EMAIL ADDRESS
+                USERNAME
               </label>
               <div className="login-input-wrapper">
                 <span className="login-input-icon">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-gray-400)" strokeWidth="1.5">
-                    <rect x="1" y="3" width="14" height="10" rx="2" />
-                    <path d="M1 5l7 4 7-4" />
+                    <circle cx="8" cy="5" r="3" />
+                    <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
                   </svg>
                 </span>
                 <Controller
@@ -205,7 +205,7 @@ export function LoginPage() {
                   render={({ field }) => (
                     <Input
                       id="username"
-                      placeholder="maiha@company.com"
+                      placeholder="priya.sharma"
                       value={field.value}
                       onChange={(e: InputChangeEvent) => field.onChange(e.value)}
                       onBlur={field.onBlur}

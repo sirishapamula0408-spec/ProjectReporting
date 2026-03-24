@@ -10,15 +10,15 @@
 }
 
 .team-allocation__title {
-  font-size: var(--text-h2);
+  font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  color: var(--text-strong);
   margin: 0;
 }
 
 .team-allocation__subtitle {
-  font-size: var(--text-body);
-  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
   margin: var(--space-1) 0 0;
 }
 
@@ -40,18 +40,18 @@
 }
 
 .team-allocation__kpi-label {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wider);
 }
 
 .team-allocation__kpi-value {
-  font-size: var(--text-kpi);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
-  line-height: 1.2;
+  color: var(--text-primary);
+  line-height: var(--leading-tight);
 }
 
 .team-allocation__section-card {
@@ -63,9 +63,9 @@
 }
 
 .team-allocation__section-title {
-  font-size: var(--text-h3);
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   margin: 0 0 var(--space-5) 0;
 }
 
@@ -75,11 +75,11 @@
 }
 
 .team-allocation__table thead th {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-widest);
   text-align: left;
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-200);
@@ -88,8 +88,8 @@
 .team-allocation__table tbody td {
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-50);
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
   vertical-align: middle;
 }
 
@@ -105,7 +105,7 @@
   border-radius: 50%;
   background: var(--color-primary-light, #DBEAFE);
   color: var(--color-primary, #2563EB);
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-bold);
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@
 
 .team-allocation__member-name {
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
 }
 
 .team-allocation__allocation {
@@ -140,16 +140,16 @@
 }
 
 .team-allocation__allocation-text {
-  font-size: var(--text-caption);
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-700);
+  color: var(--text-secondary);
   min-width: 36px;
   text-align: right;
 }
 
 .team-allocation__cell--date {
   white-space: nowrap;
-  color: var(--color-gray-500);
+  color: var(--text-muted);
 }
 
 .team-allocation__placeholder {
@@ -163,8 +163,8 @@
 }
 
 .team-allocation__placeholder-text {
-  font-size: var(--text-body);
-  color: var(--color-gray-400);
+  font-size: var(--text-sm);
+  color: var(--text-placeholder);
 }
 
 @media (max-width: 768px) {

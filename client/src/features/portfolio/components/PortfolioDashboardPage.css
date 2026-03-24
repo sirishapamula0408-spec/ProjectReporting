@@ -11,15 +11,16 @@
 }
 
 .portfolio-dashboard__title {
-  font-size: var(--text-h2);
+  font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  color: var(--text-strong);
   margin: 0;
+  letter-spacing: var(--tracking-tight);
 }
 
 .portfolio-dashboard__subtitle {
-  font-size: var(--text-body);
-  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
   margin: var(--space-1) 0 0 0;
 }
 
@@ -53,26 +54,27 @@
 }
 
 .portfolio-dashboard__kpi-label {
-  font-size: var(--text-caption);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-widest);
 }
 
 .portfolio-dashboard__kpi-value {
-  font-size: var(--text-kpi);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
-  line-height: 1.2;
+  color: var(--text-primary);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
 }
 
 .portfolio-dashboard__kpi-value--risk {
-  color: var(--color-red);
+  color: var(--text-negative);
 }
 
 .portfolio-dashboard__kpi-value--money {
-  font-size: var(--text-h2);
+  font-size: var(--text-2xl);
   font-variant-numeric: tabular-nums;
 }
 
@@ -85,18 +87,18 @@
 }
 
 .portfolio-dashboard__grid-title {
-  font-size: var(--text-h3);
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   margin: 0 0 var(--space-5) 0;
 }
 
 .portfolio-dashboard__grid .k-grid-header th {
-  font-size: var(--text-caption);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-widest);
 }
 
 .portfolio-dashboard__grid tr {
@@ -110,10 +112,12 @@
 /* Status Badge */
 .portfolio-dashboard__status-badge {
   display: inline-block;
-  padding: 2px 12px;
+  padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -132,13 +136,13 @@
 }
 
 .portfolio-dashboard__rag-text {
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 
 .portfolio-dashboard__updated-cell {
-  font-size: var(--text-body);
-  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
 }
 
 /* Empty States */

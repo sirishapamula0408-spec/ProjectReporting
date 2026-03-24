@@ -26,10 +26,11 @@
 }
 
 .topbar__logo-text {
-  font-size: var(--text-body);
+  font-size: var(--text-lg);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  color: var(--text-active);
   white-space: nowrap;
+  letter-spacing: var(--tracking-snug);
 }
 
 /* Tabs */
@@ -44,22 +45,22 @@
   border: none;
   cursor: pointer;
   padding: var(--space-2) var(--space-3);
-  font-size: var(--text-body);
+  font-size: var(--text-sm);
   font-family: var(--font-family);
   font-weight: var(--weight-medium);
-  color: var(--color-gray-500);
+  color: var(--text-muted);
   border-bottom: 2px solid transparent;
   transition: color 0.15s, border-color 0.15s;
   line-height: calc(var(--topbar-height, 56px) - var(--space-4) - 2px);
 }
 
 .topbar__tab:hover {
-  color: var(--color-gray-900);
+  color: var(--text-primary);
 }
 
 .topbar__tab--active {
-  color: var(--color-gray-900);
-  border-bottom-color: var(--color-primary);
+  color: var(--text-active);
+  border-bottom-color: var(--text-active);
   font-weight: var(--weight-semibold);
 }
 
@@ -90,14 +91,14 @@
   background: none;
   border: none;
   outline: none;
-  font-size: var(--text-body);
+  font-size: var(--text-sm);
   font-family: var(--font-family);
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   width: 160px;
 }
 
 .topbar__search-input::placeholder {
-  color: var(--color-gray-400);
+  color: var(--text-placeholder);
 }
 
 .topbar__icon-btn {
@@ -127,7 +128,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: var(--weight-bold);
-  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
   cursor: pointer;
 }

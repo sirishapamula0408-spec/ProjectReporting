@@ -10,15 +10,15 @@
 }
 
 .scope-creep__title {
-  font-size: var(--text-h2);
+  font-size: var(--text-page);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
+  color: var(--text-strong);
   margin: 0;
 }
 
 .scope-creep__subtitle {
-  font-size: var(--text-body);
-  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
   margin: var(--space-1) 0 0;
 }
 
@@ -44,18 +44,18 @@
 }
 
 .scope-creep__kpi-label {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wider);
 }
 
 .scope-creep__kpi-value {
-  font-size: var(--text-kpi);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  color: var(--color-gray-900);
-  line-height: 1.2;
+  color: var(--text-primary);
+  line-height: var(--leading-tight);
 }
 
 .scope-creep__decision-bar {
@@ -93,8 +93,8 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
-  color: var(--color-gray-500);
+  font-size: var(--text-badge);
+  color: var(--text-muted);
 }
 
 .scope-creep__legend-dot {
@@ -129,11 +129,11 @@
 }
 
 .scope-creep__table thead th {
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  color: var(--color-gray-500);
+  color: var(--text-placeholder);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-widest);
   text-align: left;
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-200);
@@ -142,13 +142,13 @@
 .scope-creep__table tbody td {
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-50);
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 
 .scope-creep__cell--date {
   white-space: nowrap;
-  color: var(--color-gray-500);
+  color: var(--text-muted);
 }
 
 .scope-creep__cell--number {
@@ -163,10 +163,12 @@
 
 .scope-creep__badge {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: 11px;
-  font-weight: var(--weight-bold);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -178,8 +180,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  font-size: var(--text-body);
-  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 
 .scope-creep__summary-divider {

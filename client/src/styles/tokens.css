@@ -31,22 +31,69 @@
   --color-red-light: #fee2e2;
 
   /* Typography — Inter font family (UX-DR7) */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
-  /* Typography Scale */
-  --text-h1: 2rem;       /* 32px */
-  --text-h2: 1.5rem;     /* 24px */
-  --text-h3: 1.25rem;    /* 20px */
-  --text-body: 0.875rem; /* 14px */
-  --text-caption: 0.75rem; /* 12px */
-  --text-kpi: 2.25rem;   /* 36px */
+  /* Typography Scale — Fintech-inspired (PRT-82, refined) */
+  --text-3xl: 32px;      /* Display KPI — large metrics */
+  --text-2xl: 28px;      /* Display KPI — standard metrics */
+  --text-page: 24px;     /* Page titles (24–26px bold) */
+  --text-xl: 20px;       /* Section titles */
+  --text-lg: 18px;       /* Brand logo, card headings */
+  --text-md: 16px;       /* Card headings, widget titles */
+  --text-base: 14px;     /* Body text, member names, nav items */
+  --text-sm: 13px;       /* Subtitles, action links, buttons */
+  --text-xs: 12px;       /* Email/meta, badges */
+  --text-2xs: 11px;      /* Table headers, invited-by, badges */
+
+  /* Legacy aliases (backward compat — prefer new tokens) */
+  --text-h1: var(--text-3xl);
+  --text-h2: var(--text-page);
+  --text-h3: var(--text-lg);
+  --text-body: var(--text-base);
+  --text-caption: var(--text-xs);
+  --text-kpi: var(--text-2xl);
 
   /* Font Weights */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
+
+  /* Line Heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.5px;   /* KPI display numbers */
+  --tracking-snug: -0.2px;    /* Page/section titles */
+  --tracking-normal: 0px;     /* Body text */
+  --tracking-wide: 0.1px;     /* Labels, buttons */
+  --tracking-wider: 0.5px;    /* Status badges */
+  --tracking-widest: 0.6px;   /* Table headers, uppercase labels */
+
+  /* Text Colors — Fintech palette */
+  --text-primary: #1A1A2E;
+  --text-secondary: #374151;
+  --text-muted: #6B7280;
+  --text-placeholder: #9CA3AF;
+  --text-strong: #111827;
+  --text-positive: #10B981;
+  --text-negative: #EF4444;
+  --text-active: #1D4ED8;
+
+  /* Status Badge Colors */
+  --badge-green-bg: #D1FAE5;
+  --badge-green-text: #065F46;
+  --badge-amber-bg: #FEF3C7;
+  --badge-amber-text: #92400E;
+  --badge-purple-bg: #EDE9FE;
+  --badge-purple-text: #5B21B6;
+  --badge-red-bg: #FEE2E2;
+  --badge-red-text: #991B1B;
+  --badge-blue-bg: #DBEAFE;
+  --badge-blue-text: #1E40AF;
 
   /* Spacing (4px base) */
   --space-1: 0.25rem;  /* 4px */
@@ -92,10 +139,10 @@
 
 body {
   font-family: var(--font-family);
-  font-size: var(--text-body);
-  color: var(--color-gray-900);
+  font-size: var(--text-base);
+  color: var(--text-primary);
   background: var(--color-gray-50);
-  line-height: 1.6;
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
