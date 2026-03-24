@@ -47,8 +47,13 @@ export function PMDashboardPage() {
       {/* Header */}
       <div className="pgm-dash__header">
         <div>
-          <h1 className="pgm-dash__title">Program Dashboard</h1>
-          <p className="pgm-dash__subtitle">Financial year 2024 Q3 Performance Analysis</p>
+          <h1 className="pgm-dash__title">Project Portfolio</h1>
+          <p className="pgm-dash__subtitle">Real-time status of all active projects under your management.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <Link to="/projects/new">
+            <Button themeColor="primary">+ Create New Project</Button>
+          </Link>
         </div>
       </div>
 
@@ -56,43 +61,42 @@ export function PMDashboardPage() {
       <div className="pgm-dash__kpi-row">
         <div className="pgm-dash__kpi-card">
           <div className="pgm-dash__kpi-top">
-            <span className="pgm-dash__kpi-label">TOTAL MANAGED</span>
-            {totalManaged > 0 && <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--green">+{totalManaged}</span>}
+            <span className="pgm-dash__kpi-label">Total Managed</span>
           </div>
-          <div className="pgm-dash__kpi-value">{totalManaged}</div>
-          <p className="pgm-dash__kpi-desc">Capital investment across {totalManaged} projects</p>
+          <div className="pgm-dash__kpi-value">
+            {totalManaged}
+            {totalManaged > 0 && <span className="pgm-dash__kpi-trend" style={{ fontSize: 'var(--text-xs)', marginLeft: '8px' }}>+{totalManaged}</span>}
+          </div>
         </div>
 
         <div className="pgm-dash__kpi-card">
           <div className="pgm-dash__kpi-top">
-            <span className="pgm-dash__kpi-label">AT RISK</span>
-            {(atRisk as number) > 0 && <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--red">CRITICAL</span>}
+            <span className="pgm-dash__kpi-label">At Risk (R/A)</span>
           </div>
-          <div className="pgm-dash__kpi-value">{atRisk as number}</div>
-          <p className="pgm-dash__kpi-desc">
-            {(atRisk as number) > 0 ? 'Action required for at-risk projects' : 'No projects at risk'}
-          </p>
+          <div className="pgm-dash__kpi-value">
+            {atRisk as number}
+            {(atRisk as number) > 0 && <span style={{ fontSize: 'var(--text-xs)', marginLeft: '8px', color: 'var(--text-negative)' }}>Action Needed</span>}
+          </div>
         </div>
 
         <div className="pgm-dash__kpi-card">
           <div className="pgm-dash__kpi-top">
-            <span className="pgm-dash__kpi-label">BURN RATE</span>
-            <span className="pgm-dash__kpi-trend">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 8l4-4 4 4" /></svg>
-            </span>
+            <span className="pgm-dash__kpi-label">Monthly Burn Rate</span>
           </div>
-          <div className="pgm-dash__kpi-value">{formatINRCompact(burnRate)} <span className="pgm-dash__kpi-unit">/mo</span></div>
-          <p className="pgm-dash__kpi-desc">Aligned with quarterly baseline projections</p>
+          <div className="pgm-dash__kpi-value">{formatINRCompact(burnRate)}<span className="pgm-dash__kpi-unit">/mo</span></div>
+          <p className="pgm-dash__kpi-desc">vs budget target</p>
         </div>
 
         <div className="pgm-dash__kpi-card">
           <div className="pgm-dash__kpi-top">
-            <span className="pgm-dash__kpi-label">UTILIZATION</span>
-            <span className="pgm-dash__kpi-badge pgm-dash__kpi-badge--green">OPTIMAL</span>
+            <span className="pgm-dash__kpi-label">Resource Utilization</span>
           </div>
-          <div className="pgm-dash__kpi-value">94.2%</div>
+          <div className="pgm-dash__kpi-value">
+            92%
+            <span style={{ fontSize: 'var(--text-xs)', marginLeft: '8px', color: 'var(--text-positive)' }}>Optimized</span>
+          </div>
           <div className="pgm-dash__kpi-progress">
-            <div className="pgm-dash__kpi-progress-fill" style={{ width: '94.2%' }} />
+            <div className="pgm-dash__kpi-progress-fill" style={{ width: '92%' }} />
           </div>
         </div>
       </div>
@@ -105,7 +109,7 @@ export function PMDashboardPage() {
           <div className="pgm-dash__section">
             <div className="pgm-dash__section-header">
               <h2 className="pgm-dash__section-title">Active Projects</h2>
-              <Link to="/projects" className="pgm-dash__view-all">View All Portfolio →</Link>
+              <Link to="/projects" className="pgm-dash__view-all">View All Projects</Link>
             </div>
 
             {sortedProjects.length === 0 ? (
@@ -117,30 +121,35 @@ export function PMDashboardPage() {
               <table className="pgm-dash__table">
                 <thead>
                   <tr>
-                    <th>PROJECT NAME</th>
-                    <th>HEALTH</th>
-                    <th>TIMELINE PROGRESS</th>
-                    <th>BURN RATE</th>
+                    <th>PROJECT DETAILS</th>
+                    <th>HEALTH (RAG)</th>
+                    <th>CURRENT BURN</th>
+                    <th>TIMELINE</th>
+                    <th>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody>
                   {sortedProjects.slice(0, 5).map((p) => {
                     const rag = p.healthRag as string | null;
+                    const ragLower = rag ? rag.toLowerCase() : 'none';
+                    const ragLabel = rag === 'GREEN' ? 'On Track' : rag === 'AMBER' ? 'At Risk' : rag === 'RED' ? 'Critical' : '—';
                     const budget = typeof p.budgetUsedPercent === 'number' ? p.budgetUsedPercent : 0;
                     return (
                       <tr key={p.id as number}>
                         <td>
                           <Link to={`/projects/${p.id}`} className="pgm-dash__project-link">
                             <span className="pgm-dash__project-name">{p.name as string}</span>
-                            <span className="pgm-dash__project-sub">{p.client as string}</span>
+                            <span className="pgm-dash__project-sub">Client: {p.client as string || '—'} · ID: #{p.projectCode as string || `PPM-${p.id}`}</span>
                           </Link>
                         </td>
                         <td>
-                          {rag ? (
-                            <span className={`pgm-dash__health-dot pgm-dash__health-dot--${rag.toLowerCase()}`} />
-                          ) : (
-                            <span className="pgm-dash__health-dot pgm-dash__health-dot--none" />
-                          )}
+                          <span className={`pgm-dash__health-badge pgm-dash__health-badge--${ragLower}`}>
+                            <span className={`pgm-dash__health-dot pgm-dash__health-dot--${ragLower}`} />
+                            {ragLabel}
+                          </span>
+                        </td>
+                        <td className="pgm-dash__burn-cell">
+                          {formatINR(p.contractValue as string)}
                         </td>
                         <td>
                           <div className="pgm-dash__timeline">
@@ -150,8 +159,10 @@ export function PMDashboardPage() {
                             <span className="pgm-dash__timeline-pct">{budget.toFixed(0)}%</span>
                           </div>
                         </td>
-                        <td className="pgm-dash__burn-cell">
-                          {formatINRCompact(p.burnRate as string)}/mo
+                        <td>
+                          <Link to={`/projects/${p.id}`} className="pgm-dash__chevron">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 4l4 4-4 4" /></svg>
+                          </Link>
                         </td>
                       </tr>
                     );

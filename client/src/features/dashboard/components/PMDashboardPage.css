@@ -156,6 +156,43 @@
 .pgm-dash__health-dot--red { background: var(--color-red); }
 .pgm-dash__health-dot--none { background: var(--color-gray-300); }
 
+/* Health text badges (ECM spec) */
+.pgm-dash__health-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pgm-dash__health-badge--green { background: var(--badge-green-bg); color: var(--badge-green-text); }
+.pgm-dash__health-badge--amber { background: var(--badge-amber-bg); color: var(--badge-amber-text); }
+.pgm-dash__health-badge--red { background: var(--badge-red-bg); color: var(--badge-red-text); }
+.pgm-dash__health-badge--none { background: var(--color-gray-100); color: var(--text-placeholder); }
+
+/* Actions column */
+.pgm-dash__actions-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.pgm-dash__action-link {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-active);
+  text-decoration: none;
+}
+.pgm-dash__action-link:hover { text-decoration: underline; }
+.pgm-dash__chevron {
+  color: var(--text-placeholder);
+  display: flex;
+  align-items: center;
+}
+
 .pgm-dash__timeline { display: flex; align-items: center; gap: var(--space-3); }
 .pgm-dash__timeline-bar { flex: 1; height: 6px; background: var(--color-gray-100); border-radius: 3px; overflow: hidden; }
 .pgm-dash__timeline-fill { height: 100%; background: var(--color-primary); border-radius: 3px; }
@@ -244,7 +281,7 @@
   border-radius: var(--radius-md);
   background: var(--color-gray-50);
 }
-.pgm-dash__milestone-month { font-size: var(--text-badge); color: var(--text-muted); text-transform: uppercase; font-weight: var(--weight-semibold); letter-spacing: var(--tracking-wider); }
+.pgm-dash__milestone-month { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: var(--weight-semibold); letter-spacing: var(--tracking-wider); }
 .pgm-dash__milestone-day { font-size: var(--text-lg); font-weight: var(--weight-bold); color: var(--text-primary); line-height: 1; }
 
 .pgm-dash__milestone-info { display: flex; flex-direction: column; gap: 2px; }
