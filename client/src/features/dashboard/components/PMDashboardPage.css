@@ -107,7 +107,7 @@
   margin-bottom: var(--space-5);
 }
 
-.pgm-dash__section-title { font-size: var(--text-md); font-weight: var(--weight-semibold); color: var(--text-primary); margin: 0; }
+.pgm-dash__section-title { font-size: var(--text-md); font-weight: var(--weight-medium); color: var(--text-primary); margin: 0; }
 .pgm-dash__section-sub { font-size: var(--text-xs); color: var(--text-placeholder); margin: var(--space-1) 0 0; }
 
 .pgm-dash__view-all {
@@ -142,7 +142,7 @@
 .pgm-dash__table tr:last-child td { border-bottom: none; }
 
 .pgm-dash__project-link { text-decoration: none; display: flex; flex-direction: column; gap: 2px; }
-.pgm-dash__project-name { font-weight: var(--weight-semibold); color: var(--text-primary); font-size: var(--text-sm); }
+.pgm-dash__project-name { font-weight: var(--weight-medium); color: var(--text-primary); font-size: var(--text-sm); }
 .pgm-dash__project-sub { font-size: var(--text-xs); color: var(--text-placeholder); }
 .pgm-dash__project-link:hover .pgm-dash__project-name { color: var(--color-primary); }
 
@@ -198,7 +198,7 @@
 .pgm-dash__timeline-fill { height: 100%; background: var(--color-primary); border-radius: 3px; }
 .pgm-dash__timeline-pct { font-size: var(--text-xs); color: var(--text-secondary); font-weight: var(--weight-semibold); min-width: 32px; }
 
-.pgm-dash__burn-cell { font-variant-numeric: tabular-nums; font-weight: var(--weight-semibold); color: var(--text-primary); white-space: nowrap; font-size: var(--text-sm); }
+.pgm-dash__burn-cell { font-variant-numeric: tabular-nums; font-weight: var(--weight-medium); color: var(--text-primary); white-space: nowrap; font-size: var(--text-sm); }
 
 .pgm-dash__showing { font-size: var(--text-xs); color: var(--text-active); margin-top: var(--space-4); }
 

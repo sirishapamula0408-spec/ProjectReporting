@@ -68,7 +68,7 @@
 
 .project-detail__card h3 {
   font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-medium);
   margin: 0 0 var(--space-5) 0;
   color: var(--text-primary);
 }

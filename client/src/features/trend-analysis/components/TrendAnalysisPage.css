@@ -62,7 +62,7 @@
 
 .trend-analysis__section-title {
   font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-medium);
   color: var(--text-primary);
   margin: 0 0 var(--space-5) 0;
 }
