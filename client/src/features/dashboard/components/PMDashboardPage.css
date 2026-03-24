@@ -3,7 +3,7 @@
    ═══════════════════════════════════════ */
 
 .pgm-dash__header { margin-bottom: var(--space-6); }
-.pgm-dash__title { font-size: var(--text-page); font-weight: var(--weight-bold); color: var(--text-primary); margin: 0; letter-spacing: var(--tracking-tight); }
+.pgm-dash__title { font-size: var(--text-page); font-weight: var(--weight-semibold); color: var(--text-primary); margin: 0; letter-spacing: var(--tracking-tight); }
 .pgm-dash__subtitle { font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-1) 0 0; }
 
 /* ── KPI Cards ── */
