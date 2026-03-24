@@ -39,7 +39,7 @@ export function LoginPage() {
     setError(null);
     setIsSubmitting(true);
     try {
-      const user = await login(data.username, data.password);
+      const user = await login(data.username, data.password, keepSignedIn);
       navigate(getRoleDashboard(user.role as Role), { replace: true });
     } catch {
       setError('Invalid username or password');
@@ -106,7 +106,7 @@ export function LoginPage() {
         </div>
 
         <div className="login-brand-panel__footer">
-          <span>&copy; 2026 ProjectReporting Solutions. All rights reserved.</span>
+          <span>&copy; 2026 PROJECTREPORTING ENTERPRISE. ALL RIGHTS RESERVED.</span>
         </div>
       </div>
 
@@ -210,6 +210,7 @@ export function LoginPage() {
                       onChange={(e: InputChangeEvent) => field.onChange(e.value)}
                       onBlur={field.onBlur}
                       valid={!errors.username}
+                      autoComplete="username"
                       className="login-input login-input--with-icon"
                     />
                   )}
@@ -223,9 +224,9 @@ export function LoginPage() {
                 <label className="login-label" htmlFor="password">
                   PASSWORD
                 </label>
-                <a href="#" className="login-forgot-link" onClick={(e) => e.preventDefault()}>
-                  FORGOT PASSWORD?
-                </a>
+                <span className="login-forgot-link">
+                  CONTACT ADMIN TO RESET
+                </span>
               </div>
               <div className="login-input-wrapper">
                 <span className="login-input-icon">
@@ -246,6 +247,7 @@ export function LoginPage() {
                       onChange={(e: InputChangeEvent) => field.onChange(e.value)}
                       onBlur={field.onBlur}
                       valid={!errors.password}
+                      autoComplete="current-password"
                       className="login-input login-input--with-icon login-input--with-suffix"
                     />
                   )}
@@ -284,7 +286,9 @@ export function LoginPage() {
               />
             </div>
 
-            {error && <div className="login-error-message">{error}</div>}
+            <div aria-live="polite" role="alert">
+              {error && <div className="login-error-message">{error}</div>}
+            </div>
 
             <Button
               type="submit"

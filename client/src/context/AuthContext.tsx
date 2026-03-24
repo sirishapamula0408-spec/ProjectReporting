@@ -6,7 +6,7 @@ interface AuthContextType {
   user: UserProfile | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<UserProfile>;
+  login: (username: string, password: string, keepSignedIn?: boolean) => Promise<UserProfile>;
   logout: () => Promise<void>;
 }
 
@@ -25,8 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const login = useCallback(async (username: string, password: string): Promise<UserProfile> => {
-    const res = await api.post<{ data: UserProfile }>('/auth/login', { username, password });
+  const login = useCallback(async (username: string, password: string, keepSignedIn?: boolean): Promise<UserProfile> => {
+    const res = await api.post<{ data: UserProfile }>('/auth/login', { username, password, keepSignedIn });
     const loggedInUser = res.data.data;
     setUser(loggedInUser);
     return loggedInUser;
