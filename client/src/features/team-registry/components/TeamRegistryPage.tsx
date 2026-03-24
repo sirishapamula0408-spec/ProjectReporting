@@ -1,10 +1,13 @@
 import { useState, useCallback, useRef } from 'react';
-import { Grid, GridColumn, type GridCellProps } from '@progress/kendo-react-grid';
+import { Grid, GridColumn, type GridCellProps, type GridPageChangeEvent, type GridSortChangeEvent } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { useTeamMembers, useUpdateTeamMember, useDeleteTeamMember } from '../hooks/useTeamMembers';
+import { Input, type InputChangeEvent } from '@progress/kendo-react-inputs';
+import type { SortDescriptor } from '@progress/kendo-data-query';
+import { useTeamMembers, useUpdateTeamMember, useDeactivateTeamMember, type TeamMembersParams } from '../hooks/useTeamMembers';
 import { AddTeamMemberDialog } from './AddTeamMemberDialog';
 import { SkeletonLoader } from '../../../components/shared';
 import { useToast } from '../../../components/shared';
+import { useAuth } from '../../../context/AuthContext';
 import { formatINR } from '../../../config/constants';
 import './TeamRegistryPage.css';
 
@@ -54,9 +57,31 @@ function StatusCell(props: GridCellProps) {
 const skeletonMarginStyle = { marginTop: 24 } as const;
 
 export function TeamRegistryPage() {
-  const { data, isLoading } = useTeamMembers();
+  const { user } = useAuth();
+  const isPM = user?.role === 'PM';
+
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
+  // Search state
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  // Sort state
+  const [sort, setSort] = useState<SortDescriptor[]>([{ field: 'name', dir: 'asc' }]);
+
+  const params: TeamMembersParams = {
+    page,
+    pageSize,
+    search: search || undefined,
+    sortBy: sort[0]?.field || 'name',
+    sortDir: sort[0]?.dir || 'asc',
+  };
+
+  const { data, isLoading } = useTeamMembers(params);
   const updateMember = useUpdateTeamMember();
-  const deleteMember = useDeleteTeamMember();
+  const deactivateMember = useDeactivateTeamMember();
   const { showToast } = useToast();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -76,6 +101,11 @@ export function TeamRegistryPage() {
 
   const handleSaveEdit = useCallback(async () => {
     if (!editingId) return;
+    const { name } = editRef.current;
+    if (!name.trim()) {
+      showToast('Name is required', 'error');
+      return;
+    }
     try {
       await updateMember.mutateAsync({ id: editingId, ...editRef.current });
       showToast('Team member updated', 'success');
@@ -88,12 +118,40 @@ export function TeamRegistryPage() {
   const handleDelete = useCallback(async (id: number, name: string) => {
     if (!window.confirm(`Are you sure you want to deactivate "${name}"?`)) return;
     try {
-      await deleteMember.mutateAsync(id);
+      await deactivateMember.mutateAsync(id);
       showToast(`${name} has been deactivated`, 'success');
     } catch {
       showToast('Failed to deactivate team member', 'error');
     }
-  }, [deleteMember, showToast]);
+  }, [deactivateMember, showToast]);
+
+  const handlePageChange = useCallback((e: GridPageChangeEvent) => {
+    setPage(Math.floor(e.page.skip / e.page.take) + 1);
+    setPageSize(e.page.take);
+  }, []);
+
+  const handleSortChange = useCallback((e: GridSortChangeEvent) => {
+    setSort(e.sort);
+    setPage(1);
+  }, []);
+
+  const handleSearchSubmit = useCallback(() => {
+    setSearch(searchInput);
+    setPage(1);
+  }, [searchInput]);
+
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setSearch(searchInput);
+      setPage(1);
+    }
+  }, [searchInput]);
+
+  const handleClearSearch = useCallback(() => {
+    setSearchInput('');
+    setSearch('');
+    setPage(1);
+  }, []);
 
   if (isLoading) {
     return (
@@ -105,6 +163,8 @@ export function TeamRegistryPage() {
   }
 
   const members = data?.data ?? [];
+  const total = data?.meta?.total ?? 0;
+  const skip = (page - 1) * pageSize;
 
   return (
     <div className="team-registry">
@@ -115,21 +175,53 @@ export function TeamRegistryPage() {
             Manage team members, roles, and cost rates across all enterprise portfolios
           </p>
         </div>
-        <Button themeColor="primary" onClick={handleOpenAdd}>
-          + Add Team Member
-        </Button>
+        {isPM && (
+          <Button themeColor="primary" onClick={handleOpenAdd}>
+            + Add Team Member
+          </Button>
+        )}
+      </div>
+
+      {/* Search bar */}
+      <div className="team-registry__toolbar">
+        <div className="team-registry__search">
+          <Input
+            placeholder="Search by name, role, or department..."
+            value={searchInput}
+            onChange={(e: InputChangeEvent) => setSearchInput(e.value ?? '')}
+            onKeyDown={handleSearchKeyDown}
+            className="team-registry__search-input"
+          />
+          <Button themeColor="primary" size="small" onClick={handleSearchSubmit}>
+            Search
+          </Button>
+          {search && (
+            <Button fillMode="flat" size="small" onClick={handleClearSearch}>
+              Clear
+            </Button>
+          )}
+        </div>
+        <span className="team-registry__count">
+          {total} member{total !== 1 ? 's' : ''} found
+        </span>
       </div>
 
       {members.length === 0 ? (
         <div className="team-registry__empty">
           <h3>No team members found</h3>
-          <p>Add your first team member to get started.</p>
+          <p>{search ? `No results for "${search}". Try a different search term.` : 'Add your first team member to get started.'}</p>
         </div>
       ) : (
         <Grid
           data={members}
           sortable
+          sort={sort}
+          onSortChange={handleSortChange}
           pageable={{ pageSizes: [10, 20, 50] }}
+          skip={skip}
+          take={pageSize}
+          total={total}
+          onPageChange={handlePageChange}
           className="team-registry__grid"
         >
           <GridColumn field="name" title="Name" width="200" cell={(props: GridCellProps) => {
@@ -188,46 +280,48 @@ export function TeamRegistryPage() {
             }
             return <CostRateCell {...props} />;
           }} />
-          <GridColumn field="skills" title="Skills" cell={SkillsCell} />
-          <GridColumn field="isActive" title="Status" width="100" cell={StatusCell} />
-          <GridColumn title="Actions" width="130" cell={(props: GridCellProps) => {
-            const item = props.dataItem;
-            if (editingId === item.id) {
+          <GridColumn field="skills" title="Skills" sortable={false} cell={SkillsCell} />
+          <GridColumn field="isActive" title="Status" width="100" sortable={false} cell={StatusCell} />
+          {isPM && (
+            <GridColumn title="Actions" width="130" sortable={false} cell={(props: GridCellProps) => {
+              const item = props.dataItem;
+              if (editingId === item.id) {
+                return (
+                  <td>
+                    <div className="team-registry__actions">
+                      <Button size="small" themeColor="primary" onClick={handleSaveEdit} disabled={updateMember.isPending}>
+                        Save
+                      </Button>
+                      <Button size="small" onClick={handleCancelEdit}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </td>
+                );
+              }
               return (
                 <td>
                   <div className="team-registry__actions">
-                    <Button size="small" themeColor="primary" onClick={handleSaveEdit} disabled={updateMember.isPending}>
-                      Save
+                    <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
+                      </svg>
                     </Button>
-                    <Button size="small" onClick={handleCancelEdit}>
-                      Cancel
+                    <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5" />
+                        <path d="M3 4l1 10a1 1 0 001 1h6a1 1 0 001-1l1-10" />
+                      </svg>
                     </Button>
                   </div>
                 </td>
               );
-            }
-            return (
-              <td>
-                <div className="team-registry__actions">
-                  <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--edit" title="Edit" onClick={() => handleEdit(item)}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
-                    </svg>
-                  </Button>
-                  <Button fillMode="flat" size="small" className="team-registry__action-btn team-registry__action-btn--delete" title="Delete" onClick={() => handleDelete(item.id, item.name)}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5" />
-                      <path d="M3 4l1 10a1 1 0 001 1h6a1 1 0 001-1l1-10" />
-                    </svg>
-                  </Button>
-                </div>
-              </td>
-            );
-          }} />
+            }} />
+          )}
         </Grid>
       )}
 
-      <AddTeamMemberDialog visible={showAddDialog} onClose={handleCloseAdd} />
+      {isPM && <AddTeamMemberDialog visible={showAddDialog} onClose={handleCloseAdd} />}
     </div>
   );
 }

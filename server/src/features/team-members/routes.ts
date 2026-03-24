@@ -14,7 +14,10 @@ router.get(
   asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page as string, 10) || 1;
     const pageSize = parseInt(req.query.pageSize as string, 10) || 50;
-    const result = await teamMemberService.listTeamMembers(page, pageSize);
+    const search = (req.query.search as string) || '';
+    const sortBy = (req.query.sortBy as string) || 'name';
+    const sortDir = (req.query.sortDir as string) === 'desc' ? 'desc' as const : 'asc' as const;
+    const result = await teamMemberService.listTeamMembers({ page, pageSize, search, sortBy, sortDir });
     res.json(result);
   }),
 );

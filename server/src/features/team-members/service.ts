@@ -10,12 +10,35 @@ function serializeMember(m: any) {
   };
 }
 
-export async function listTeamMembers(page = 1, pageSize = 50) {
-  const where = { isActive: true };
+interface ListOptions {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  sortBy?: string;
+  sortDir?: 'asc' | 'desc';
+}
+
+const SORTABLE_FIELDS = ['name', 'role', 'department', 'loadedCostRate', 'createdAt'];
+
+export async function listTeamMembers(opts: ListOptions = {}) {
+  const { page = 1, pageSize = 50, search, sortBy = 'name', sortDir = 'asc' } = opts;
+
+  const where: Prisma.TeamMemberWhereInput = { isActive: true };
+  if (search && search.trim()) {
+    where.OR = [
+      { name: { contains: search.trim(), mode: 'insensitive' } },
+      { role: { contains: search.trim(), mode: 'insensitive' } },
+      { department: { contains: search.trim(), mode: 'insensitive' } },
+    ];
+  }
+
+  const orderField = SORTABLE_FIELDS.includes(sortBy) ? sortBy : 'name';
+  const orderDir = sortDir === 'desc' ? 'desc' : 'asc';
+
   const [members, total] = await Promise.all([
     prisma.teamMember.findMany({
       where,
-      orderBy: { name: 'asc' },
+      orderBy: { [orderField]: orderDir },
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
@@ -57,6 +80,7 @@ export async function updateTeamMember(id: number, input: UpdateTeamMemberInput)
   if (input.department !== undefined) updateData.department = input.department;
   if (input.loadedCostRate !== undefined) updateData.loadedCostRate = new Prisma.Decimal(input.loadedCostRate);
   if (input.skills !== undefined) updateData.skills = input.skills;
+  if (input.isActive !== undefined) updateData.isActive = input.isActive;
 
   const member = await prisma.teamMember.update({
     where: { id },

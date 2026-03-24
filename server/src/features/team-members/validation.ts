@@ -8,7 +8,9 @@ export const createTeamMemberSchema = z.object({
   skills: z.array(z.string()).default([]),
 });
 
-export const updateTeamMemberSchema = createTeamMemberSchema.partial();
+export const updateTeamMemberSchema = createTeamMemberSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
 
 export type CreateTeamMemberInput = z.infer<typeof createTeamMemberSchema>;
 export type UpdateTeamMemberInput = z.infer<typeof updateTeamMemberSchema>;

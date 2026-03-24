@@ -16,11 +16,19 @@ interface TeamMembersResponse {
   meta: { total: number; page: number; pageSize: number };
 }
 
-export function useTeamMembers() {
+export interface TeamMembersParams {
+  page: number;
+  pageSize: number;
+  search?: string;
+  sortBy?: string;
+  sortDir?: 'asc' | 'desc';
+}
+
+export function useTeamMembers(params: TeamMembersParams) {
   return useQuery<TeamMembersResponse>({
-    queryKey: ['team-members'],
+    queryKey: ['team-members', params],
     queryFn: async () => {
-      const res = await api.get<TeamMembersResponse>('/team-members');
+      const res = await api.get<TeamMembersResponse>('/team-members', { params });
       return res.data;
     },
   });
@@ -60,11 +68,11 @@ export function useUpdateTeamMember() {
   });
 }
 
-export function useDeleteTeamMember() {
+export function useDeactivateTeamMember() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => {
-      await api.put(`/team-members/${id}`, { isActive: false } as unknown as Partial<CreateTeamMemberInput>);
+      await api.put(`/team-members/${id}`, { isActive: false });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['team-members'] });
