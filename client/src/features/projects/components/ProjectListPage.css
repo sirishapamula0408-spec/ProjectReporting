@@ -11,10 +11,10 @@
 
 .pf-list__title {
   font-size: var(--text-page);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-medium);
   color: var(--text-primary);
   margin: 0 0 var(--space-1) 0;
-  letter-spacing: var(--tracking-tight);
+  
 }
 
 .pf-list__subtitle {

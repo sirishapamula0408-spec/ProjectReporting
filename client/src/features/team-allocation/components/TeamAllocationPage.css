@@ -11,7 +11,7 @@
 
 .team-allocation__title {
   font-size: var(--text-page);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-medium);
   color: var(--text-primary);
   margin: 0;
 }

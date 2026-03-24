@@ -37,7 +37,7 @@
   /* Typography Scale — ECM Project Tracker spec */
   --text-3xl: 32px;      /* Display KPI — large metrics */
   --text-2xl: 28px;      /* Display KPI — standard metrics */
-  --text-page: 24px;     /* Page titles (24–26px bold #111827) */
+  --text-page: 20px;     /* Page titles (20px medium #111827) */
   --text-login: 22px;    /* Login panel title (22px semibold) */
   --text-xl: 20px;       /* Section titles */
   --text-lg: 18px;       /* Section headings */
