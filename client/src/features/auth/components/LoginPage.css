@@ -57,11 +57,10 @@
 }
 
 .login-brand-panel__division {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
   color: white;
   margin: 0 0 4px 0;
-  letter-spacing: var(--tracking-snug);
 }
 
 .login-brand-panel__division-sub {
@@ -74,13 +73,12 @@
 }
 
 .login-brand-panel__headline {
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
   color: white;
   line-height: var(--leading-tight);
   margin: 0;
   text-align: center;
-  letter-spacing: var(--tracking-tight);
 }
 
 /* Feature cards */
