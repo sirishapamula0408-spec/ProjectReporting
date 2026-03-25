@@ -290,6 +290,45 @@
   color: var(--color-gray-400);
 }
 
+/* TabStrip — blue active tab to match project list filter tabs */
+.project-detail .k-tabstrip-items {
+  border-bottom: 1px solid var(--color-gray-200);
+  gap: 0;
+}
+
+.project-detail .k-tabstrip-items .k-item {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-gray-600);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: var(--space-2) var(--space-4);
+  transition: all 0.15s;
+}
+
+.project-detail .k-tabstrip-items .k-item:hover:not(.k-active) {
+  background: var(--color-gray-50);
+  color: var(--text-primary);
+}
+
+.project-detail .k-tabstrip-items .k-item.k-active {
+  background: var(--color-primary);
+  color: white;
+  font-weight: var(--weight-semibold);
+  border: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.project-detail .k-tabstrip-items .k-item.k-active .k-link {
+  color: white;
+}
+
+.project-detail .k-tabstrip-items .k-link {
+  color: inherit;
+  padding: var(--space-2) var(--space-4);
+}
+
 @media (max-width: 768px) {
   .project-detail__info-grid {
     grid-template-columns: 1fr;
