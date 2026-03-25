@@ -144,8 +144,8 @@
 }
 
 .login-form-panel__title {
-  font-size: var(--text-login);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
   color: var(--text-primary);
   margin: 0 0 4px 0;
 }
