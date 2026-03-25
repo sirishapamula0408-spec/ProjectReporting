@@ -19,6 +19,34 @@
   background-color: var(--color-primary-hover) !important;
   border-color: var(--color-primary-hover) !important;
 }
+.k-button-solid-primary:focus,
+.k-button-solid-primary:active,
+.k-button-solid-primary.k-focus,
+.k-button-solid-primary.k-active,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px var(--color-primary-light) !important;
+  outline: none !important;
+}
+
+/* Override Kendo focus/active red border on ALL button variants */
+.k-button:focus,
+.k-button:active,
+.k-button.k-focus,
+.k-button.k-active {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px var(--color-primary-light) !important;
+  outline: none !important;
+}
+
+.k-button-flat:focus,
+.k-button-flat:active,
+.k-button-flat.k-focus {
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
 
 /* Secondary — outlined */
 .btn-secondary {
