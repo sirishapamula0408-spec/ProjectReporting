@@ -158,8 +158,8 @@
 }
 
 .team-registry__action-btn--delete:hover {
-  color: var(--text-negative);
-  background: #fef2f2;
+  color: var(--text-active);
+  background: var(--color-primary-light);
 }
 
 /* Inline edit input */

@@ -198,7 +198,7 @@
 }
 
 .sidebar__bottom-link--logout:hover {
-  color: var(--color-red);
+  color: var(--text-active);
 }
 
 /* Footer / User */

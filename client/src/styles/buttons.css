@@ -38,16 +38,16 @@
   text-decoration: underline;
 }
 
-/* Destructive — outlined red */
+/* Destructive — outlined blue (consistent with primary) */
 .btn-destructive {
-  border: 1px solid var(--text-negative) !important;
-  color: var(--text-negative) !important;
+  border: 1px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
   background: transparent !important;
   font-weight: var(--weight-medium) !important;
   font-size: var(--text-sm) !important;
 }
 .btn-destructive:hover {
-  background: var(--color-red-light) !important;
+  background: var(--color-primary-light) !important;
 }
 
 /* Disabled state */
