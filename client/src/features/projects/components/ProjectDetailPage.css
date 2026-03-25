@@ -303,7 +303,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  padding: var(--space-2) var(--space-4);
+  padding: 4px var(--space-3);
   transition: all 0.15s;
 }
 
@@ -326,7 +326,7 @@
 
 .project-detail .k-tabstrip-items .k-link {
   color: inherit;
-  padding: var(--space-2) var(--space-4);
+  padding: 4px var(--space-3);
 }
 
 @media (max-width: 768px) {
