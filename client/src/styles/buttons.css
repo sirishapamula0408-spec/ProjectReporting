@@ -4,11 +4,20 @@
  * Applied via className on KendoReact Button components.
  */
 
-/* Primary — solid blue (default KendoReact themeColor="primary") */
+/* Primary — solid blue (global override for all KendoReact primary buttons) */
+.k-button-solid-primary,
 .btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: white !important;
   font-weight: var(--weight-semibold) !important;
   font-size: var(--text-sm) !important;
   letter-spacing: var(--tracking-wide) !important;
+}
+.k-button-solid-primary:hover,
+.btn-primary:hover {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
 }
 
 /* Secondary — outlined */
